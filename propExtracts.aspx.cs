@@ -14,14 +14,70 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        //firstSentence("Earth");
-        //onlyIntro("Earth");
-        //allText("Earth");
+
+        //FirstSentence("Earth");
+        //OnlyIntro("Earth");
+        //AllText("Earth");
+        
         //RandomPageFromCategory("Arts");
-        //getInfoNearBy("31.771959", "35.217018", "1000");
+
+        //GetInfoNearBy("31.771959", "35.217018", "1000");
+        //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
     }
 
-    private void getInfoNearBy(string lat, string lng, string radius)
+    private void GetInfoNearByWithImgs(string lat, string lng, string radius)
+    {
+
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&format=json&prop=coordinates%7Cpageimages%7Cpageterms&colimit=50&piprop=thumbnail&pithumbsize=144&pilimit=50&wbptterms=description&generator=geosearch&ggscoord=" + lat + "%7C" + lng + "&ggsradius=" + radius + "&ggslimit=1");
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        JObject root = JObject.Parse(ResponseText);
+
+        try
+        {
+            var digTest = root["query"].First.First.First.First;
+        }
+        catch (Exception)
+        {
+            return;
+        }
+
+        var dig = root["query"].First.First.First.First;
+
+        var articleID = dig["pageid"];
+        var img = dig["thumbnail"]["source"];
+
+
+        myRequest =
+       (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&pageids=" + articleID);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        root = JObject.Parse(ResponseText);
+
+        var article = root["query"]["pages"].First.First;
+
+        var content = article["extract"];
+        var id = article["pageid"];
+        var title = article["title"];
+
+        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/> <img src='" + img + "'/> <br/>" + "<h3>Content :<h3><br/>" + content;
+    }
+
+    private void GetInfoNearBy(string lat, string lng, string radius)
     {
 
         string ResponseText;
@@ -109,7 +165,7 @@ public partial class _Default : System.Web.UI.Page
                 + "<h3>Content :<h3><br/>" + content;
     }
 
-    private void firstSentence(string articleTitle)
+    private void FirstSentence(string articleTitle)
     {
         string ResponseText;
         HttpWebRequest myRequest =
@@ -133,7 +189,7 @@ public partial class _Default : System.Web.UI.Page
         ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
     }
 
-    private void onlyIntro(string articleTitle)
+    private void OnlyIntro(string articleTitle)
     {
         string ResponseText;
         HttpWebRequest myRequest =
@@ -157,7 +213,7 @@ public partial class _Default : System.Web.UI.Page
         ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
     }
 
-    private void allText(string articleTitle)
+    private void AllText(string articleTitle)
     {
         string ResponseText;
         HttpWebRequest myRequest =
