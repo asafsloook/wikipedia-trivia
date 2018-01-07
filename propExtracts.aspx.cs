@@ -8,21 +8,25 @@ using System.Net;
 using System.Xml.Linq;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        //firstSentence();
-        //onlyIntro();
-        //allText();
+        //firstSentence("Earth");
+        //onlyIntro("Earth");
+        //allText("Earth");
+        //RandomPageFromCategory("Arts");
+        //getInfoNearBy("31.771959", "35.217018", "1000");
     }
 
-    private void firstSentence()
+    private void getInfoNearBy(string lat, string lng, string radius)
     {
+
         string ResponseText;
         HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=1&format=json&titles=Earth");
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&format=json&list=geosearch&gscoord=" + lat + "%7C" + lng + "&gsradius=" + radius + "&gslimit=1");
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -31,32 +35,23 @@ public partial class _Default : System.Web.UI.Page
             }
         }
 
-        JavaScriptSerializer js = new JavaScriptSerializer();
+        JObject root = JObject.Parse(ResponseText);
+        var dig = new object();
 
-        var a1 = js.DeserializeObject(ResponseText);
+        try
+        {
+            dig = root["query"]["geosearch"].First.First.First;
+        }
+        catch (Exception)
+        {
+            return;
+        }
 
-        var a2 = ((Dictionary<string, object>)a1).Values.ElementAt(2);
-
-        var a3 = ((Dictionary<string, object>)a2).Values.ElementAt(0);
-
-        var a4 = ((Dictionary<string, object>)a3).Values.ElementAt(0);
-
-        var id = ((Dictionary<string, object>)a4).Values.ElementAt(0);
-
-        var title = ((Dictionary<string, object>)a4).Values.ElementAt(2);
-
-        var content = ((Dictionary<string, object>)a4).Values.ElementAt(3);
+        var articleID = JsonConvert.SerializeObject(dig);
 
 
-        ph.Text = "<h1>Title: " + title + "<br/> ID: " + id + "</h1><br/>" +
-         "<h3>Content :<h3><br>" + content + "<br/>";
-    }
-
-    private void onlyIntro()
-    {
-        string ResponseText;
-        HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=Earth");
+        myRequest =
+       (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&pageids=" + articleID);
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -65,32 +60,31 @@ public partial class _Default : System.Web.UI.Page
             }
         }
 
-        JavaScriptSerializer js = new JavaScriptSerializer();
+        root = JObject.Parse(ResponseText);
 
-        var a1 = js.DeserializeObject(ResponseText);
+        var article = root["query"]["pages"].First.First;
 
-        var a2 = ((Dictionary<string, object>)a1).Values.ElementAt(1);
+        var content = article["extract"];
+        var id = article["pageid"];
+        var title = article["title"];
 
-        var a3 = ((Dictionary<string, object>)a2).Values.ElementAt(0);
-
-        var a4 = ((Dictionary<string, object>)a3).Values.ElementAt(0);
-
-        var id = ((Dictionary<string, object>)a4).Values.ElementAt(0);
-
-        var title = ((Dictionary<string, object>)a4).Values.ElementAt(2);
-
-        var content = ((Dictionary<string, object>)a4).Values.ElementAt(3);
-
-
-        ph.Text = "<h1>Title: " + title + "<br/> ID: " + id + "</h1><br/>" +
-         "<h3>Content :<h3><br>" + content + "<br/>";
+        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
     }
 
-    private void allText()
+    private void RandomPageFromCategory(string categoryTitle)
     {
-        string ResponseText;
+        string ResponseURI;
         HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&titles=Earth");
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/wiki/Special:RandomInCategory/" + categoryTitle);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            ResponseURI = response.ResponseUri.ToString();
+        }
+        ResponseURI = ResponseURI.Replace("https://en.wikipedia.org/wiki/", "");
+
+        string ResponseText;
+        myRequest =
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + ResponseURI);
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -99,24 +93,93 @@ public partial class _Default : System.Web.UI.Page
             }
         }
 
-        JavaScriptSerializer js = new JavaScriptSerializer();
+        JObject root = JObject.Parse(ResponseText);
+        var content = root["query"]["pages"].First.First["extract"];
+        var id = root["query"]["pages"].First.First["pageid"];
+        var title = root["query"]["pages"].First.First["title"];
 
-        var a1 = js.DeserializeObject(ResponseText);
+        if (content.ToString() == "")
+        {
+            RandomPageFromCategory(categoryTitle);
+            return;
+        }
 
-        var a2 = ((Dictionary<string, object>)a1).Values.ElementAt(2);
-
-        var a3 = ((Dictionary<string, object>)a2).Values.ElementAt(0);
-
-        var a4 = ((Dictionary<string, object>)a3).Values.ElementAt(0);
-
-        var id = ((Dictionary<string, object>)a4).Values.ElementAt(0);
-
-        var title = ((Dictionary<string, object>)a4).Values.ElementAt(2);
-
-        var content = ((Dictionary<string, object>)a4).Values.ElementAt(3);
-
-
-        ph.Text = "<h1>Title: " + title + "<br/> ID: " + id + "</h1><br/>" +
-         "<h3>Content :<h3><br>" + content + "<br/>";
+        ph.Text = "<h1>Title: " + title + "</h1>"
+                + "<h1>ID: " + id + "</h1><br/>"
+                + "<h3>Content :<h3><br/>" + content;
     }
+
+    private void firstSentence(string articleTitle)
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=1&format=json&titles=" + articleTitle);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        JObject root = JObject.Parse(ResponseText);
+
+        var article = root["query"]["pages"].First.First;
+
+        var content = article["extract"];
+        var id = article["pageid"];
+        var title = article["title"];
+
+        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
+    }
+
+    private void onlyIntro(string articleTitle)
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + articleTitle);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        JObject root = JObject.Parse(ResponseText);
+
+        var article = root["query"]["pages"].First.First;
+
+        var content = article["extract"];
+        var id = article["pageid"];
+        var title = article["title"];
+
+        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
+    }
+
+    private void allText(string articleTitle)
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&titles=" + articleTitle);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        JObject root = JObject.Parse(ResponseText);
+
+        var article = root["query"]["pages"].First.First;
+
+        var content = article["extract"];
+        var id = article["pageid"];
+        var title = article["title"];
+
+        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
+    }
+
+
 }
