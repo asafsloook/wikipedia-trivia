@@ -9,6 +9,8 @@ using System.Xml.Linq;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 
 public partial class _Default : System.Web.UI.Page
 {
@@ -24,10 +26,35 @@ public partial class _Default : System.Web.UI.Page
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
 
-
+        //RandomPhotoOfTheDay();
 
         //--Beta--
         //MoreLike("Messi", "Sports");
+    }
+
+    private void RandomPhotoOfTheDay()
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://commons.wikimedia.org/w/api.php?format=json&action=featuredfeed&feed=potd");
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        XDocument doc = XDocument.Parse(ResponseText);
+
+        var x1 = doc.Root.FirstNode;
+
+        var x2 = ((XContainer)x1).Elements("item");
+
+        Random rnd = new Random();
+        int randomNum = rnd.Next(0, 9);
+
+        ph.Text = x2.ElementAt(randomNum).Value;
     }
 
     private void MoreLike(string var1, string var2)
