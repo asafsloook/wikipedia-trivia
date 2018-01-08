@@ -19,7 +19,7 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Earth");
         //AllText("Earth");
 
-        //RandomPageFromCategory("Arts");
+        //RandomPageFromCategory("society");
 
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
@@ -199,11 +199,14 @@ public partial class _Default : System.Web.UI.Page
         }
 
         JObject root = JObject.Parse(ResponseText);
-        var content = root["query"]["pages"].First.First["extract"];
-        var id = root["query"]["pages"].First.First["pageid"];
-        var title = root["query"]["pages"].First.First["title"];
 
-        if (content.ToString() == "")
+        var dig = root["query"]["pages"].First.First;
+
+        var content = dig["extract"];
+        var id = dig["pageid"];
+        var title = dig["title"];
+
+        if (content.ToString() == "" || ((string)content).ToArray().Length < 200)
         {
             RandomPageFromCategory(categoryTitle);
             return;
