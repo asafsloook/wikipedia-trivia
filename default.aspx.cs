@@ -18,11 +18,60 @@ public partial class _Default : System.Web.UI.Page
         //FirstSentence("Earth");
         //OnlyIntro("Earth");
         //AllText("Earth");
-        
+
         //RandomPageFromCategory("Arts");
 
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
+
+
+
+        //--Beta--
+        //MoreLike("Messi", "Sports");
+    }
+
+    private void MoreLike(string var1, string var2)
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=morelike:" + var1 + "%7C" + var2 + "&srlimit=100&srprop=size&formatversion=2");
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        JObject root = JObject.Parse(ResponseText);
+
+        Random rnd = new Random();
+        int randomNum = rnd.Next(0, 99);
+        
+        var article = root["query"]["search"].ElementAt(randomNum);
+
+        var articleID = article["pageid"];
+
+        myRequest =
+       (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&pageids=" + articleID);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        root = JObject.Parse(ResponseText);
+
+         article = root["query"]["pages"].First.First;
+
+        var content = article["extract"];
+        var id = article["pageid"];
+        var title = article["title"];
+
+        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
+
     }
 
     private void GetInfoNearByWithImgs(string lat, string lng, string radius)
