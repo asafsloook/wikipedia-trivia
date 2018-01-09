@@ -17,11 +17,13 @@ public partial class _Default : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
 
-        //FirstSentence("Earth");
+        //FirstSentence("Machine");
         //OnlyIntro("Earth");
         //AllText("Earth");
 
-        //RandomPageFromCategory("society");
+        //RandomPageFromCategory("Geography");
+        //RandomPageFromCategory("French cemeteries‎");
+
 
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
@@ -29,7 +31,8 @@ public partial class _Default : System.Web.UI.Page
         //RandomPhotoOfTheDay();
 
         //--Beta--
-        //MoreLike("Messi", "Sports");
+        //MoreLike("Technology", "Tennis");
+
     }
 
     private void RandomPhotoOfTheDay()
@@ -51,10 +54,7 @@ public partial class _Default : System.Web.UI.Page
 
         var x2 = ((XContainer)x1).Elements("item");
 
-        Random rnd = new Random();
-        int randomNum = rnd.Next(0, 9);
-
-        ph.Text = x2.ElementAt(randomNum).Value;
+        ph.Text = x2.ElementAt(9).Value;
     }
 
     private void MoreLike(string var1, string var2)
@@ -233,8 +233,21 @@ public partial class _Default : System.Web.UI.Page
         var id = dig["pageid"];
         var title = dig["title"];
 
-        if (content.ToString() == "" || ((string)content).ToArray().Length < 200)
+        if (content.ToString() == "" || ((string)content).ToArray().Length < 200 || title.ToString().StartsWith("Category") || title.ToString().StartsWith("List"))
         {
+            if (title.ToString().StartsWith("Category"))
+            {
+                title = title.ToString().Replace("Category:","");
+                RandomPageFromCategory(title.ToString());
+                return;
+            }
+
+            if (title.ToString().StartsWith("List"))
+            {
+                RandomPageFromCategory("French cemeteries‎");
+                return;
+            }
+
             RandomPageFromCategory(categoryTitle);
             return;
         }
@@ -315,6 +328,5 @@ public partial class _Default : System.Web.UI.Page
 
         ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
     }
-
-
+    
 }
