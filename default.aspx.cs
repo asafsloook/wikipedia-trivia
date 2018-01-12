@@ -21,7 +21,7 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Earth");
         //AllText("Earth");
 
-        RandomPageFromCategory("People");
+        //RandomPageFromCategory("People");
         //RandomPageFromCategory("French cemeteries‎");
 
 
@@ -32,7 +32,45 @@ public partial class _Default : System.Web.UI.Page
 
         //--Beta--
         //MoreLike("Technology", "Tennis");
+        
+        //GetViews("Paris");
 
+    }
+
+    private int GetViews(string articleTitle)
+    {
+        string yearStr = DateTime.Now.Year.ToString();
+        string dayStr = DateTime.Now.AddDays(-1).Day.ToString();
+
+        int monthInt = DateTime.Now.Month;
+        string monthStr = "";
+
+        if (monthInt < 10)
+        {
+            monthStr = "0" + monthInt;
+        }
+
+        string timeStamp = yearStr + monthStr + dayStr;
+        string url = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/" + articleTitle + "/daily/" + timeStamp + "/" + timeStamp;
+
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create(url);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        JObject root = JObject.Parse(ResponseText);
+
+        var dig = root["items"].First;
+
+        int views = int.Parse(dig["views"].ToString());
+
+        return views;
     }
 
     private void RandomPhotoOfTheDay()
@@ -385,5 +423,7 @@ public partial class _Default : System.Web.UI.Page
 
         ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
     }
+
+
 
 }
