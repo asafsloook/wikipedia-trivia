@@ -21,7 +21,7 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Earth");
         //AllText("Earth");
 
-        //RandomPageFromCategory("Geography");
+        RandomPageFromCategory("People");
         //RandomPageFromCategory("French cemeteries‎");
 
 
@@ -74,7 +74,7 @@ public partial class _Default : System.Web.UI.Page
 
         Random rnd = new Random();
         int randomNum = rnd.Next(0, 99);
-        
+
         var article = root["query"]["search"].ElementAt(randomNum);
 
         var articleID = article["pageid"];
@@ -91,7 +91,7 @@ public partial class _Default : System.Web.UI.Page
 
         root = JObject.Parse(ResponseText);
 
-         article = root["query"]["pages"].First.First;
+        article = root["query"]["pages"].First.First;
 
         var content = article["extract"];
         var id = article["pageid"];
@@ -237,14 +237,14 @@ public partial class _Default : System.Web.UI.Page
         {
             if (title.ToString().StartsWith("Category"))
             {
-                title = title.ToString().Replace("Category:","");
+                title = title.ToString().Replace("Category:", "");
                 RandomPageFromCategory(title.ToString());
                 return;
             }
 
             if (title.ToString().StartsWith("List"))
             {
-                RandomPageFromCategory("French cemeteries‎");
+                RandomPageFromCategory("People");
                 return;
             }
 
@@ -252,9 +252,11 @@ public partial class _Default : System.Web.UI.Page
             return;
         }
 
-        ph.Text = "<h1>Title: " + title + "</h1>"
-                + "<h1>ID: " + id + "</h1><br/>"
-                + "<h3>Content :<h3><br/>" + content;
+        FirstSentence(title.ToString());
+
+        //    ph.Text = "<h1>Title: " + title + "</h1>"
+        //            + "<h1>ID: " + id + "</h1><br/>"
+        //            + "<h3>Content :<h3><br/>" + content;
     }
 
     private void FirstSentence(string articleTitle)
@@ -278,7 +280,62 @@ public partial class _Default : System.Web.UI.Page
         var id = article["pageid"];
         var title = article["title"];
 
+        string[] sentenceArr = (content.ToString().Split());
+
+        var yearArr = isYear(sentenceArr);
+
+        if (yearArr.Count > 0)
+        {
+            foreach (var year in yearArr)
+            {
+                content += "<br/>    " + year.ToString() + " ";
+            }
+        }
+
         ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
+    }
+
+    private List<int> isYear(string[] sentenceArr)
+    {
+        List<int> YearArr = new List<int>();
+        foreach (var word in sentenceArr)
+        {
+            try
+            {
+                if (word.ToString().Length == 4)
+                {
+                    int wordInt = int.Parse(word.ToString());
+                    if (wordInt < 2200 && wordInt > 1000)
+                    {
+                        YearArr.Add(wordInt);
+                    }
+                }
+
+                if (word.ToString().Length == 5)
+                {
+                    char[] charsToTrim = { ')', '.', ',' };
+                    var wordPiece = word.ToString().TrimEnd(charsToTrim);
+                    int wordInt = int.Parse(wordPiece.ToString());
+                    if (wordInt < 2200 && wordInt > 1000)
+                    {
+                        YearArr.Add(wordInt);
+                    }
+
+                    char[] charsToTrim2 = { '(' };
+                    wordPiece = word.ToString().TrimStart(charsToTrim2);
+                    wordInt = int.Parse(wordPiece.ToString());
+                    if (wordInt < 2200 && wordInt > 1000)
+                    {
+                        YearArr.Add(wordInt);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+        }
+        return YearArr;
     }
 
     private void OnlyIntro(string articleTitle)
@@ -328,5 +385,5 @@ public partial class _Default : System.Web.UI.Page
 
         ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
     }
-    
+
 }
