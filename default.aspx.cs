@@ -17,9 +17,10 @@ public partial class _Default : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
 
-        //FirstSentence("Machine");
-        //OnlyIntro("Earth");
-        //AllText("Earth");
+        FirstSentence("Mary Ball Washington");
+
+        //OnlyIntro("Mary Ball Washington");
+        //AllText("Kenneth Burke");
 
         //RandomPageFromCategory("People");
         //RandomPageFromCategory("French cemeteries‎");
@@ -32,9 +33,28 @@ public partial class _Default : System.Web.UI.Page
 
         //--Beta--
         //MoreLike("Technology", "Tennis");
-        
+
         //GetViews("Paris");
 
+    }
+
+    private string GetYears(string content)
+    {
+        string[] sentenceArr = (content.ToString().Split());
+
+        var yearArr = isYear(sentenceArr);
+
+        string yearStr = "";
+
+        if (yearArr.Count > 0)
+        {
+            foreach (var year in yearArr)
+            {
+                yearStr += "<br/>    " + year.ToString() + " ";
+            }
+        }
+
+        return yearStr;
     }
 
     private int GetViews(string articleTitle)
@@ -292,9 +312,9 @@ public partial class _Default : System.Web.UI.Page
 
         FirstSentence(title.ToString());
 
-        //    ph.Text = "<h1>Title: " + title + "</h1>"
-        //            + "<h1>ID: " + id + "</h1><br/>"
-        //            + "<h3>Content :<h3><br/>" + content;
+        //ph.Text = "<h1>Title: " + title + "</h1>"
+        //        + "<h1>ID: " + id + "</h1><br/>"
+        //        + "<h3>Content :<h3><br/>" + content;
     }
 
     private void FirstSentence(string articleTitle)
@@ -318,19 +338,27 @@ public partial class _Default : System.Web.UI.Page
         var id = article["pageid"];
         var title = article["title"];
 
-        string[] sentenceArr = (content.ToString().Split());
+        string contentAfterCheck = checkContent(content.ToString());
 
-        var yearArr = isYear(sentenceArr);
+        var years = GetYears(contentAfterCheck.ToString());
 
-        if (yearArr.Count > 0)
+        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + contentAfterCheck + years;
+    }
+
+    private string checkContent(string content)
+    {
+        var updatedContent = content;
+        int cutFrom = updatedContent.Length;
+
+        foreach (var item in content.Split())
         {
-            foreach (var year in yearArr)
+            if (item.StartsWith("<h2>") || item.EndsWith("<h2>"))
             {
-                content += "<br/>    " + year.ToString() + " ";
+                cutFrom = updatedContent.IndexOf("<h2>");
+                return updatedContent.Substring(0, cutFrom);
             }
         }
-
-        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
+        return updatedContent.Substring(0,cutFrom);
     }
 
     private List<int> isYear(string[] sentenceArr)
@@ -340,31 +368,19 @@ public partial class _Default : System.Web.UI.Page
         {
             try
             {
-                if (word.ToString().Length == 4)
-                {
-                    int wordInt = int.Parse(word.ToString());
-                    if (wordInt < 2200 && wordInt > 1000)
-                    {
-                        YearArr.Add(wordInt);
-                    }
-                }
+                var lettersArr = word.ToList();
+                var counter = 0;
+                var year = "";
 
-                if (word.ToString().Length == 5)
+                foreach (var letter in lettersArr)
                 {
-                    char[] charsToTrim = { ')', '.', ',' };
-                    var wordPiece = word.ToString().TrimEnd(charsToTrim);
-                    int wordInt = int.Parse(wordPiece.ToString());
-                    if (wordInt < 2200 && wordInt > 1000)
-                    {
-                        YearArr.Add(wordInt);
-                    }
+                    var checkNum = int.Parse(letter.ToString());
+                    year += letter.ToString();
+                    counter++;
 
-                    char[] charsToTrim2 = { '(' };
-                    wordPiece = word.ToString().TrimStart(charsToTrim2);
-                    wordInt = int.Parse(wordPiece.ToString());
-                    if (wordInt < 2200 && wordInt > 1000)
+                    if (counter == 4)
                     {
-                        YearArr.Add(wordInt);
+                        YearArr.Add(int.Parse(year));
                     }
                 }
             }
