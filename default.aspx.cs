@@ -17,8 +17,7 @@ public partial class _Default : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
 
-        FirstSentence("Mary Ball Washington");
-
+        //FirstSentence("Mary Ball Washington");
         //OnlyIntro("Mary Ball Washington");
         //AllText("Kenneth Burke");
 
@@ -321,7 +320,7 @@ public partial class _Default : System.Web.UI.Page
     {
         string ResponseText;
         HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=1&format=json&titles=" + articleTitle);
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=true&exsentences=1&format=json&titles=" + articleTitle);
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -338,11 +337,9 @@ public partial class _Default : System.Web.UI.Page
         var id = article["pageid"];
         var title = article["title"];
 
-        string contentAfterCheck = checkContent(content.ToString());
+        var years = GetYears(content.ToString());
 
-        var years = GetYears(contentAfterCheck.ToString());
-
-        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + contentAfterCheck + years;
+        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content + years;
     }
 
     private string checkContent(string content)
