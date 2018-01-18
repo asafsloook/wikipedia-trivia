@@ -21,21 +21,22 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Mary Ball Washington");
         //AllText("Kenneth Burke");
 
-        RandomPageFromCategory("People");
-        
+        //RandomPageFromCategory("People");
+
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
 
         //RandomPhotoOfTheDay();
-
-        //--Beta--
-        //MoreLike("Technology", "Tennis");
-
+        
         //var a = GetViews("Fernando Pasarin");
         //var b = GetViews("Paris");
         //Response.Write(a + "<br/> <br/>" + b);
-    }
 
+        //--Beta--
+        //MoreLike("Technology", "Tennis");
+        
+    }
+    
     /// <summary>
     /// ////////////////////////////////////////////////////////////
     /// Main feature, random article from desired root category. 
@@ -428,7 +429,6 @@ public partial class _Default : System.Web.UI.Page
         {
             JObject root = JObject.Parse(ResponseText);
             timeOfDeathStr = root["entities"].First.First["claims"]["P570"].First["mainsnak"]["datavalue"]["value"]["time"].ToString();
-
         }
         catch (Exception)
         {
