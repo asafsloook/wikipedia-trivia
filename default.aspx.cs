@@ -21,7 +21,7 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Mary Ball Washington");
         //AllText("Kenneth Burke");
 
-        RandomPageFromCategory("People", "People");
+        //RandomPageFromCategory("Health‎", "Health");
 
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
@@ -35,8 +35,43 @@ public partial class _Default : System.Web.UI.Page
         //--Beta--
         //MoreLike("Technology", "Tennis");
 
+        //getMainCategories();
+    }
+
+
+    /// <summary>
+    /// ////////////////////////////////////////////////////////////
+    /// Get the main/root categories from wikipedia
+    /// ////////////////////////////////////////////////////////////
+    /// </summary>
+    /// 
+    private List<string> getMainCategories()
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtitle=Category:Main_topic_classifications&cmlimit=100");
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        JObject root = JObject.Parse(ResponseText);
+        var dig = root["query"]["categorymembers"];
+
+        List<string> mainCategories = new List<string>(); 
+
+        foreach (var item in dig)
+        {
+            mainCategories.Add(item["title"].ToString().Replace("Category:",""));
+        }
+
+        return mainCategories;
     }
     
+
     /// <summary>
     /// ////////////////////////////////////////////////////////////
     /// Main feature, random article from desired root category. 
@@ -74,7 +109,7 @@ public partial class _Default : System.Web.UI.Page
         var id = dig["pageid"];
         var title = dig["title"];
 
-        if (content.ToString() == "" || title.ToString().StartsWith("Category") || title.ToString().StartsWith("List")) //((string)content).ToArray().Length < 100 ||
+        if (content.ToString() == "" || title.ToString().StartsWith("Category") || title.ToString().StartsWith("List") || title.ToString().StartsWith("Portal") || title.ToString().StartsWith("Index")) //((string)content).ToArray().Length < 100 ||
         {
             if (title.ToString().StartsWith("Category"))
             {
