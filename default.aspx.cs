@@ -21,20 +21,20 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Mary Ball Washington");
         //AllText("Kenneth Burke");
 
-        //RandomPageFromCategory("People");
+        RandomPageFromCategory("People", "People");
 
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
 
         //RandomPhotoOfTheDay();
-        
-        //var a = GetViews("Fernando Pasarin");
+
+        //var a = GetViews("Amsterdam");
         //var b = GetViews("Paris");
         //Response.Write(a + "<br/> <br/>" + b);
 
         //--Beta--
         //MoreLike("Technology", "Tennis");
-        
+
     }
     
     /// <summary>
@@ -44,7 +44,7 @@ public partial class _Default : System.Web.UI.Page
     /// ////////////////////////////////////////////////////////////
     /// </summary>
     /// 
-    private void RandomPageFromCategory(string categoryTitle)
+    private void RandomPageFromCategory(string categoryTitle, string rootCategoryTitle)
     {
         string ResponseURI;
         HttpWebRequest myRequest =
@@ -79,17 +79,17 @@ public partial class _Default : System.Web.UI.Page
             if (title.ToString().StartsWith("Category"))
             {
                 title = title.ToString().Replace("Category:", "");
-                RandomPageFromCategory(title.ToString());
+                RandomPageFromCategory(title.ToString(), rootCategoryTitle);
                 return;
             }
 
-            if (title.ToString().StartsWith("List"))
-            {
-                RandomPageFromCategory("people");
-                return;
-            }
+            //if (title.ToString().StartsWith("List"))
+            //{
+            //    RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            //    return;
+            //}
 
-            RandomPageFromCategory(categoryTitle);
+            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             return;
         }
 
