@@ -21,16 +21,14 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Mary Ball Washington");
         //AllText("Kenneth Burke");
 
-        //RandomPageFromCategory("People‎", "People");
-
-        ph.Text += hasCauseOfDeath("John_F._Kennedy");
+        RandomPageFromCategory("People‎", "People");
 
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
 
         //RandomPhotoOfTheDay();
 
-        //var a = GetViews("Amsterdam");
+        //var a = GetViews("Roussan Camille");
         //var b = GetViews("Paris");
         //Response.Write(a + "<br/> <br/>" + b);
 
@@ -90,11 +88,11 @@ public partial class _Default : System.Web.UI.Page
         {
             ResponseURI = response.ResponseUri.ToString();
         }
-        ResponseURI = ResponseURI.Replace("https://en.wikipedia.org/wiki/", "");
-
+        string articleTitle = ResponseURI.Replace("https://en.wikipedia.org/wiki/", "");
+        
         string ResponseText;
         myRequest =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + ResponseURI);
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + articleTitle);
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -104,14 +102,14 @@ public partial class _Default : System.Web.UI.Page
         }
 
         JObject root = JObject.Parse(ResponseText);
-
+        
         var dig = root["query"]["pages"].First.First;
 
         var content = dig["extract"];
         var id = dig["pageid"];
         var title = dig["title"];
 
-        if (content.ToString() == "" || title.ToString().StartsWith("Category") || title.ToString().StartsWith("List") || title.ToString().StartsWith("Portal") || title.ToString().StartsWith("Index")) //((string)content).ToArray().Length < 100 ||
+        if (content == null || content.ToString() == "" || title.ToString().StartsWith("Category") || title.ToString().StartsWith("List") || title.ToString().StartsWith("Portal") || title.ToString().StartsWith("Index")) //((string)content).ToArray().Length < 100 ||
         {
             if (title.ToString().StartsWith("Category"))
             {
@@ -132,7 +130,8 @@ public partial class _Default : System.Web.UI.Page
 
         OnlyIntro(title.ToString());
 
-        //var a = hasBorn(content.ToString());
+
+        ////////////////////////////////////////////////////
         var birth_date = hasBirthDate(title.ToString());
         if (birth_date != null)
         {
@@ -143,6 +142,12 @@ public partial class _Default : System.Web.UI.Page
         if (death_date != null)
         {
             ph.Text += "<br/>DEATHDAY:   " + death_date.ToString().Substring(0, 11).Replace("+", "");
+        }
+
+        var cause_death = hasCauseOfDeath(title.ToString());
+        if (cause_death != null)
+        {
+            ph.Text += "<br/>CAUSE OF DEATH:   " + cause_death;
         }
 
         //ph.Text = "<h1>Title: " + title + "</h1>"
@@ -494,7 +499,7 @@ public partial class _Default : System.Web.UI.Page
         try
         {
             JObject root = JObject.Parse(ResponseText);
-            propID = root["entities"].First.First["claims"]["P1196"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+            propID = root["entities"].First.First["claims"]["P509"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
         }
         catch (Exception)
         {
@@ -506,6 +511,14 @@ public partial class _Default : System.Web.UI.Page
         return propVal;
     }
 
+
+    /// <summary>
+    /// /////////
+    /// extract the longest property description
+    /// needed: optimization to most accurate or mean value
+    /// /////////
+    /// </summary>
+    /// 
     private string propertyValue(string propertyID)
     {
         string ResponseText;
@@ -522,10 +535,26 @@ public partial class _Default : System.Web.UI.Page
         JObject root = JObject.Parse(ResponseText);
 
 
-        var dig = root["entities"].First.First["aliases"]["en"][0]["value"].ToString();
-        
-        return dig;
+        var dig = root["entities"].First.First["aliases"]["en"];
+
+        int temp = 0;
+        int id = 0;
+
+        for (int i = 0; i < dig.Count(); i++)
+        {
+            int len = dig[i]["value"].ToString().Length;
+
+            if (len > temp)
+            {
+                temp = len;
+                id = i;
+            }
+        }
+
+        return dig[id]["value"].ToString();
     }
+
+
 
     /// <summary>
     /// /////////
