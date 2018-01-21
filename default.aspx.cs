@@ -40,9 +40,9 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// ////////////////////////////////////////////////////////////
+    /// /////////
     /// Get the main/root categories from wikipedia
-    /// ////////////////////////////////////////////////////////////
+    /// /////////
     /// </summary>
     /// 
     private List<string> getMainCategories()
@@ -61,22 +61,22 @@ public partial class _Default : System.Web.UI.Page
         JObject root = JObject.Parse(ResponseText);
         var dig = root["query"]["categorymembers"];
 
-        List<string> mainCategories = new List<string>(); 
+        List<string> mainCategories = new List<string>();
 
         foreach (var item in dig)
         {
-            mainCategories.Add(item["title"].ToString().Replace("Category:",""));
+            mainCategories.Add(item["title"].ToString().Replace("Category:", ""));
         }
 
         return mainCategories;
     }
-    
+
 
     /// <summary>
-    /// ////////////////////////////////////////////////////////////
+    /// /////////
     /// Main feature, random article from desired root category. 
     /// Important: recursing and may be slow sometimes. (10-20secs)
-    /// ////////////////////////////////////////////////////////////
+    /// /////////
     /// </summary>
     /// 
     private void RandomPageFromCategory(string categoryTitle, string rootCategoryTitle)
@@ -150,9 +150,9 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// Return awesome picture of the day
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// </summary>
     /// 
     private void RandomPhotoOfTheDay()
@@ -179,9 +179,9 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// Get number of views of yesterday (today is not compatible)
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// </summary>
     /// 
     private void GetInfoNearByWithImgs(string lat, string lng, string radius)
@@ -288,9 +288,9 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// Get number of views of yesterday (today is not compatible)
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// </summary>
     /// 
     private int GetViews(string articleTitle)
@@ -329,11 +329,11 @@ public partial class _Default : System.Web.UI.Page
         return views;
     }
 
-    
+
     /// <summary>
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// Text extracts from wiki
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// </summary>
     /// 
     private void FirstSentence(string articleTitle)
@@ -408,11 +408,11 @@ public partial class _Default : System.Web.UI.Page
         ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
     }
 
-    
+
     /// <summary>
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// Person events check
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// </summary>
     /// 
     private string hasBirthDate(string articleTitle)
@@ -428,7 +428,7 @@ public partial class _Default : System.Web.UI.Page
             }
         }
 
-        string timeOfBirthStr="";
+        string timeOfBirthStr = "";
 
         try
         {
@@ -440,8 +440,8 @@ public partial class _Default : System.Web.UI.Page
         {
             return null;
         }
-        
-        
+
+
         return timeOfBirthStr;
     }
     /// 
@@ -474,11 +474,11 @@ public partial class _Default : System.Web.UI.Page
         return timeOfDeathStr;
     }
 
-    
+
     /// <summary>
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// Beta, unknown behaviar
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// </summary>
     /// 
     private void MoreLike(string var1, string var2)
@@ -525,11 +525,11 @@ public partial class _Default : System.Web.UI.Page
 
     }
 
-    
+
     /// <summary>
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// Functions tests, not for use
-    /// ////////////////////////////////////////////////////
+    /// /////////
     /// </summary>
     /// 
     private string hasBorn(string content)
