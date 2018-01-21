@@ -21,7 +21,9 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Mary Ball Washington");
         //AllText("Kenneth Burke");
 
-        //RandomPageFromCategory("Health‎", "Health");
+        //RandomPageFromCategory("People‎", "People");
+
+        ph.Text += hasCauseOfDeath("John_F._Kennedy");
 
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
@@ -473,7 +475,57 @@ public partial class _Default : System.Web.UI.Page
 
         return timeOfDeathStr;
     }
+    ///
+    private string hasCauseOfDeath(string articleTitle)
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=claims&titles=" + articleTitle);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
 
+        string propID = "";
+
+        try
+        {
+            JObject root = JObject.Parse(ResponseText);
+            propID = root["entities"].First.First["claims"]["P1196"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+
+        var propVal = propertyValue(propID);
+
+        return propVal;
+    }
+
+    private string propertyValue(string propertyID)
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&ids=" + propertyID);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        JObject root = JObject.Parse(ResponseText);
+
+
+        var dig = root["entities"].First.First["aliases"]["en"][0]["value"].ToString();
+        
+        return dig;
+    }
 
     /// <summary>
     /// /////////
