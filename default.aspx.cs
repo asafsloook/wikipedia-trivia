@@ -21,8 +21,8 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Mary Ball Washington");
         //AllText("Kenneth Burke");
 
-        RandomPageFromCategory("People‎", "People");
-
+        //RandomPageFromCategory("People‎", "People");
+        
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
 
@@ -89,7 +89,7 @@ public partial class _Default : System.Web.UI.Page
             ResponseURI = response.ResponseUri.ToString();
         }
         string articleTitle = ResponseURI.Replace("https://en.wikipedia.org/wiki/", "");
-        
+
         string ResponseText;
         myRequest =
         (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + articleTitle);
@@ -102,7 +102,7 @@ public partial class _Default : System.Web.UI.Page
         }
 
         JObject root = JObject.Parse(ResponseText);
-        
+
         var dig = root["query"]["pages"].First.First;
 
         var content = dig["extract"];
@@ -127,6 +127,12 @@ public partial class _Default : System.Web.UI.Page
             RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             return;
         }
+
+        //if (GetViews(title.ToString()) < 50)
+        //{
+        //    RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+        //    return;
+        //}
 
         OnlyIntro(title.ToString());
 
@@ -514,8 +520,7 @@ public partial class _Default : System.Web.UI.Page
 
     /// <summary>
     /// /////////
-    /// extract the longest property description
-    /// needed: optimization to most accurate or mean value
+    /// extract random property description
     /// /////////
     /// </summary>
     /// 
@@ -537,23 +542,26 @@ public partial class _Default : System.Web.UI.Page
 
         var dig = root["entities"].First.First["aliases"]["en"];
 
-        int temp = 0;
-        int id = 0;
+        List<string> ls = new List<string>();
 
         for (int i = 0; i < dig.Count(); i++)
         {
-            int len = dig[i]["value"].ToString().Length;
 
-            if (len > temp)
+            if (dig[i]["value"].ToString().Length > 5)
             {
-                temp = len;
-                id = i;
+                ls.Add(dig[i]["value"].ToString());
             }
         }
 
-        return dig[id]["value"].ToString();
-    }
+        //ls.Sort((x, y) => x.Length.CompareTo(y.Length));
+        //ls.ElementAt((ls.Count / 2)).ToString()
 
+
+        Random rnd = new Random();
+        int randomNum = rnd.Next(0, ls.Count());
+
+        return ls.ElementAt(randomNum).ToString();
+    }
 
 
     /// <summary>
