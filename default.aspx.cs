@@ -18,18 +18,18 @@ public partial class _Default : System.Web.UI.Page
     {
 
         //FirstSentence("Mary Ball Washington");
-        //OnlyIntro("Mary Ball Washington");
+        //OnlyIntro("Ariel Sharon");
         //AllText("Kenneth Burke");
 
         //RandomPageFromCategory("People‎", "People");
-        
+
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
 
         //RandomPhotoOfTheDay();
 
-        //var a = GetViews("Roussan Camille");
-        //var b = GetViews("Paris");
+        //var a = GetViews("Gymnastics at the 1961 Summer Universiade");
+        //var b = GetViews("Front of Shamyl");
         //Response.Write(a + "<br/> <br/>" + b);
 
         //--Beta--
@@ -40,9 +40,7 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// /////////
     /// Get the main/root categories from wikipedia
-    /// /////////
     /// </summary>
     /// 
     private List<string> getMainCategories()
@@ -73,10 +71,8 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// /////////
     /// Main feature, random article from desired root category. 
     /// Important: recursing and may be slow sometimes. (10-20secs)
-    /// /////////
     /// </summary>
     /// 
     private void RandomPageFromCategory(string categoryTitle, string rootCategoryTitle)
@@ -105,20 +101,20 @@ public partial class _Default : System.Web.UI.Page
 
         var dig = root["query"]["pages"].First.First;
 
-        var content = dig["extract"];
-        var id = dig["pageid"];
-        var title = dig["title"];
+        var content = dig["extract"].ToString();
+        var id = dig["pageid"].ToString();
+        var title = dig["title"].ToString();
 
-        if (content == null || content.ToString() == "" || title.ToString().StartsWith("Category") || title.ToString().StartsWith("List") || title.ToString().StartsWith("Portal") || title.ToString().StartsWith("Index")) //((string)content).ToArray().Length < 100 ||
+        if (content == null || content == "" || title.StartsWith("Category") || title.StartsWith("List") || title.StartsWith("Portal") || title.StartsWith("Index")) //((string)content).ToArray().Length < 100 ||
         {
-            if (title.ToString().StartsWith("Category"))
+            if (title.StartsWith("Category"))
             {
-                title = title.ToString().Replace("Category:", "");
-                RandomPageFromCategory(title.ToString(), rootCategoryTitle);
+                title = title.Replace("Category:", "");
+                RandomPageFromCategory(title, rootCategoryTitle);
                 return;
             }
 
-            //if (title.ToString().StartsWith("List"))
+            //if (title.StartsWith("List"))
             //{
             //    RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             //    return;
@@ -128,32 +124,43 @@ public partial class _Default : System.Web.UI.Page
             return;
         }
 
-        //if (GetViews(title.ToString()) < 50)
+        //var views = GetViews(title);
+        //if (views == -1 || views < 10)
         //{
         //    RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
         //    return;
         //}
 
-        OnlyIntro(title.ToString());
+        OnlyIntro(title);
 
+        ph.Text += "<br/> Description: " + hasDescription(title) + "<br/>";
 
-        ////////////////////////////////////////////////////
-        var birth_date = hasBirthDate(title.ToString());
-        if (birth_date != null)
+        if (isPerson(title))
         {
-            ph.Text += "<br/>BIRTHDAY:   " + birth_date.ToString().Substring(0, 11).Replace("+", "");
+            ph.Text += "<br/> isPerson:true <br/>";
+
+            var birth_date = hasBirthDate(title);
+            if (birth_date != null)
+            {
+                ph.Text += "<br/>Who is the *BD*:" + birth_date.Substring(0, 11).Replace("+", "");
+            }
+
+            var death_date = hasDeathDate(title);
+            if (death_date != null)
+            {
+                ph.Text += "<br/>Who is the *DD*:   " + death_date.Substring(0, 11).Replace("+", "");
+            }
+
+            var cause_death = hasCauseOfDeath(title);
+            if (cause_death != null)
+            {
+                ph.Text += "<br/>Who is the *COH*:   " + cause_death;
+            }
         }
 
-        var death_date = hasDeathDate(title.ToString());
-        if (death_date != null)
+        if (isAnimal(title) != null)
         {
-            ph.Text += "<br/>DEATHDAY:   " + death_date.ToString().Substring(0, 11).Replace("+", "");
-        }
-
-        var cause_death = hasCauseOfDeath(title.ToString());
-        if (cause_death != null)
-        {
-            ph.Text += "<br/>CAUSE OF DEATH:   " + cause_death;
+            ph.Text += "<br/>Do you know that animal?:" + isAnimal(title);
         }
 
         //ph.Text = "<h1>Title: " + title + "</h1>"
@@ -163,9 +170,7 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// /////////
     /// Return awesome picture of the day
-    /// /////////
     /// </summary>
     /// 
     private void RandomPhotoOfTheDay()
@@ -192,9 +197,7 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// /////////
-    /// Get number of views of yesterday (today is not compatible)
-    /// /////////
+    /// Geolocation based queries
     /// </summary>
     /// 
     private void GetInfoNearByWithImgs(string lat, string lng, string radius)
@@ -301,9 +304,7 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// /////////
     /// Get number of views of yesterday (today is not compatible)
-    /// /////////
     /// </summary>
     /// 
     private int GetViews(string articleTitle)
@@ -321,17 +322,26 @@ public partial class _Default : System.Web.UI.Page
 
         string timeStamp = yearStr + monthStr + dayStr;
         string url = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/" + articleTitle + "/daily/" + timeStamp + "/" + timeStamp;
-
         string ResponseText;
-        HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create(url);
-        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+
+        try
         {
-            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+
+            HttpWebRequest myRequest =
+            (HttpWebRequest)WebRequest.Create(url);
+            using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
             {
-                ResponseText = reader.ReadToEnd();
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    ResponseText = reader.ReadToEnd();
+                }
             }
         }
+        catch (Exception)
+        {
+            return -1;
+        }
+
 
         JObject root = JObject.Parse(ResponseText);
 
@@ -344,9 +354,7 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// /////////
     /// Text extracts from wiki
-    /// /////////
     /// </summary>
     /// 
     private void FirstSentence(string articleTitle)
@@ -423,11 +431,9 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// /////////
-    /// Person events check
-    /// /////////
+    /// Person functions
     /// </summary>
-    /// 
+    ///
     private string hasBirthDate(string articleTitle)
     {
         string ResponseText;
@@ -516,12 +522,111 @@ public partial class _Default : System.Web.UI.Page
 
         return propVal;
     }
+    ///
+    private bool isPerson(string articleTitle)
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=claims&titles=" + articleTitle);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        string propVal = "";
+
+        try
+        {
+            JObject root = JObject.Parse(ResponseText);
+            propVal = root["entities"].First.First["claims"]["P31"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+            if (propVal == "Q5")
+            {
+                return true;
+            }
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+        return false;
+    }
+
 
 
     /// <summary>
-    /// /////////
-    /// extract random property description
-    /// /////////
+    /// If the article is about animel, function returns emoji of the animal
+    /// </summary>
+    /// 
+    private string isAnimal(string articleTitle)
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=claims&titles=" + "Lion");
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        string propVal = "";
+
+        try
+        {
+            JObject root = JObject.Parse(ResponseText);
+            propVal = root["entities"].First.First["claims"]["P1417"].First["mainsnak"]["datavalue"]["value"].ToString();
+            if (propVal.StartsWith("animal"))
+            {
+                propVal = root["entities"].First.First["claims"]["P487"].First["mainsnak"]["datavalue"]["value"].ToString();
+                return propVal;
+            }
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+        return null;
+    }
+
+
+    /// <summary>
+    /// get article short description for notification
+    /// </summary>
+    /// 
+    private string hasDescription(string articleTitle)
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=descriptions&titles=" + articleTitle);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        try
+        {
+            JObject root = JObject.Parse(ResponseText);
+
+            var dig = root["entities"].First.First["descriptions"]["en"]["value"];
+
+            return dig.ToString();
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+
+    /// <summary>
+    /// extract property description
     /// </summary>
     /// 
     private string propertyValue(string propertyID)
@@ -540,34 +645,30 @@ public partial class _Default : System.Web.UI.Page
         JObject root = JObject.Parse(ResponseText);
 
 
-        var dig = root["entities"].First.First["aliases"]["en"];
+        var dig = root["entities"].First.First["labels"]["en"];
 
-        List<string> ls = new List<string>();
-
-        for (int i = 0; i < dig.Count(); i++)
-        {
-
-            if (dig[i]["value"].ToString().Length > 5)
-            {
-                ls.Add(dig[i]["value"].ToString());
-            }
-        }
-
+        //random alias of the property
+        ////////////////////////////////////////
+        //List<string> ls = new List<string>();
+        //for (int i = 0; i < dig.Count(); i++)
+        //{
+        //    if (dig[i]["value"].ToString().Length > 5)
+        //    {
+        //        ls.Add(dig[i]["value"].ToString());
+        //    }
+        //}
         //ls.Sort((x, y) => x.Length.CompareTo(y.Length));
         //ls.ElementAt((ls.Count / 2)).ToString()
+        //Random rnd = new Random();
+        //int randomNum = rnd.Next(0, ls.Count());
+        //return ls.ElementAt(randomNum).ToString();
 
-
-        Random rnd = new Random();
-        int randomNum = rnd.Next(0, ls.Count());
-
-        return ls.ElementAt(randomNum).ToString();
+        return dig["value"].ToString();
     }
 
 
     /// <summary>
-    /// /////////
     /// Beta, unknown behaviar
-    /// /////////
     /// </summary>
     /// 
     private void MoreLike(string var1, string var2)
@@ -616,9 +717,7 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// /////////
     /// Functions tests, not for use
-    /// /////////
     /// </summary>
     /// 
     private string hasBorn(string content)
