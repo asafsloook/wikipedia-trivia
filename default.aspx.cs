@@ -21,7 +21,7 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Ariel Sharon");
         //AllText("Kenneth Burke");
 
-        //RandomPageFromCategory("People‎", "People");
+        RandomPageFromCategory("Animals‎", "Animals");
 
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
@@ -105,7 +105,7 @@ public partial class _Default : System.Web.UI.Page
         var id = dig["pageid"].ToString();
         var title = dig["title"].ToString();
 
-        if (content == null || content == "" || title.StartsWith("Category") || title.StartsWith("List") || title.StartsWith("Portal") || title.StartsWith("Index")) //((string)content).ToArray().Length < 100 ||
+        if (content == null || content == "" || title.StartsWith("Category") || title.StartsWith("List") || title.StartsWith("Portal") || title.StartsWith("Index") || title.StartsWith("Template")) //((string)content).ToArray().Length < 100 ||
         {
             if (title.StartsWith("Category"))
             {
@@ -564,7 +564,7 @@ public partial class _Default : System.Web.UI.Page
     {
         string ResponseText;
         HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=claims&titles=" + "Lion");
+        (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=claims&titles=" + articleTitle);
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
