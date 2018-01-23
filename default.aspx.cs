@@ -21,7 +21,12 @@ public partial class _Default : System.Web.UI.Page
         //OnlyIntro("Ariel Sharon");
         //AllText("Kenneth Burke");
 
-        RandomPageFromCategory("Animals‎", "Animals");
+        Random rnd = new Random();
+        int randomNum = rnd.Next(0, getMainCategories().Count());
+
+        var a = getMainCategories()[randomNum].ToString();
+
+        RandomPageFromCategory("Events", "Events");
 
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
@@ -133,6 +138,15 @@ public partial class _Default : System.Web.UI.Page
 
         OnlyIntro(title);
 
+        if (hasDescription(title) != null)
+        {
+            if (hasDescription(title).Contains("Wikipedia disambiguation page"))
+            {
+                RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+                return;
+            }
+        }
+
         ph.Text += "<br/> Description: " + hasDescription(title) + "<br/>";
 
         if (isPerson(title))
@@ -160,7 +174,12 @@ public partial class _Default : System.Web.UI.Page
 
         if (isAnimal(title) != null)
         {
-            ph.Text += "<br/>Do you know that animal?:" + isAnimal(title);
+            ph.Text += "<br/>Do you know that animal?: " + isAnimal(title);
+        }
+
+        if (isEvent(title))
+        {
+            ph.Text += "isEvent: true";
         }
 
         //ph.Text = "<h1>Title: " + title + "</h1>"
@@ -542,7 +561,7 @@ public partial class _Default : System.Web.UI.Page
         {
             JObject root = JObject.Parse(ResponseText);
             propVal = root["entities"].First.First["claims"]["P31"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
-            if (propVal == "Q5")
+            if (propVal == "Q5")  // Q5 = wikidata id for human
             {
                 return true;
             }
@@ -554,6 +573,80 @@ public partial class _Default : System.Web.UI.Page
         return false;
     }
 
+
+    /// <summary>
+    /// Events functions
+    /// </summary>
+    ///
+    private bool isEvent(string articleTitle)
+    {
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=claims&titles=" + articleTitle);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        string propVal = "";
+        JObject root = new JObject();
+        try
+        {
+            root = JObject.Parse(ResponseText);
+            propVal = root["entities"].First.First["claims"]["P279"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+            if (propVal == "Q1656682")
+            {
+                return true;
+            }
+            else
+            {
+                propVal = root["entities"].First.First["claims"]["P31"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+            }
+        }
+        catch (Exception)
+        {
+            propVal = root["entities"].First.First["claims"]["P31"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+        }
+
+        root = new JObject();
+
+        while (propVal != "Q1656682") // Q1656682 = event id in wikidata
+        {
+            myRequest =
+        (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=claims&ids=" + propVal);
+            using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+            {
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    ResponseText = reader.ReadToEnd();
+                }
+            }
+
+            try
+            {
+                root = JObject.Parse(ResponseText);
+                propVal = root["entities"].First.First["claims"]["P279"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+
+                if (propVal == "Q1656682")
+                {
+                    return true;
+                }
+                else
+                {
+                    propVal = root["entities"].First.First["claims"]["P31"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
 
 
     /// <summary>
