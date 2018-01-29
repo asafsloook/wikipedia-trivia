@@ -22,20 +22,21 @@ public partial class _Default : System.Web.UI.Page
         //AllText("Kenneth Burke");
 
         Random rnd = new Random();
-        int randomNum = rnd.Next(0, getMainCategories().Count());
+        var categoriesList = getMainCategories();
+        categoriesList.Remove("Reference works");
+        int randomNum = rnd.Next(0, categoriesList.Count());
+        var a = categoriesList[randomNum].ToString();
 
-        var a = getMainCategories()[randomNum].ToString();
-
-        RandomPageFromCategory("Events", "Events");
-
+        RandomPageFromCategory(a, a);
+       // ph.Text= isAnimal("Donkey");
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
 
         //RandomPhotoOfTheDay();
 
-        //var a = GetViews("Gymnastics at the 1961 Summer Universiade");
-        //var b = GetViews("Front of Shamyl");
-        //Response.Write(a + "<br/> <br/>" + b);
+        //var aa = GetViews("Gymnastics at the 1961 Summer Universiade");
+        //var bb = GetViews("26th century");
+        //Response.Write(aa + "<br/> <br/>" + bb);
 
         //--Beta--
         //MoreLike("Technology", "Tennis");
@@ -109,8 +110,10 @@ public partial class _Default : System.Web.UI.Page
         var content = dig["extract"].ToString();
         var id = dig["pageid"].ToString();
         var title = dig["title"].ToString();
+        
+        title = title.Replace(' ', '_');
 
-        if (content == null || content == "" || title.StartsWith("Category") || title.StartsWith("List") || title.StartsWith("Portal") || title.StartsWith("Index") || title.StartsWith("Template")) //((string)content).ToArray().Length < 100 ||
+        if (content == null || content == "" || title.StartsWith("Category") || title.StartsWith("This page")  || title.StartsWith("List") || title.StartsWith("Portal") || title.StartsWith("Index") || title.StartsWith("Template") || title.StartsWith("Timeline")) //((string)content).ToArray().Length < 100 || title.StartsWith("Book:")
         {
             if (title.StartsWith("Category"))
             {
@@ -119,72 +122,113 @@ public partial class _Default : System.Web.UI.Page
                 return;
             }
 
-            //if (title.StartsWith("List"))
-            //{
-            //    RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-            //    return;
-            //}
-
             RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             return;
         }
 
-        //var views = GetViews(title);
-        //if (views == -1 || views < 10)
-        //{
-        //    RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-        //    return;
-        //}
-
-        OnlyIntro(title);
-
-        if (hasDescription(title) != null)
+        var views = GetViews(title);
+        if (views == -1 || views < 1)
         {
-            if (hasDescription(title).Contains("Wikipedia disambiguation page"))
-            {
-                RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-                return;
-            }
+            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            return;
         }
 
-        ph.Text += "<br/> Description: " + hasDescription(title) + "<br/>";
+        ph.Text += "<br/><br/><br/>";
+
+        //wikipedia 
+        OnlyIntro(title);
+        ph.Text += "FirstSentence: " + FirstSentence(title);
+        ph.Text += "<br/><br/>Root Category: " + rootCategoryTitle;
+
+        var question = "";
+
+        //wikidata 
+        if (hasDescription(title) != null)
+        {
+            var desc = hasDescription(title);
+            if (desc.Contains("Wikipedia disambiguation page") || desc.Contains("Wikimedia disambiguation page") || content.Substring(0, 25).Contains("list") || desc.Contains("list") || desc.ToLower().StartsWith("of "))
+            {
+                //RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+                //return;
+            }
+
+            if (desc.ToLower().StartsWith("the ") || desc.ToLower().StartsWith("a ") || desc.ToLower().StartsWith("an "))
+            {
+                question = "<br/><br/> Q: Do you know what is " + desc + "?<br/>";
+            }
+
+            else
+            {
+                var x = startWithVowel(desc);
+
+                question = "<br/><br/> Q: Do you know what is " + x + desc + "?<br/>";
+            }
+
+        }
+
+        var desc2 = hasDescription(title);
 
         if (isPerson(title))
         {
-            ph.Text += "<br/> isPerson:true <br/>";
+            ph.Text += "<br/><br/> isPerson:true <br/>";
 
             var birth_date = hasBirthDate(title);
             if (birth_date != null)
             {
-                ph.Text += "<br/>Who is the *BD*:" + birth_date.Substring(0, 11).Replace("+", "");
+                ph.Text += "<br/>*BD*:" + birth_date.Substring(0, 11).Replace("+", "");
             }
 
             var death_date = hasDeathDate(title);
             if (death_date != null)
             {
-                ph.Text += "<br/>Who is the *DD*:   " + death_date.Substring(0, 11).Replace("+", "");
+                ph.Text += "<br/>*DD*:   " + death_date.Substring(0, 11).Replace("+", "");
             }
 
             var cause_death = hasCauseOfDeath(title);
             if (cause_death != null)
             {
-                ph.Text += "<br/>Who is the *COH*:   " + cause_death;
+                ph.Text += "<br/>*COD*:   " + cause_death;
             }
+
+            var x = startWithVowel(desc2);
+            question = "<br/><br/> Q: Do you know who is " + x + desc2 + "?<br/>";
         }
 
         if (isAnimal(title) != null)
         {
-            ph.Text += "<br/>Do you know that animal?: " + isAnimal(title);
+            ph.Text += "<br/><br/>Q: Do you know that animal?: " + isAnimal(title);
         }
 
-        if (isEvent(title))
-        {
-            ph.Text += "isEvent: true";
-        }
+        ph.Text += question;
+
+
+        //Unstable// Not for use
+        //if (isEvent(title))
+        //{
+        //    ph.Text += "isEvent: true";
+        //}
+
 
         //ph.Text = "<h1>Title: " + title + "</h1>"
         //        + "<h1>ID: " + id + "</h1><br/>"
         //        + "<h3>Content :<h3><br/>" + content;
+    }
+
+    private string startWithVowel(string desc)
+    {
+        List<string> vowels = new List<string> { "a", "e", "i", "o", "u" };
+
+        var x = "a ";
+
+        foreach (var item in vowels)
+        {
+            if (desc.ToLower().StartsWith(item))
+            {
+                x = "an ";
+            }
+        }
+
+        return x;
     }
 
 
@@ -376,11 +420,11 @@ public partial class _Default : System.Web.UI.Page
     /// Text extracts from wiki
     /// </summary>
     /// 
-    private void FirstSentence(string articleTitle)
+    private string FirstSentence(string articleTitle)
     {
         string ResponseText;
         HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?action=query&prop=extracts&exintro=true&exsentences=1&format=json&titles=" + articleTitle);
+        (HttpWebRequest)WebRequest.Create("https://www.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=true&exsentences=1&format=json&titles=" + articleTitle);
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -393,11 +437,11 @@ public partial class _Default : System.Web.UI.Page
 
         var article = root["query"]["pages"].First.First;
 
-        var content = article["extract"];
-        var id = article["pageid"];
-        var title = article["title"];
+        var content = article["extract"].ToString();
+        //var id = article["pageid"];
+        //var title = article["title"];
 
-        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
+        return content;
     }
     /// 
     private void OnlyIntro(string articleTitle)
@@ -575,7 +619,7 @@ public partial class _Default : System.Web.UI.Page
 
 
     /// <summary>
-    /// Events functions
+    /// Events functions//warning// not for use
     /// </summary>
     ///
     private bool isEvent(string articleTitle)
@@ -593,28 +637,36 @@ public partial class _Default : System.Web.UI.Page
 
         string propVal = "";
         JObject root = new JObject();
-        try
+        string propID = "P279";
+
+        while (propVal == "")
         {
-            root = JObject.Parse(ResponseText);
-            propVal = root["entities"].First.First["claims"]["P279"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
-            if (propVal == "Q1656682")
+            try
             {
-                return true;
+                root = JObject.Parse(ResponseText);
+                propVal = root["entities"].First.First["claims"][propID].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+
+                if (propVal == "Q1190554")
+                {
+                    return true;
+                }
             }
-            else
+            catch (Exception)
             {
-                propVal = root["entities"].First.First["claims"]["P31"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+                if (propID == "P31")
+                {
+                    return false;
+                }
+                propID = "P31";
             }
-        }
-        catch (Exception)
-        {
-            propVal = root["entities"].First.First["claims"]["P31"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
         }
 
         root = new JObject();
-
-        while (propVal != "Q1656682") // Q1656682 = event id in wikidata
+        int count = 0;
+        propID = "P279";
+        while (propVal != "Q1190554") // Q1656682 = event id in wikidata
         {
+
             myRequest =
         (HttpWebRequest)WebRequest.Create("https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=claims&ids=" + propVal);
             using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
@@ -628,23 +680,37 @@ public partial class _Default : System.Web.UI.Page
             try
             {
                 root = JObject.Parse(ResponseText);
-                propVal = root["entities"].First.First["claims"]["P279"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+                propVal = root["entities"].First.First["claims"][propID].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
 
-                if (propVal == "Q1656682")
+                if (propVal == "Q1190554")
                 {
                     return true;
                 }
-                else
-                {
-                    propVal = root["entities"].First.First["claims"]["P31"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
-                }
             }
             catch (Exception)
+            {
+
+            }
+            if (propID == "P31")
+            {
+                propID = "P279";
+            }
+            else
+            {
+                propID = "P31";
+            }
+
+            count++;
+            if (count > 10)
             {
                 return false;
             }
         }
 
+        if (propVal == "Q1190554")
+        {
+            return true;
+        }
         return false;
     }
 
