@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Text.RegularExpressions;
+
 
 public partial class _Default : System.Web.UI.Page
 {
@@ -35,8 +37,8 @@ public partial class _Default : System.Web.UI.Page
 
         //RandomPhotoOfTheDay();
 
-        //var aa = GetViews("Gymnastics at the 1961 Summer Universiade");
-        //var bb = GetViews("ISO_19114");
+        //var aa = GetViews("Computational creativity");
+        //var bb = GetViews("Bovine_spongiform_encephalopathy");
         //Response.Write(aa + "<br/> <br/>" + bb);
 
         //--Beta--
@@ -99,7 +101,7 @@ public partial class _Default : System.Web.UI.Page
 
         string ResponseText;
         HttpWebRequest myRequest2 =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle);
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle);  //Agritourism
         using (HttpWebResponse response2 = (HttpWebResponse)myRequest2.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response2.GetResponseStream()))
@@ -130,8 +132,8 @@ public partial class _Default : System.Web.UI.Page
         }
         catch (Exception)
         {
-
-            throw;
+            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            return;
         }
 
         title = title.Replace(' ', '_');
@@ -148,12 +150,43 @@ public partial class _Default : System.Web.UI.Page
             RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             return;
         }
+        
 
-        var views = GetViews(title);
-        if (views == -1 || views < 50)
+        //cheack for issues with article   
+        string ResponseText5;
+        HttpWebRequest myRequest5 =
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&titles=" + title);
+        using (HttpWebResponse response5 = (HttpWebResponse)myRequest5.GetResponse())
+        {
+            using (StreamReader reader5 = new StreamReader(response5.GetResponseStream()))
+            {
+                ResponseText5 = reader5.ReadToEnd();
+            }
+        }
+
+        JObject root2 = JObject.Parse(ResponseText5);
+
+        var dig2 = root2["query"]["pages"].First.First["revisions"].First["*"];
+
+        var hasIssues = dig2.ToString().Substring(0, 100).Contains("issues");
+
+        if (hasIssues)
         {
             RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             return;
+        }
+
+
+        var views = GetViews(title);
+        if (views == -1 || views < 100)
+        {
+            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            return;
+        }
+
+        if (content.Contains("(<span></span>)"))
+        {
+            content = content.Replace("(<span></span>)", "");
         }
 
         if (content.Contains("</dl>"))
@@ -175,61 +208,209 @@ public partial class _Default : System.Web.UI.Page
         //ph.Text += "FirstSentence: " + FirstSentence(title) + "<br/>" + "<br/>";
         ph.Text += "<br/><br/>Root Category: " + rootCategoryTitle + "<br/>" + "<br/>";
 
-        var DESCquestion = "";
 
-        //wikidata 
-        if (hasDescription(title) != null)
-        {
-            var desc = hasDescription(title);
-            if (desc.Contains("Wikipedia disambiguation page") || desc.Contains("Wikimedia disambiguation page") || content.Substring(0, 25).Contains("list") || desc.Contains("list") || desc.ToLower().StartsWith("of "))
-            {
-                //RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-                //return;
-            }
 
-            if (desc.ToLower().StartsWith("the ") || desc.ToLower().StartsWith("a ") || desc.ToLower().StartsWith("an "))
-            {
-                DESCquestion = "<br/><br/> DESC-Q: Do you know what is " + desc + "?<br/>";
-            }
+        #region wikidata
+        // var DESCquestion = "";
+        //if (hasDescription(title) != null)
+        //{
+        //    var desc = hasDescription(title);
+        //    if (desc.Contains("Wikipedia disambiguation page") || desc.Contains("Wikimedia disambiguation page") || content.Substring(0, 25).Contains("list") || desc.Contains("list") || desc.ToLower().StartsWith("of "))
+        //    {
+        //        //RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+        //        //return;
+        //    }
 
-            else
-            {
-                var x = startWithVowel(desc);
+        //    if (desc.ToLower().StartsWith("the ") || desc.ToLower().StartsWith("a ") || desc.ToLower().StartsWith("an "))
+        //    {
+        //        DESCquestion = "<br/><br/> DESC-Q: Do you know what is " + desc + "?<br/>";
+        //    }
 
-                DESCquestion = "<br/><br/> DESC-Q: Do you know what is " + x + desc + "?<br/>";
-            }
+        //    else
+        //    {
+        //        var x = startWithVowel(desc);
 
-        }
-        ph.Text += DESCquestion;
+        //        DESCquestion = "<br/><br/> DESC-Q: Do you know what is " + x + desc + "?<br/>";
+        //    }
+
+        //}
+        //ph.Text += DESCquestion;
+        #endregion
 
 
         var isQuestion = "";
 
-
-        var a = firstOccurence(content, new List<string> { " is ", " are ", " was ", " started ", " appears ", " became ", " contains ", " encompasses ", " attracted ", " accounts ", " presents ", " involves ", " shows ", " describes ", " consists ", " refer ", " refers ", " has ", " have ", " had ", " provides ", " exist ", " includes " });
-        
-        int startIndex = content.IndexOf(a);
-
-
-        string tempContent = content.Substring(startIndex);
-
-
-        var b = firstOccurence(tempContent, new List<string> { ".", "; ", ", such as ", "?", ", particularly ", ", which ", " which, ", ": " });
-
-        int endIndex = tempContent.IndexOf(b);
-
-
-        tempContent = tempContent.Substring(0, endIndex);
-
-
-        if (tempContent.StartsWith(" exist "))
+        if (content.Contains("<p><span></span></p>"))
         {
-            tempContent = tempContent.Replace(" exist "," exists ");
+            content = content.Replace("<p><span></span></p>", "");
         }
 
-        if (tempContent.StartsWith(" refer "))
+        //content = content.Replace(".<", ". <"); //(<([^>]+)>)
+
+        content = content.Replace("  ", " ");
+        content = content.Replace(" . ", ". ");
+
+        string qContent = content.Substring(0, content.IndexOf("</p>"));
+
+        //if (qContent.Length < 100)
+        //{
+        //    qContent = content.Substring(content.IndexOf("</p>"));
+        //}
+
+
+        qContent = Regex.Replace(qContent, @"<[^>]*>", String.Empty);
+
+        //content = Regex.Replace(content, @"\n", " ");
+
+
+        if (qContent.StartsWith("There") || qContent.StartsWith("Among"))
         {
-            tempContent = tempContent.Replace(" refer ", " refers ");
+            ph.Text += "NOT A QUESTION";
+        }
+
+
+
+        var startStr = firstOccurence(qContent, new List<string> { " crashed ", " is ", " involved ", " refer(s) ", " establishes ", " gives ", " states ", " premiered ", " began ", " represent ", " are ", " was ", " started ", " appears ", " became ", " contains ", " encompasses ", " attracted ", " accounts ", " presents ", " involves ", " shows ", " describes ", " consists ", " refer ", " refers ", " has ", " have ", " had ", " provides ", " exist ", " exists ", " includes ", " include " });
+
+        int startIndex = qContent.IndexOf(startStr);
+
+
+        string tempContent = qContent.Substring(startIndex);
+
+        tempContent = tempContent.Replace("&amp;", "&");
+
+
+        List<string> endSentenceMarkStr = new List<string>() { ".\"" , ";" , "." };
+
+        List<int> endSentenceMarkLen = new List<int>();
+
+        foreach (var item in endSentenceMarkStr)
+        {
+            //if (tempContent.IndexOf(item) != -1)
+            //{
+                if (item == ".\"")
+                {
+                    Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,)]{2,}[.\"]{2,})\\s+\\W*[A-Z,\"])");      
+
+                    var sentences1 = rx1.Matches(tempContent);
+
+                    string firstSentence1;
+
+                    try
+                    {
+                        firstSentence1 = sentences1[0].Value;
+                        endSentenceMarkLen.Add(firstSentence1.Length);
+                    }
+                    catch (Exception)
+                    {
+                        firstSentence1 = tempContent;
+                        endSentenceMarkLen.Add(firstSentence1.Length);
+                    }
+                }
+                else if (item == ";")
+                {
+                    Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,\",)]{2,}[;])\\s+\\W*[A-Z,a-z,\"])");
+
+                    var sentences1 = rx1.Matches(tempContent);
+
+                    string firstSentence1;
+
+                    try
+                    {
+                        firstSentence1 = sentences1[0].Value;
+                        endSentenceMarkLen.Add(firstSentence1.Length);
+                    }
+                    catch (Exception)
+                    {
+                        firstSentence1 = tempContent;
+                        endSentenceMarkLen.Add(firstSentence1.Length);
+                    }
+                }
+                else if (item == ".")
+                {
+                    Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,\",.)]{2,}[.])\\s+\\W*[A-Z,\"])");
+
+                    var sentences1 = rx1.Matches(tempContent);
+
+                    string firstSentence1;
+
+                    try
+                    {
+                        firstSentence1 = sentences1[0].Value;
+                        endSentenceMarkLen.Add(firstSentence1.Length);
+                    }
+                    catch (Exception)
+                    {
+                        firstSentence1 = tempContent;
+                        endSentenceMarkLen.Add(firstSentence1.Length);
+                    }
+                }
+            //}
+        }
+
+        //"((^.*?[a-z,0-9,A-Z,\",.)]{2,}[.])\\s+\\W*[A-Z,\"])|((^.*?[a-z,0-9,A-Z,\",)]{2,}[;])\\s+\\W*[A-Z,a-z,\"])|((^.*?[a-z,0-9,A-Z,)]{2,}[.\"]{2,})\\s+\\W*[A-Z,\"])");       //   /.*?[.;](?= +[A-Z,a-z,\"]|$)      (^.*?[a-z]{2,}[.;])\\s+\\W*[A-Z,\"]
+
+
+        tempContent = tempContent.Substring(0, endSentenceMarkLen.Min());
+
+        var tempInt = endSentenceMarkLen.IndexOf(endSentenceMarkLen.Min());
+
+        try
+        {
+        tempContent = tempContent.Substring(0, tempContent.LastIndexOf(endSentenceMarkStr[tempInt]));
+        }
+        catch (Exception)
+        {
+            tempContent = tempContent.Substring(0, tempContent.Length-1);
+        }
+        
+
+
+
+
+        //tempContent = firstSentence.Substring(0, firstSentence.Length-1);
+        
+        //Regex rx = new Regex(@"(\S.+?[.!?])(?=\s+|$)");
+
+        //var sentences = rx.Matches(tempContent);
+
+        //tempContent = sentences[0].Value;
+
+
+        var endStr = firstOccurence(tempContent, new List<string> { ", originally ", ", in other words ", ", either ", ", including ", ", especially ", ", usually ", ", typically ", ", often ", ", such as ", ", particularly ", " and in which ", ", which ", " which, ", ", in which", ", and in particular:" }); // " whose "
+
+        int endIndex = tempContent.IndexOf(endStr);
+
+        if (endIndex != -1)
+        {
+            tempContent = tempContent.Substring(0, endIndex);
+        }
+
+
+        //if (tempContent.Length > 100)
+        //{
+        //     endStr = firstOccurence(tempContent, new List<string> { " which " , " regarding " }); //, " and "  ,  " that "
+
+        //    endIndex = tempContent.LastIndexOf(endStr);
+
+        //    if (endIndex != -1)
+        //    {
+        //        tempContent = tempContent.Substring(0, endIndex);
+        //    }
+        //}
+
+        List<string> wList = new List<string>() { " include ", " represent ", " refer ", " exist "};
+
+        foreach (var item in wList)
+        {
+            if (tempContent.StartsWith(item))
+            {
+                tempContent = tempContent.Replace(item, item.TrimEnd(' ') + "s ");
+            }
+            else if (tempContent.StartsWith(" refer(s) "))
+            {
+                tempContent = tempContent.Replace(" refer(s) ", " refers ");
+            }
         }
 
         if (tempContent.Contains("<b>"))
@@ -248,17 +429,15 @@ public partial class _Default : System.Web.UI.Page
                 qWord = " What ";
 
             }
-            isQuestion = a + "QUEST:" + qWord + tempContent + "?";
+            isQuestion = startStr + "QUEST:" + qWord + tempContent + "?";
 
             ph.Text += isQuestion + "<br/>";
         }
+        
 
+        //var personQuestion = "";
 
-
-
-        var personQuestion = "";
-
-        var desc2 = hasDescription(title);
+        //var desc2 = hasDescription(title);
 
         if (isPerson(title))
         {
@@ -282,8 +461,8 @@ public partial class _Default : System.Web.UI.Page
                 ph.Text += "<br/>*COD*:   " + cause_death;
             }
 
-            var x = startWithVowel(desc2);
-            personQuestion = "<br/><br/> Q: Do you know who is " + x + desc2 + "?<br/>";
+            //var x = startWithVowel(desc2);
+            //personQuestion = "<br/><br/> Q: Do you know who is " + x + desc2 + "?<br/>";
         }
 
         if (isAnimal(title) != null)
@@ -291,7 +470,7 @@ public partial class _Default : System.Web.UI.Page
             ph.Text += "<br/><br/>Q: Do you know that animal?: " + isAnimal(title);
         }
 
-        ph.Text += personQuestion;
+        //ph.Text += personQuestion;
 
 
         //Unstable// Not for use
@@ -306,10 +485,11 @@ public partial class _Default : System.Web.UI.Page
         //        + "<h3>Content :<h3><br/>" + content;
     }
 
+    //Not for use, sababa?
     private string finalOccurence(string content, List<string> qList, int startIndex)
     {
         content = content.Substring(startIndex);
-        
+
         List<int> iqList = new List<int>();
 
         for (int i = 0; i < qList.Count; i++)
@@ -324,7 +504,7 @@ public partial class _Default : System.Web.UI.Page
                 {
                     while (content.IndexOf(qList[i]) < startIndex)
                     {
-                        content = content.Substring(content.IndexOf(qList[i])+1);
+                        content = content.Substring(content.IndexOf(qList[i]) + 1);
                     }
                     iqList.Add(content.IndexOf(qList[i]));
                 }
@@ -339,7 +519,7 @@ public partial class _Default : System.Web.UI.Page
                         iqList.Add(content.IndexOf(qList[i]));
                     }
                 }
-                
+
             }
         }
 
@@ -618,7 +798,7 @@ public partial class _Default : System.Web.UI.Page
     {
         string ResponseText;
         HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + articleTitle);
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + articleTitle); //&explaintext= for clean text
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -635,7 +815,7 @@ public partial class _Default : System.Web.UI.Page
         var id = article["pageid"];
         var title = article["title"];
 
-        return title.ToString() + "<br/><br/>" + content.ToString();
+        return content.ToString();
     }
     /// 
     private void AllText(string articleTitle)
