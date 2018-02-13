@@ -38,7 +38,7 @@ public partial class _Default : System.Web.UI.Page
         //RandomPhotoOfTheDay();
 
         //var aa = GetViews("Computational creativity");
-        //var bb = GetViews("Bovine_spongiform_encephalopathy");
+        //var bb = GetViews("RAVEN_(Respecting_Aboriginal_Values_&_Environmental_Needs)");
         //Response.Write(aa + "<br/> <br/>" + bb);
 
         //--Beta--
@@ -165,20 +165,28 @@ public partial class _Default : System.Web.UI.Page
         }
 
         JObject root2 = JObject.Parse(ResponseText5);
+        JToken dig2 = null;
 
-        var dig2 = root2["query"]["pages"].First.First["revisions"].First["*"];
-
-        var hasIssues = dig2.ToString().Substring(0, 100).Contains("issues");
-
-        if (hasIssues)
+        try
         {
-            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-            return;
+            dig2 = root2["query"]["pages"].First.First["revisions"].First["*"];
+
+            var hasIssues = dig2.ToString().Substring(0, 100).Contains("issues");
+
+            if (hasIssues)
+            {
+                RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+                return;
+            }
+        }
+        catch (Exception)
+        {
+
         }
 
 
         var views = GetViews(title);
-        if (views == -1 || views < 100)
+        if (views == -1 || views < 150)
         {
             RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             return;
@@ -268,13 +276,22 @@ public partial class _Default : System.Web.UI.Page
             ph.Text += "NOT A QUESTION";
         }
 
+        if (qContent == title + " may refer to:")
+        {
+            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            return;
+        }
 
+        //if (!qContent.StartsWith("The") || !qContent.StartsWith(title))
+        //{
+        //    ph.Text += "NOT A QUESTION";
+        //}
 
-        var startStr = firstOccurence(qContent, new List<string> { " as it is ", " were ", " crashed ", " is ", " involved ", " refer(s) ", " establishes ", " gives ", " states ", " premiered ", " began ", " represent ", " are ", " was ", " started ", " appears ", " became ", " contains ", " encompasses ", " attracted ", " accounts ", " presents ", " involves ", " shows ", " describes ", " consists ", " refer ", " refers ", " has ", " have ", " had ", " provides ", " exist ", " exists ", " includes ", " include " });
+        var startStr = firstOccurence(qContent, new List<string> { " occurs ", " as it is ", " were ", " crashed ", " is ", " involved ", " refer(s) ", " establishes ", " gives ", " states ", " premiered ", " began ", " represent ", " are ", " was ", " started ", " appears ", " became ", " contains ", " encompasses ", " attracted ", " accounts ", " presents ", " involves ", " shows ", " describes ", " consists ", " refer ", " refers ", " has ", " have ", " had ", " provides ", " exist ", " exists ", " includes ", " include " });
 
         int startIndex = qContent.IndexOf(startStr);
 
-        if (startStr == " were ")
+        if (startStr == " were " || startStr == " as it is ")
         {
             ph.Text += "NOT A QUESTION";
 
@@ -285,7 +302,7 @@ public partial class _Default : System.Web.UI.Page
         tempContent = tempContent.Replace("&amp;", "&");
 
 
-        List<string> endSentenceMarkStr = new List<string>() {  ".", ".\"", ";" };
+        List<string> endSentenceMarkStr = new List<string>() { ".", ".\"", ";" };
 
         List<int> endSentenceMarkLen = new List<int>();
 
@@ -295,7 +312,7 @@ public partial class _Default : System.Web.UI.Page
             //{
             if (item == ".")
             {
-                Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,\",.)]{2,}[.])\\s+\\W*[A-Z,\"])");
+                Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,\")]{2,}[.])\\s+\\W*[A-Z,\"])");
 
                 var sentences1 = rx1.Matches(tempContent);
 
@@ -304,13 +321,28 @@ public partial class _Default : System.Web.UI.Page
                 try
                 {
                     firstSentence1 = sentences1[0].Value;
-                    endSentenceMarkLen.Add(firstSentence1.Length);
                 }
                 catch (Exception)
                 {
                     firstSentence1 = tempContent;
-                    endSentenceMarkLen.Add(firstSentence1.Length);
                 }
+                endSentenceMarkLen.Add(firstSentence1.Length);
+
+
+                rx1 = new Regex("((^.*?[0-9)]{1,}[.])\\s+\\W*[A-Z,\"])");
+
+                sentences1 = rx1.Matches(firstSentence1);
+
+                try
+                {
+                    firstSentence1 = sentences1[0].Value;
+                }
+                catch (Exception)
+                {
+                    //firstSentence1 = tempContent;
+                }
+                endSentenceMarkLen[0] = (firstSentence1.Length);
+
             }
             else if (item == ".\"")
             {
@@ -323,13 +355,28 @@ public partial class _Default : System.Web.UI.Page
                 try
                 {
                     firstSentence1 = sentences1[0].Value;
-                    endSentenceMarkLen.Add(firstSentence1.Length);
                 }
                 catch (Exception)
                 {
                     firstSentence1 = tempContent;
-                    endSentenceMarkLen.Add(firstSentence1.Length);
                 }
+                endSentenceMarkLen.Add(firstSentence1.Length);
+
+
+                rx1 = new Regex("((^.*?[0-9)]{1,}[.])\\s+\\W*[A-Z,\"])");
+
+                sentences1 = rx1.Matches(firstSentence1);
+
+                try
+                {
+                    firstSentence1 = sentences1[0].Value;
+                }
+                catch (Exception)
+                {
+                    //firstSentence1 = tempContent;
+                }
+                endSentenceMarkLen[1] = (firstSentence1.Length);
+
             }
             else if (item == ";")
             {
@@ -342,15 +389,28 @@ public partial class _Default : System.Web.UI.Page
                 try
                 {
                     firstSentence1 = sentences1[0].Value;
-                    endSentenceMarkLen.Add(firstSentence1.Length);
                 }
                 catch (Exception)
                 {
                     firstSentence1 = tempContent;
-                    endSentenceMarkLen.Add(firstSentence1.Length);
                 }
-            }
+                endSentenceMarkLen.Add(firstSentence1.Length);
 
+
+                rx1 = new Regex("((^.*?[0-9)]{1,}[.])\\s+\\W*[A-Z,\"])");
+
+                sentences1 = rx1.Matches(firstSentence1);
+
+                try
+                {
+                    firstSentence1 = sentences1[0].Value;
+                }
+                catch (Exception)
+                {
+                    //firstSentence1 = tempContent;
+                }
+                endSentenceMarkLen[2] = (firstSentence1.Length);
+            }
             //}
         }
 
@@ -383,11 +443,11 @@ public partial class _Default : System.Web.UI.Page
         //tempContent = sentences[0].Value;
 
 
-        var endStr = firstOccurence(tempContent, new List<string> { ", meaning ", ", originally ", ", in other words ", ", either ", ", including ", ", especially ", ", usually ", ", typically ", ", often ", ", such as ", ", particularly ", " and in which ", ", which ", " which, ", ", in which", ", and in particular:" }); // " whose "
+        var endStr = firstOccurence(tempContent, new List<string> { " in order to ", ", the most ", ", e.g. ", " in which ", ", whether ", ", consistent with ", ", meaning ", ", originally ", ", in other words ", ", either ", ", including ", ", especially ", ", usually ", ", typically ", ", often ", ", such as ", ", particularly ", " and in which ", ", which ", " which, ", ", in which", ", and in particular:" }); // " whose "   " such as "
 
         int endIndex = tempContent.IndexOf(endStr);
 
-        if (endIndex != -1) ///length design tools
+        if (endIndex != -1) //&& endIndex > 35) ///length
         {
             tempContent = tempContent.Substring(0, endIndex);
         }
@@ -441,7 +501,7 @@ public partial class _Default : System.Web.UI.Page
                 tempContent = tempContent + "\"";
             }
 
-            while (tempContent.IndexOf("(")!=-1)
+            while (tempContent.IndexOf("(") != -1)
             {
                 tempContent = tempContent.Remove(tempContent.IndexOf("(") - 1, (tempContent.IndexOf(")")) - (tempContent.IndexOf("(") - 2));
 
@@ -553,12 +613,12 @@ public partial class _Default : System.Web.UI.Page
 
         for (int i = 0; i < qList.Count; i++)
         {
-            if (qList[i] == " as it is " && content.IndexOf(qList[i]) != -1)
-            {
-                content = content.Substring(content.IndexOf(qList[i]) + qList[i].Length);
-                iqList.Add(999999);
-                continue;
-            }
+            //if (qList[i] == " as it is " && content.IndexOf(qList[i]) != -1)
+            //{
+            //    //content = content.Substring(content.IndexOf(qList[i]) + qList[i].Length);
+            //    iqList.Add(999999);
+            //    continue;
+            //}
             if (content.IndexOf(qList[i]) == -1)
             {
                 iqList.Add(999999);
