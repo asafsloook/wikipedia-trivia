@@ -101,10 +101,10 @@ public partial class _Default : System.Web.UI.Page
 
         string ResponseText;
         HttpWebRequest myRequest2 =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle);  //Agritourism
-        using (HttpWebResponse response2 = (HttpWebResponse)myRequest2.GetResponse())
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle);
+        using (HttpWebResponse response = (HttpWebResponse)myRequest2.GetResponse())
         {
-            using (StreamReader reader = new StreamReader(response2.GetResponseStream()))
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
             {
                 ResponseText = reader.ReadToEnd();
             }
@@ -150,7 +150,7 @@ public partial class _Default : System.Web.UI.Page
             RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             return;
         }
-        
+
 
         //cheack for issues with article   
         string ResponseText5;
@@ -270,17 +270,22 @@ public partial class _Default : System.Web.UI.Page
 
 
 
-        var startStr = firstOccurence(qContent, new List<string> { " crashed ", " is ", " involved ", " refer(s) ", " establishes ", " gives ", " states ", " premiered ", " began ", " represent ", " are ", " was ", " started ", " appears ", " became ", " contains ", " encompasses ", " attracted ", " accounts ", " presents ", " involves ", " shows ", " describes ", " consists ", " refer ", " refers ", " has ", " have ", " had ", " provides ", " exist ", " exists ", " includes ", " include " });
+        var startStr = firstOccurence(qContent, new List<string> { " as it is ", " were ", " crashed ", " is ", " involved ", " refer(s) ", " establishes ", " gives ", " states ", " premiered ", " began ", " represent ", " are ", " was ", " started ", " appears ", " became ", " contains ", " encompasses ", " attracted ", " accounts ", " presents ", " involves ", " shows ", " describes ", " consists ", " refer ", " refers ", " has ", " have ", " had ", " provides ", " exist ", " exists ", " includes ", " include " });
 
         int startIndex = qContent.IndexOf(startStr);
 
+        if (startStr == " were ")
+        {
+            ph.Text += "NOT A QUESTION";
+
+        }
 
         string tempContent = qContent.Substring(startIndex);
 
         tempContent = tempContent.Replace("&amp;", "&");
 
 
-        List<string> endSentenceMarkStr = new List<string>() { ".\"" , ";" , "." };
+        List<string> endSentenceMarkStr = new List<string>() {  ".", ".\"", ";" };
 
         List<int> endSentenceMarkLen = new List<int>();
 
@@ -288,63 +293,64 @@ public partial class _Default : System.Web.UI.Page
         {
             //if (tempContent.IndexOf(item) != -1)
             //{
-                if (item == ".\"")
+            if (item == ".")
+            {
+                Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,\",.)]{2,}[.])\\s+\\W*[A-Z,\"])");
+
+                var sentences1 = rx1.Matches(tempContent);
+
+                string firstSentence1;
+
+                try
                 {
-                    Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,)]{2,}[.\"]{2,})\\s+\\W*[A-Z,\"])");      
-
-                    var sentences1 = rx1.Matches(tempContent);
-
-                    string firstSentence1;
-
-                    try
-                    {
-                        firstSentence1 = sentences1[0].Value;
-                        endSentenceMarkLen.Add(firstSentence1.Length);
-                    }
-                    catch (Exception)
-                    {
-                        firstSentence1 = tempContent;
-                        endSentenceMarkLen.Add(firstSentence1.Length);
-                    }
+                    firstSentence1 = sentences1[0].Value;
+                    endSentenceMarkLen.Add(firstSentence1.Length);
                 }
-                else if (item == ";")
+                catch (Exception)
                 {
-                    Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,\",)]{2,}[;])\\s+\\W*[A-Z,a-z,\"])");
-
-                    var sentences1 = rx1.Matches(tempContent);
-
-                    string firstSentence1;
-
-                    try
-                    {
-                        firstSentence1 = sentences1[0].Value;
-                        endSentenceMarkLen.Add(firstSentence1.Length);
-                    }
-                    catch (Exception)
-                    {
-                        firstSentence1 = tempContent;
-                        endSentenceMarkLen.Add(firstSentence1.Length);
-                    }
+                    firstSentence1 = tempContent;
+                    endSentenceMarkLen.Add(firstSentence1.Length);
                 }
-                else if (item == ".")
+            }
+            else if (item == ".\"")
+            {
+                Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,)]{2,}[.\"]{2,})\\s+\\W*[A-Z,\"])");
+
+                var sentences1 = rx1.Matches(tempContent);
+
+                string firstSentence1;
+
+                try
                 {
-                    Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,\",.)]{2,}[.])\\s+\\W*[A-Z,\"])");
-
-                    var sentences1 = rx1.Matches(tempContent);
-
-                    string firstSentence1;
-
-                    try
-                    {
-                        firstSentence1 = sentences1[0].Value;
-                        endSentenceMarkLen.Add(firstSentence1.Length);
-                    }
-                    catch (Exception)
-                    {
-                        firstSentence1 = tempContent;
-                        endSentenceMarkLen.Add(firstSentence1.Length);
-                    }
+                    firstSentence1 = sentences1[0].Value;
+                    endSentenceMarkLen.Add(firstSentence1.Length);
                 }
+                catch (Exception)
+                {
+                    firstSentence1 = tempContent;
+                    endSentenceMarkLen.Add(firstSentence1.Length);
+                }
+            }
+            else if (item == ";")
+            {
+                Regex rx1 = new Regex("((^.*?[a-z,0-9,A-Z,\",)]{2,}[;])\\s+\\W*[A-Z,a-z,\"])");
+
+                var sentences1 = rx1.Matches(tempContent);
+
+                string firstSentence1;
+
+                try
+                {
+                    firstSentence1 = sentences1[0].Value;
+                    endSentenceMarkLen.Add(firstSentence1.Length);
+                }
+                catch (Exception)
+                {
+                    firstSentence1 = tempContent;
+                    endSentenceMarkLen.Add(firstSentence1.Length);
+                }
+            }
+
             //}
         }
 
@@ -357,19 +363,19 @@ public partial class _Default : System.Web.UI.Page
 
         try
         {
-        tempContent = tempContent.Substring(0, tempContent.LastIndexOf(endSentenceMarkStr[tempInt]));
+            tempContent = tempContent.Substring(0, tempContent.LastIndexOf(endSentenceMarkStr[tempInt]));
         }
         catch (Exception)
         {
-            tempContent = tempContent.Substring(0, tempContent.Length-1);
+            tempContent = tempContent.Substring(0, tempContent.Length - 1);
         }
-        
+
 
 
 
 
         //tempContent = firstSentence.Substring(0, firstSentence.Length-1);
-        
+
         //Regex rx = new Regex(@"(\S.+?[.!?])(?=\s+|$)");
 
         //var sentences = rx.Matches(tempContent);
@@ -377,11 +383,11 @@ public partial class _Default : System.Web.UI.Page
         //tempContent = sentences[0].Value;
 
 
-        var endStr = firstOccurence(tempContent, new List<string> { ", originally ", ", in other words ", ", either ", ", including ", ", especially ", ", usually ", ", typically ", ", often ", ", such as ", ", particularly ", " and in which ", ", which ", " which, ", ", in which", ", and in particular:" }); // " whose "
+        var endStr = firstOccurence(tempContent, new List<string> { ", meaning ", ", originally ", ", in other words ", ", either ", ", including ", ", especially ", ", usually ", ", typically ", ", often ", ", such as ", ", particularly ", " and in which ", ", which ", " which, ", ", in which", ", and in particular:" }); // " whose "
 
         int endIndex = tempContent.IndexOf(endStr);
 
-        if (endIndex != -1)
+        if (endIndex != -1) ///length design tools
         {
             tempContent = tempContent.Substring(0, endIndex);
         }
@@ -399,7 +405,7 @@ public partial class _Default : System.Web.UI.Page
         //    }
         //}
 
-        List<string> wList = new List<string>() { " include ", " represent ", " refer ", " exist "};
+        List<string> wList = new List<string>() { " include ", " represent ", " refer ", " exist " };
 
         foreach (var item in wList)
         {
@@ -429,11 +435,24 @@ public partial class _Default : System.Web.UI.Page
                 qWord = " What ";
 
             }
+
+            if (endSentenceMarkStr[tempInt] == ".\"")
+            {
+                tempContent = tempContent + "\"";
+            }
+
+            while (tempContent.IndexOf("(")!=-1)
+            {
+                tempContent = tempContent.Remove(tempContent.IndexOf("(") - 1, (tempContent.IndexOf(")")) - (tempContent.IndexOf("(") - 2));
+
+            }
+
+
             isQuestion = startStr + "QUEST:" + qWord + tempContent + "?";
 
             ph.Text += isQuestion + "<br/>";
         }
-        
+
 
         //var personQuestion = "";
 
@@ -534,6 +553,12 @@ public partial class _Default : System.Web.UI.Page
 
         for (int i = 0; i < qList.Count; i++)
         {
+            if (qList[i] == " as it is " && content.IndexOf(qList[i]) != -1)
+            {
+                content = content.Substring(content.IndexOf(qList[i]) + qList[i].Length);
+                iqList.Add(999999);
+                continue;
+            }
             if (content.IndexOf(qList[i]) == -1)
             {
                 iqList.Add(999999);
@@ -727,10 +752,19 @@ public partial class _Default : System.Web.UI.Page
         {
             dayStr = "0" + dayInt;
         }
+        else
+        {
+            dayStr = dayInt.ToString();
+        }
 
         if (monthInt < 10)
         {
             monthStr = "0" + monthInt;
+        }
+        else
+        {
+            monthStr = monthInt.ToString();
+
         }
 
         string timeStamp = yearStr + monthStr + dayStr;
