@@ -1,52 +1,34 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using System.IO;
 using System.Web.UI.WebControls;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Net;
 using System.Xml.Linq;
 using System.Web.Script.Serialization;
-using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 
 
-public partial class _Default : System.Web.UI.Page
+/// <summary>
+/// Summary description for Class1
+/// </summary>
+public class Class1
 {
-    protected void Page_Load(object sender, EventArgs e)
+    public Class1()
     {
-        //DYK?
-        //Grasp
-        //FirstSentence("Mary Ball Washington");
-        //OnlyIntro("Ariel Sharon");
-        //AllText("Kenneth Burke");
+        //
+        // TODO: Add constructor logic here
+        //
 
-        Random rnd = new Random();
-        var categoriesList = getMainCategories();
-        categoriesList.Remove("Reference works");
-        int randomNum = rnd.Next(0, categoriesList.Count());
-        var a = categoriesList[randomNum].ToString();
-
-        RandomPageFromCategory("Money", "Money");
-
-        // ph.Text= isAnimal("Donkey");
-        //GetInfoNearBy("31.771959", "35.217018", "1000");
-        //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
-
-        //RandomPhotoOfTheDay();
-
-        //var aa = GetViews("Computational creativity");
-        //var bb = GetViews("Baku bid for Expo 2025");
-        //Response.Write(aa + "<br/> <br/>" + bb);
-
-        //--Beta--
-        //MoreLike("Technology", "Tennis");
-
-        //getMainCategories();
     }
+    string notify;
+    public string Notify { get; set; }
 
 
     /// <summary>
@@ -85,7 +67,7 @@ public partial class _Default : System.Web.UI.Page
     /// Important: recursing and may be slow sometimes. (10-20secs)
     /// </summary>
     /// 
-    private void RandomPageFromCategory(string categoryTitle, string rootCategoryTitle)
+    public string RandomPageFromCategory(string categoryTitle, string rootCategoryTitle)
     {
         string ResponseURI;
         HttpWebRequest myRequest =
@@ -102,7 +84,7 @@ public partial class _Default : System.Web.UI.Page
 
         string ResponseText;
         HttpWebRequest myRequest2 =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle);
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle); //
         using (HttpWebResponse response = (HttpWebResponse)myRequest2.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -133,8 +115,8 @@ public partial class _Default : System.Web.UI.Page
         }
         catch (Exception)
         {
-            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-            return;
+
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
         }
 
         title = title.Replace(' ', '_');
@@ -144,12 +126,12 @@ public partial class _Default : System.Web.UI.Page
             if (title.StartsWith("Category"))
             {
                 title = title.Replace("Category:", "");
-                RandomPageFromCategory(title, rootCategoryTitle);
-                return;
+
+                return RandomPageFromCategory(title, rootCategoryTitle);
             }
 
-            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-            return;
+            
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle); ;
         }
 
 
@@ -176,9 +158,10 @@ public partial class _Default : System.Web.UI.Page
 
             if (hasIssues)
             {
-                RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-                return;
+                
+                return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             }
+            
         }
         catch (Exception)
         {
@@ -188,8 +171,8 @@ public partial class _Default : System.Web.UI.Page
         var views = GetViews(title);
         if (views == -1 || views < 100)
         {
-            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-            return;
+            
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
         }
 
         if (content.Contains("(<span></span>)"))
@@ -202,25 +185,27 @@ public partial class _Default : System.Web.UI.Page
             content = content.Substring(content.IndexOf("<p>"));
         }
 
-        ph.Text += "title:" + title.ToString() + "<br/><br/>";
+        //printing the title
+        //ph.Text += "title:" + title.ToString() + "<br/><br/>";
 
         //wikipedia 
 
         if (content.Contains("<math"))
         {
             //cdn script for translate math formualas to img
-            ph.Text += "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>";
+            //ph.Text += "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>";
         }
 
-        ph.Text += content + "<br/>" + "<br/>";
+        //testing printing
+        //ph.Text += content + "<br/>" + "<br/>";
         //ph.Text += "FirstSentence: " + FirstSentence(title) + "<br/>" + "<br/>";
-        ph.Text += "<br/><br/>Root Category: " + rootCategoryTitle + "<br/>" + "<br/>";
+        //ph.Text += "<br/><br/>Root Category: " + rootCategoryTitle + "<br/>" + "<br/>";
 
 
         if (content == title + " may refer to:")
         {
-            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-            return;
+            
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
         }
 
 
@@ -251,9 +236,11 @@ public partial class _Default : System.Web.UI.Page
         //ph.Text += DESCquestion;
         #endregion
 
-        ph.Text += renderNotification(content, title, rootCategoryTitle);
+        string notification = renderNotification(content, title, rootCategoryTitle);
 
+        notify = notification;
 
+        return notification;
         #region isPerson, isAnimal, isEvent tests
         //if (isPerson(title))
         //{
@@ -299,7 +286,6 @@ public partial class _Default : System.Web.UI.Page
         //ph.Text = "<h1>Title: " + title + "</h1>"
         //        + "<h1>ID: " + id + "</h1><br/>"
         //        + "<h3>Content :<h3><br/>" + content;
-
     }
 
     private string renderNotification(string content, string title, string rootCategoryTitle)
@@ -370,12 +356,24 @@ public partial class _Default : System.Web.UI.Page
             isQuestion = "sentence";
         }
 
-        string tempContent = qContent.Substring(startIndex);
 
+        string tempContent = qContent;
+
+        try
+        {
+        tempContent = qContent.Substring(startIndex);
+
+        }
+        catch (Exception)
+        {
+            isQuestion = "sentence"; 
+        }
 
         var qRegex = FirstSentenceByRegex(tempContent);
 
         tempContent = qRegex[0];
+
+
 
 
         //"((^.*?[a-z,0-9,A-Z,\",.)]{2,}[.])\\s+\\W*[A-Z,\"])|((^.*?[a-z,0-9,A-Z,\",)]{2,}[;])\\s+\\W*[A-Z,a-z,\"])|((^.*?[a-z,0-9,A-Z,)]{2,}[.\"]{2,})\\s+\\W*[A-Z,\"])");       //   /.*?[.;](?= +[A-Z,a-z,\"]|$)      (^.*?[a-z]{2,}[.;])\\s+\\W*[A-Z,\"]
@@ -432,7 +430,7 @@ public partial class _Default : System.Web.UI.Page
         string born = "";
         if (isPerson(title))
         {
-            qWord = " Who ";
+            qWord = "Who";
             born = hasBirthDate(title);
 
             Regex rxYear = new Regex(@"\b\d{4}\b");
@@ -440,7 +438,7 @@ public partial class _Default : System.Web.UI.Page
             var year = rxYear.Matches(tempContent);
 
             string yearStr = "";
-            
+
             try
             {
                 yearStr = year[0].Value;
@@ -462,7 +460,7 @@ public partial class _Default : System.Web.UI.Page
         }
         else
         {
-            qWord = " What ";
+            qWord = "What";
 
         }
 
@@ -477,7 +475,7 @@ public partial class _Default : System.Web.UI.Page
         Regex rxParenthesis = new Regex(@"(?<=\()(?:[^()]+|\([^)]+\))+(?=\))");
 
         var parenthesis = rxParenthesis.Matches(tempContent);
-        
+
         string parenthesisStr = "";
 
         try
@@ -487,7 +485,7 @@ public partial class _Default : System.Web.UI.Page
                 parenthesisStr = parenthesis[i].Value;
                 tempContent = tempContent.Remove(tempContent.IndexOf(parenthesisStr), parenthesisStr.Length);
             }
-            
+
         }
         catch (Exception)
         {
@@ -520,7 +518,7 @@ public partial class _Default : System.Web.UI.Page
         {
             tempContent = tempContent.Remove(tempContent.IndexOf("(") - 1, (tempContent.IndexOf(")")) - (tempContent.IndexOf("(") - 2));
         }
-        
+
 
         while (content.IndexOf("(") != -1)
         {
@@ -530,7 +528,7 @@ public partial class _Default : System.Web.UI.Page
 
         if (isQuestion != "sentence")
         {
-            isQuestion =  qWord + tempContent + born + "?";
+            isQuestion = qWord + tempContent + born + "?";
 
             if (isQuestion.Length > 150)
             {
@@ -555,6 +553,9 @@ public partial class _Default : System.Web.UI.Page
         {
             sentence = ls[0] + ".";
         }
+
+
+
 
         return sentence;
 
@@ -793,7 +794,7 @@ public partial class _Default : System.Web.UI.Page
     /// Return awesome picture of the day
     /// </summary>
     /// 
-    private void RandomPhotoOfTheDay()
+    private string RandomPhotoOfTheDay()
     {
         string ResponseText;
         HttpWebRequest myRequest =
@@ -812,7 +813,7 @@ public partial class _Default : System.Web.UI.Page
 
         var x2 = ((XContainer)x1).Elements("item");
 
-        ph.Text = x2.ElementAt(9).Value;
+        return x2.ElementAt(9).Value;
     }
 
 
@@ -820,7 +821,7 @@ public partial class _Default : System.Web.UI.Page
     /// Geolocation based queries
     /// </summary>
     /// 
-    private void GetInfoNearByWithImgs(string lat, string lng, string radius)
+    private string GetInfoNearByWithImgs(string lat, string lng, string radius)
     {
 
         string ResponseText;
@@ -842,7 +843,7 @@ public partial class _Default : System.Web.UI.Page
         }
         catch (Exception)
         {
-            return;
+            return "";
         }
 
         var dig = root["query"].First.First.First.First;
@@ -869,10 +870,10 @@ public partial class _Default : System.Web.UI.Page
         var id = article["pageid"];
         var title = article["title"];
 
-        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/> <img src='" + img + "'/> <br/>" + "<h3>Content :<h3><br/>" + content;
+        return "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/> <img src='" + img + "'/> <br/>" + "<h3>Content :<h3><br/>" + content;
     }
     /// 
-    private void GetInfoNearBy(string lat, string lng, string radius)
+    private string GetInfoNearBy(string lat, string lng, string radius)
     {
 
         string ResponseText;
@@ -895,7 +896,7 @@ public partial class _Default : System.Web.UI.Page
         }
         catch (Exception)
         {
-            return;
+            return "";
         }
 
         var articleID = JsonConvert.SerializeObject(dig);
@@ -919,7 +920,7 @@ public partial class _Default : System.Web.UI.Page
         var id = article["pageid"];
         var title = article["title"];
 
-        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
+        return "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
     }
 
 
@@ -1042,7 +1043,7 @@ public partial class _Default : System.Web.UI.Page
         return content.ToString();
     }
     /// 
-    private void AllText(string articleTitle)
+    private string AllText(string articleTitle)
     {
         string ResponseText;
         HttpWebRequest myRequest =
@@ -1063,7 +1064,7 @@ public partial class _Default : System.Web.UI.Page
         var id = article["pageid"];
         var title = article["title"];
 
-        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
+        return "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
     }
 
 
@@ -1404,7 +1405,7 @@ public partial class _Default : System.Web.UI.Page
     /// Beta, unknown behaviar
     /// </summary>
     /// 
-    private void MoreLike(string var1, string var2)
+    private string MoreLike(string var1, string var2)
     {
         string ResponseText;
         HttpWebRequest myRequest =
@@ -1444,7 +1445,7 @@ public partial class _Default : System.Web.UI.Page
         var id = article["pageid"];
         var title = article["title"];
 
-        ph.Text = "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
+        return "<h1>Title: " + title + "</h1>" + "<h1>ID: " + id + "</h1><br/>" + "<h3>Content :<h3><br/>" + content;
 
     }
 
@@ -1534,5 +1535,4 @@ public partial class _Default : System.Web.UI.Page
         }
         return updatedContent.Substring(0, cutFrom);
     }
-
 }
