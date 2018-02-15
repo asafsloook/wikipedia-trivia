@@ -38,13 +38,17 @@ public class WebService : System.Web.Services.WebService
     public string HelloWorld()
     {
 
-        
-        Class1 c1 = new Class1();
-        var a = c1.RandomPageFromCategory("Sports", "Sports");
+        Photo p1 = new Photo();
+        p1.AllPhotoOfTheDay();
 
-        a = a.Replace("  " ," ");
 
-        return a;
+        //Article a1 = new Article();
+        //var a = a1.RandomPageFromCategory("Sports", "Sports");
+
+        //a = a.Replace("  " ," ");
+
+        //return a;
+        return "";
     }
 
 

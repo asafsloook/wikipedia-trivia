@@ -14,54 +14,34 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 
-
 /// <summary>
-/// Summary description for Class1
+/// Summary description for Article
 /// </summary>
-public class Class1
+public class Article
 {
-    public Class1()
+    public Article()
     {
         //
         // TODO: Add constructor logic here
         //
-
-    }
-    string notify;
-    public string Notify { get; set; }
-
-
-    /// <summary>
-    /// Get the main/root categories from wikipedia
-    /// </summary>
-    /// 
-    private List<string> getMainCategories()
-    {
-        string ResponseText;
-        HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtitle=Category:Main_topic_classifications&cmlimit=100");
-        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
-        {
-            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-            {
-                ResponseText = reader.ReadToEnd();
-            }
-        }
-
-        JObject root = JObject.Parse(ResponseText);
-        var dig = root["query"]["categorymembers"];
-
-        List<string> mainCategories = new List<string>();
-
-        foreach (var item in dig)
-        {
-            mainCategories.Add(item["title"].ToString().Replace("Category:", ""));
-        }
-
-        return mainCategories;
     }
 
+    string articleID;
+    public string ArticleId { get; set; }
 
+    Category category;
+    public Category Category { get; set; }
+
+    string notificationContent;
+    public string NotificationContent { get; set; }
+
+    string title;
+    public string Title { get; set; }
+
+    string url;
+    public string Url { get; set; }
+
+    
     /// <summary>
     /// Main feature, random article from desired root category. 
     /// Important: recursing and may be slow sometimes. (10-20secs)
@@ -130,7 +110,7 @@ public class Class1
                 return RandomPageFromCategory(title, rootCategoryTitle);
             }
 
-            
+
             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle); ;
         }
 
@@ -158,10 +138,10 @@ public class Class1
 
             if (hasIssues)
             {
-                
+
                 return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             }
-            
+
         }
         catch (Exception)
         {
@@ -171,7 +151,7 @@ public class Class1
         var views = GetViews(title);
         if (views == -1 || views < 100)
         {
-            
+
             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
         }
 
@@ -204,7 +184,7 @@ public class Class1
 
         if (content == title + " may refer to:")
         {
-            
+
             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
         }
 
@@ -237,10 +217,10 @@ public class Class1
         #endregion
 
         string notification = renderNotification(content, title, rootCategoryTitle);
-
-        notify = notification;
+        
 
         return notification;
+
         #region isPerson, isAnimal, isEvent tests
         //if (isPerson(title))
         //{
@@ -361,12 +341,12 @@ public class Class1
 
         try
         {
-        tempContent = qContent.Substring(startIndex);
+            tempContent = qContent.Substring(startIndex);
 
         }
         catch (Exception)
         {
-            isQuestion = "sentence"; 
+            isQuestion = "sentence";
         }
 
         var qRegex = FirstSentenceByRegex(tempContent);
@@ -789,32 +769,6 @@ public class Class1
         return x;
     }
 
-
-    /// <summary>
-    /// Return awesome picture of the day
-    /// </summary>
-    /// 
-    private string RandomPhotoOfTheDay()
-    {
-        string ResponseText;
-        HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create("https://commons.wikimedia.org/w/api.php?format=json&action=featuredfeed&feed=potd");
-        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
-        {
-            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-            {
-                ResponseText = reader.ReadToEnd();
-            }
-        }
-
-        XDocument doc = XDocument.Parse(ResponseText);
-
-        var x1 = doc.Root.FirstNode;
-
-        var x2 = ((XContainer)x1).Elements("item");
-
-        return x2.ElementAt(9).Value;
-    }
 
 
     /// <summary>

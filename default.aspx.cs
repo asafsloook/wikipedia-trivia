@@ -30,13 +30,13 @@ public partial class _Default : System.Web.UI.Page
         int randomNum = rnd.Next(0, categoriesList.Count());
         var a = categoriesList[randomNum].ToString();
 
-        RandomPageFromCategory("Money", "Money");
+        //RandomPageFromCategory("Money", "Money");
 
         // ph.Text= isAnimal("Donkey");
         //GetInfoNearBy("31.771959", "35.217018", "1000");
         //GetInfoNearByWithImgs("32.4613", "35.0067", "100"); // "31.771959", "35.217018", "1000"
 
-        //RandomPhotoOfTheDay();
+        RandomPhotoOfTheDay();
 
         //var aa = GetViews("Computational creativity");
         //var bb = GetViews("Baku bid for Expo 2025");
