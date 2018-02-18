@@ -1,79 +1,198 @@
 
+$(document).on('pagebeforeshow', function () { 
+if (window.location.href.toString().indexOf('AllPhotos.html') != -1) {
+    $.ajax({ // ajax call starts
+        url: '../WebService.asmx/GetPhotos',   // server side web service method
+        //data: dataString,                          // the parameters sent to the server
+        type: 'POST',                              // can be also GET
+        dataType: 'json',                          // expecting JSON datatype from the server
+        contentType: 'application/json; charset = utf-8', // sent to the server
+        success: successPhotosCB,                // data.d id the Variable data contains the data we get from serverside
+        error: errorPhotosCB
+    }); // end of ajax call
+
+    function successPhotosCB(results) {
+        var results = $.parseJSON(results.d);
+        photos = results;
+
+        //for (var i = 0; i < results.length; i++) {
+        //    var str = '<img class="preload-image" data-original="' + results[i].Url + '" alt="img">'
+        //        + '<strong>' + (new Date(parseInt(results[i].Date.replace('/Date(', ''))).toLocaleDateString()) + '</strong>'
+        //        + '<em>' + results[i].Description + '</em>';
+        //    $("#ph" + i).html(str);}
+
+
+        for (var i = 0; i < results.length; i++) {
+
+            $("#ph" + i + " img").attr("src", results[i].Url);
+
+            //$("#ph" + i).attr("href", "Photo.html?id=" + i);
+
+            $("#ph" + i + " strong").html((new Date(parseInt(results[i].Date.replace('/Date(', ''))).toLocaleDateString()));
+
+            var short = "";
+            if (results[i].Description.length > 60) {
+                short = "...";
+            }
+
+            $("#ph" + i + " em").html(results[i].Description.substring(0, 60).trim() + short);
+        }
+
+    }
+
+    function errorPhotosCB(e) {
+        alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
+    }
+}
+});
 
 $(document).ready(function () {      
-            
-    function init_template(){//Class is vital to run AJAX Pages 
-
-  $(function() {
     
-    
-    $('.button, .icon, .footer-menu-item i, .footer-menu-controls a, .mobileui-home a i, .landing-homepage ul li a i').on('click', function (event) {
-      //event.preventDefault();
-      
-      var $div = $('<div/>'),
-          btnOffset = $(this).offset(),
-      		xPos = event.pageX - btnOffset.left,
-      		yPos = event.pageY - btnOffset.top;      
-      $div.addClass('button-effect');
-      var $ripple = $(".button-effect");
-      
-      $ripple.css("height", $(this).height());
-      $ripple.css("width", $(this).height());
-      $div
-        .css({
-          top: yPos - ($ripple.height()/2),
-          left: xPos - ($ripple.width()/2),
-          background: "rgba(255,255,255,0.5)" //$(this).data("ripple-color")
-        }) 
-        .appendTo($(this));
+    function init_template() {//Class is vital to run AJAX Pages 
 
-      window.setTimeout(function(){
-        $div.remove();
-      }, 800);
-    });
-    
-  });
-        
-    //Timeout required to allow menu scrolling to bottom position
-    setTimeout(function(){
-        $('.footer-menu .footer-menu-item').addClass('remove-menu');
-        $('.footer-menu-wrapper').addClass('remove-wrapper');
-        $('.footer-menu-wrapper').removeClass('remove-menu');
-        $('.page-menu').addClass('remove-menu');
-    }, 0.01);
+        $(function () {
 
 
-    $('.footer-menu-open').click(function() {
-        $.ajax({ // ajax call starts
-            url: '../WebService.asmx/GetArticle',   // server side web service method
-            //data: dataString,                          // the parameters sent to the server
-            type: 'POST',                              // can be also GET
-            dataType: 'json',                          // expecting JSON datatype from the server
-            contentType: 'application/json; charset = utf-8', // sent to the server
-            success: successArticlesCB,                // data.d id the Variable data contains the data we get from serverside
-            error: errorArticlesCB
-        }); // end of ajax call
-    });
+            $('.button, .icon, .footer-menu-item i, .footer-menu-controls a, .mobileui-home a i, .landing-homepage ul li a i').on('click', function (event) {
+                //event.preventDefault();
 
-    function successArticlesCB(results) {
-        var results = $.parseJSON(results.d);
-        var a = "";
+                var $div = $('<div/>'),
+                    btnOffset = $(this).offset(),
+                    xPos = event.pageX - btnOffset.left,
+                    yPos = event.pageY - btnOffset.top;
+                $div.addClass('button-effect');
+                var $ripple = $(".button-effect");
 
-        $("#title").empty();
-        $("#title").html(results.Title);
+                $ripple.css("height", $(this).height());
+                $ripple.css("width", $(this).height());
+                $div
+                    .css({
+                        top: yPos - ($ripple.height() / 2),
+                        left: xPos - ($ripple.width() / 2),
+                        background: "rgba(255,255,255,0.5)" //$(this).data("ripple-color")
+                    })
+                    .appendTo($(this));
 
-        //results.ArticleContent
-        $("#articleContent").empty();
-        $("#articleContent").html(results.ArticleContent);
-        
-        $("#ArticleImg").attr("src", results.PhotoUrl);
-    }
+                window.setTimeout(function () {
+                    $div.remove();
+                }, 800);
+            });
 
-    function errorArticlesCB(e) {
-        alert("I caught the exception : failed in GetArticles \n The exception message is : " + e.responseText);
+        });
 
-    }
-     
+        //Timeout required to allow menu scrolling to bottom position
+        setTimeout(function () {
+            $('.footer-menu .footer-menu-item').addClass('remove-menu');
+            $('.footer-menu-wrapper').addClass('remove-wrapper');
+            $('.footer-menu-wrapper').removeClass('remove-menu');
+            $('.page-menu').addClass('remove-menu');
+        }, 0.01);
+
+
+        if (window.location.href.toString().indexOf("Article.html") != -1) {
+            $('.footer-menu-open').click(function () {
+                $.ajax({ // ajax call starts
+                    url: '../WebService.asmx/GetArticle',   // server side web service method
+                    //data: dataString,                          // the parameters sent to the server
+                    type: 'POST',                              // can be also GET
+                    dataType: 'json',                          // expecting JSON datatype from the server
+                    contentType: 'application/json; charset = utf-8', // sent to the server
+                    success: successArticlesCB,                // data.d id the Variable data contains the data we get from serverside
+                    error: errorArticlesCB
+                }); // end of ajax call
+            });
+
+            function successArticlesCB(results) {
+                var results = $.parseJSON(results.d);
+                var a = "";
+
+                $("#title").empty();
+                $("#title").html(results.Title);
+
+                //results.ArticleContent
+                $("#articleContent").empty();
+                $("#articleContent").html(results.ArticleContent);
+
+                $("#ArticleImg").attr("src", results.PhotoUrl);
+            }
+
+            function errorArticlesCB(e) {
+                alert("I caught the exception : failed in GetArticles \n The exception message is : " + e.responseText);
+
+            }
+        }
+
+        $("#photos a").on('click', function () {
+
+            var id = parseInt(this.id.toString().substring(2, 3));
+
+            localStorage["PhotoUrl"] = photos[id].Url;
+            localStorage["PhotoDesc"] = photos[id].Description;
+            localStorage["PhotoDate"] = photos[id].Date;
+        });
+
+        if (window.location.href.toString().indexOf('Photo.html') != -1) {
+            render();
+        }
+
+        function render() {
+
+            var a1 = localStorage["PhotoUrl"];
+            var a2 = localStorage["PhotoDate"];
+            var a3 = localStorage["PhotoDesc"];
+
+
+            $("#ArticleImg").attr("src", a1);
+            $("#title").html("Photo of the Day: " + (new Date(parseInt(a2.replace('/Date(', ''))).toLocaleDateString()));
+            $("#articleContent").html(a3);
+
+        }
+
+    //    if (window.location.href.toString().indexOf('AllPhotos.html') != -1) { 
+    //    $.ajax({ // ajax call starts
+    //        url: '../WebService.asmx/GetPhotos',   // server side web service method
+    //        //data: dataString,                          // the parameters sent to the server
+    //        type: 'POST',                              // can be also GET
+    //        dataType: 'json',                          // expecting JSON datatype from the server
+    //        contentType: 'application/json; charset = utf-8', // sent to the server
+    //        success: successPhotosCB,                // data.d id the Variable data contains the data we get from serverside
+    //        error: errorPhotosCB
+    //    }); // end of ajax call
+
+    //    function successPhotosCB(results) {
+    //        var results = $.parseJSON(results.d);
+    //        photos = results;
+
+    //        //for (var i = 0; i < results.length; i++) {
+    //        //    var str = '<img class="preload-image" data-original="' + results[i].Url + '" alt="img">'
+    //        //        + '<strong>' + (new Date(parseInt(results[i].Date.replace('/Date(', ''))).toLocaleDateString()) + '</strong>'
+    //        //        + '<em>' + results[i].Description + '</em>';
+    //        //    $("#ph" + i).html(str);}
+
+
+    //        for (var i = 0; i < results.length; i++) {
+
+    //            $("#ph" + i + " img").attr("src", results[i].Url);
+
+    //            //$("#ph" + i).attr("href", "Photo.html?id=" + i);
+
+    //            $("#ph" + i + " strong").html((new Date(parseInt(results[i].Date.replace('/Date(', ''))).toLocaleDateString()));
+
+    //            var short = "";
+    //            if (results[i].Description.length > 60) {
+    //                short = "...";
+    //            }
+
+    //            $("#ph" + i + " em").html(results[i].Description.substring(0, 60).trim() + short);
+    //        }
+
+    //    }
+
+    //    function errorPhotosCB(e) {
+    //        alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
+    //    }
+    //}
+
     //Activate Menu
     //$('.footer-menu-open').click(function(){
     //    $('.footer-menu-open').addClass('remove-menu');

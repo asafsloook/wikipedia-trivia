@@ -34,9 +34,8 @@
     <script type="text/javascript" src="scripts/plugins.js"></script>
     <script type="text/javascript" src="scripts/custom.js"></script>
 
-
-
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+   
     <style>
         #title {
             padding-bottom: 20px;
@@ -47,45 +46,29 @@
             margin: 0 auto;
         }
 
-        img {
-            height: 120px;
+        #refreshBTN {
+            font-size: 30px;
+        }
+
+        #ArticleImg {
+            height: 230px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+            max-width: 330px;
+        }
+
+        .thumb-layout img {
+            width: 95px;
+            position: absolute;
+            height: 95px;
+            object-fit: cover;
+        }
+
+        .thumb-layout a {
+            height: 95px;
         }
     </style>
-    
-    <script>
 
-
-        $(document).on('pagebeforeshow', function () {
-            $.ajax({ // ajax call starts
-                url: '../WebService.asmx/GetPhotos',   // server side web service method
-                //data: dataString,                          // the parameters sent to the server
-                type: 'POST',                              // can be also GET
-                dataType: 'json',                          // expecting JSON datatype from the server
-                contentType: 'application/json; charset = utf-8', // sent to the server
-                success: successPhotosCB,                // data.d id the Variable data contains the data we get from serverside
-                error: errorPhotosCB
-            }); // end of ajax call
-        });
-
-        function successPhotosCB(results) {
-            var results = $.parseJSON(results.d);
-
-            //Date Description Url
-
-
-            for (var i = 0; i < results.length; i++) {
-                $("#img" + i).attr("href", results[i].Url);
-                $("#img1" + i).attr("data-original", results[i].Url);
-
-            }
-        }
-
-        function errorPhotosCB(e) {
-            alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
-
-        }
-
-    </script>
 </head>
 
 <body>
@@ -106,139 +89,77 @@
         <div id="page-content" class="page-content header-clear-full">
             <div id="page-content-scroll">
 
+                <!--<div class="heading-strip bg-2">
+                    <h3>News List 1</h3>
+                    <p>This is just a template, not a theme</p>
+                    <i class="fa fa-newspaper-o"></i>
+                    <div class="overlay dark-overlay"></div>
+                </div>-->
+
                 <div class="heading-strip bg-8">
-                    <h3>Photo of the Day</h3>
-                    <!--<p>Essential Features for your Page</p>-->
+                    <h3>Photos of the Day</h3>
+                    <p>Last 10 days</p>
                     <i class="fa fa-camera"></i>
                     <div class="overlay dark-overlay"></div>
                 </div>
 
                 <div class="decoration decoration-margins"></div>
 
-                <div class="content-fullscreen">
-                    <div class="gallery-blocks">
-                        <a id="img0" class="show-gallery" href="images/pictures/0.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Breakfast</strong>
-                            <img id="img10" class="preload-image responsive-image" data-original="images/pictures/0t.jpg" alt="img">
+                <div class="content full-top material-full-bottom">
+                    <div id="photos" class="thumb-layout thumb-layout-page">
+                        <a id="ph9" href="Photo.html">
+                            <img class="preload-image" alt="img">
+                            <strong>Android 20 Realeased</strong>
+                            <em>Android released it’s latest operating system, and it’s gorgeous. Powerful than ever and with more features!</em>
                         </a>
-                        <a id="img1" class="show-gallery" href="images/pictures/1.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Desert</strong>
-                            <img id="img11" class="preload-image responsive-image" data-original="images/pictures/1t.jpg" alt="img">
+                        <a id="ph8" href="Photo.html">
+                            <img class="preload-image" alt="img">
+                            <strong>Android 20 Realeased</strong>
+                            <em>Android released it’s latest operating system, and it’s gorgeous. Powerful than ever and with more features!</em>
                         </a>
-                        <a id="img2" class="show-gallery" href="images/pictures/2.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Dinner</strong>
-                            <img id="img12" class="preload-image responsive-image" data-original="images/pictures/2t.jpg" alt="img">
+                        <a id="ph7" href="Photo.html">
+                            <img class="preload-image" alt="img">
+                            <strong>Android 20 Realeased</strong>
+                            <em>Android released it’s latest operating system, and it’s gorgeous. Powerful than ever and with more features!</em>
                         </a>
-                        <a id="img3" class="show-gallery" href="images/pictures/3.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Cookies</strong>
-                            <img id="img13" class="preload-image responsive-image" data-original="images/pictures/3t.jpg" alt="img">
+                        <a id="ph6" href="Photo.html">
+                            <img class="preload-image" alt="img">
+                            <strong>Android 20 Realeased</strong>
+                            <em>Android released it’s latest operating system, and it’s gorgeous. Powerful than ever and with more features!</em>
                         </a>
-                        <a id="img4" class="show-gallery" href="images/pictures/4.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Sunny Road</strong>
-                            <img id="img14" class="preload-image responsive-image" data-original="images/pictures/4t.jpg" alt="img">
+                        <a id="ph5" href="Photo.html">
+                            <img class="preload-image" alt="img">
+                            <strong>Android 20 Realeased</strong>
+                            <em>Android released it’s latest operating system, and it’s gorgeous. Powerful than ever and with more features!</em>
                         </a>
-                        <a id="img5" class="show-gallery" href="images/pictures/5.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Sunrise</strong>
-                            <img id="img15" class="preload-image responsive-image" data-original="images/pictures/5t.jpg" alt="img">
+                        <a id="ph4" href="Photo.html">
+                            <img class="preload-image" alt="img">
+                            <strong>Android 20 Realeased</strong>
+                            <em>Android released it’s latest operating system, and it’s gorgeous. Powerful than ever and with more features!</em>
                         </a>
-                        <a id="img6" class="show-gallery" href="images/pictures/6.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Skateboard</strong>
-                            <img id="img16" class="preload-image responsive-image" data-original="images/pictures/6t.jpg" alt="img">
+                        <a id="ph3" href="Photo.html">
+                            <img class="preload-image" alt="img">
+                            <strong>Android 20 Realeased</strong>
+                            <em>Android released it’s latest operating system, and it’s gorgeous. Powerful than ever and with more features!</em>
                         </a>
-                        <a id="img7" class="show-gallery" href="images/pictures/7.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Storm</strong>
-                            <img id="img17" class="preload-image responsive-image" data-original="images/pictures/7t.jpg" alt="img">
+                        <a id="ph2" href="Photo.html">
+                            <img class="preload-image" alt="img">
+                            <strong>Android 20 Realeased</strong>
+                            <em>Android released it’s latest operating system, and it’s gorgeous. Powerful than ever and with more features!</em>
                         </a>
-                        <a id="img8" class="show-gallery" href="images/pictures/8.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Big City</strong>
-                            <img id="img18" class="preload-image responsive-image" data-original="images/pictures/8t.jpg" alt="img">
+                        <a id="ph1" href="Photo.html">
+                            <img class="preload-image" alt="img">
+                            <strong>Android 20 Realeased</strong>
+                            <em>Android released it’s latest operating system, and it’s gorgeous. Powerful than ever and with more features!</em>
                         </a>
-                        <a id="img9" class="show-gallery" href="images/pictures/9.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Nightlife</strong>
-                            <img id="img19" class="preload-image responsive-image" data-original="images/pictures/9t.jpg" alt="img">
+                        <a id="ph0" href="Photo.html">
+                            <img class="preload-image" alt="img">
+                            <strong>Android 20 Realeased</strong>
+                            <em>Android released it’s latest operating system, and it’s gorgeous. Powerful than ever and with more features!</em>
                         </a>
-                        <!--<a class="show-gallery" href="images/pictures/0.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Breakfast</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/0t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/1.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Desert</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/1t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/0.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Cookies</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/0t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/1.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Sweets</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/1t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/2.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Grills</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/2t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/3.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Flowers</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/3t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/4.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Road</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/4t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/5.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Ocean</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/5t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/6.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Outdoor</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/6t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/7.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Sea Storm</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/7t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/8.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Skyscrape</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/8t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/9.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Capitol</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/9t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/0.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Food</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/0t.jpg" alt="img">
-                        </a>
-                        <a class="show-gallery" href="images/pictures/1.jpg" alt="img" title="Image Caption">
-                            <em class="overlay"></em>
-                            <strong>Brunch</strong>
-                            <img class="preload-image responsive-image" data-original="images/pictures/1t.jpg" alt="img">
-                        </a>-->
-                        <div class="clear"></div>
                     </div>
+                    <div class="decoration"></div>
+                    <a href="#" class="load-more-thumbs button button-full button-green">Load More</a>
                 </div>
 
                 <div class="decoration decoration-margins"></div>
@@ -401,11 +322,11 @@
                         </div>
                     </div>
                     <div class="has-submenu">
-                        <a class="menu-item open-submenu active-item" href="#">
+                        <a class="menu-item open-submenu" href="#">
                             <!-- active-item -->
                             <i class="bg-orange-dark fa fa-camera"></i>Gallery<em class="menu-number">0</em>
                         </a>
-                        <div class="submenu active-submenu">
+                        <div class="submenu">
                             <!--active-submenu-->
                             <a class="menu-item" href="gallery-round.html">
                                 <i class="fa fa-circle"></i>Round<i class="fa fa-circle"></i>
@@ -413,7 +334,7 @@
                             <a class="menu-item" href="gallery-square.html">
                                 <i class="fa fa-square"></i>Squares<i class="fa fa-circle"></i>
                             </a>
-                            <a class="menu-item active-item" href="gallery-blocks.html">
+                            <a class="menu-item" href="gallery-blocks.html">
                                 <i class="fa fa-th-large"></i>Blocks<i class="fa fa-circle"></i>
                             </a>
                             <a class="menu-item" href="gallery-adaptive.html">
@@ -587,11 +508,11 @@
                         </div>
                     </div>
                     <div class="has-submenu">
-                        <a class="menu-item open-submenu" href="#">
+                        <a class="menu-item open-submenu active-item" href="#">
                             <!-- active-item -->
                             <i class="bg-blue-dark fa fa-newspaper-o"></i>News Pages<em class="menu-number">0</em>
                         </a>
-                        <div class="submenu">
+                        <div class="submenu active-submenu">
                             <!--active-submenu-->
                             <a class="menu-item" href="news-faq.html">
                                 <i class="fa fa-question"></i>F.A.Q.<i class="fa fa-circle"></i>
@@ -605,7 +526,7 @@
                             <a class="menu-item" href="news-cover.html">
                                 <i class="fa fa-image"></i>Cover<i class="fa fa-circle"></i>
                             </a>
-                            <a class="menu-item" href="news-list-1.html">
+                            <a class="menu-item active-item" href="news-list-1.html">
                                 <i class="fa fa-list"></i>List 1<i class="fa fa-circle"></i>
                             </a>
                             <a class="menu-item" href="news-list-2.html">
@@ -775,28 +696,46 @@
             <div class="footer-menu-wrapper remove-menu">
                 <div class="footer-menu-scroll">
                     <div class="footer-menu">
-                        <a href="gallery-collections.html" class="footer-menu-item">
-                            <em>Collections</em><i class="scale-hover bg-orange-light fa fa-list"></i>
+                        <a href="news-archive.html" class="footer-menu-item">
+                            <em>Archive</em><i class="scale-hover bg-yellow-light fa fa-archive"></i>
                         </a>
-                        <a href="gallery-adaptive.html" class="footer-menu-item">
-                            <em>Adaptive</em><i class="scale-hover bg-magenta-light fa fa-refresh"></i>
+                        <a href="news-post-3.html" class="footer-menu-item">
+                            <em>Post 3</em><i class="scale-hover bg-orange-dark fa fa-pencil"></i>
                         </a>
-                        <a href="gallery-blocks.html" class="footer-menu-item active-menu">
-                            <em>Blocks</em><i class="scale-hover bg-night-dark fa fa-th-large"></i>
+                        <a href="news-post-2.html" class="footer-menu-item">
+                            <em>Post 2</em><i class="scale-hover bg-red-dark fa fa-pencil"></i>
                         </a>
-                        <a href="gallery-square.html" class="footer-menu-item">
-                            <em>Square</em><i class="scale-hover bg-blue-dark fa fa-square"></i>
+                        <a href="news-post-1.html" class="footer-menu-item">
+                            <em>Post 1</em><i class="scale-hover bg-red-light fa fa-pencil"></i>
                         </a>
-                        <a href="gallery-round.html" class="footer-menu-item">
-                            <em>Round</em><i class="scale-hover bg-green-light fa fa-circle"></i>
+                        <a href="news-list-3.html" class="footer-menu-item">
+                            <em>List 3</em><i class="scale-hover bg-magenta-dark fa fa-list"></i>
+                        </a>
+                        <a href="news-list-2.html" class="footer-menu-item">
+                            <em>List 2</em><i class="scale-hover bg-night-dark fa fa-list"></i>
+                        </a>
+                        <a href="news-list-1.html" class="footer-menu-item active-menu">
+                            <em>List 1</em><i class="scale-hover bg-night-light fa fa-list"></i>
+                        </a>
+                        <a href="news-cover.html" class="footer-menu-item">
+                            <em>Cover</em><i class="scale-hover bg-blue-light fa fa-image"></i>
+                        </a>
+                        <a href="news-front-2.html" class="footer-menu-item">
+                            <em>Home 2</em><i class="scale-hover bg-blue-dark fa fa-home"></i>
+                        </a>
+                        <a href="news-front-1.html" class="footer-menu-item">
+                            <em>Home 1</em><i class="scale-hover bg-green-dark fa fa-home"></i>
+                        </a>
+                        <a href="news-faq.html" class="footer-menu-item">
+                            <em>FAQ</em><i class="scale-hover bg-green-light fa fa-question"></i>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="footer-menu-controls light-footer-menu">
-            <a href="#" class="footer-menu-open"><i class="fa fa-camera bg-orange-dark"></i></a>
-            <a href="#" class="footer-menu-close remove-menu"><i class="fa fa-times bg-red-dark"></i><em>Close</em></a>
+            <!--<a href="#" class="footer-menu-open"><i class="fa fa-newspaper-o bg-blue-dark"></i></a>
+            <a href="#" class="footer-menu-close remove-menu"><i class="fa fa-times bg-red-dark"></i><em>Close</em></a>-->
         </div>
         <div class="footer-menu-tap-close remove-menu"></div>
         <div class="footer-menu-background light-footer-background remove-menu"></div>
