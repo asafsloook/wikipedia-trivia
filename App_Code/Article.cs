@@ -35,20 +35,41 @@ public class Article
     string notificationContent;
     public string NotificationContent { get; set; }
 
+    string photoUrl;
+    public string PhotoUrl { get; set; }
+
     string title;
     public string Title { get; set; }
+
+    string articleContent;
+    public string ArticleContent { get; set; }
 
     string url;
     public string Url { get; set; }
 
+    public void setCategory()
+    {
+        //Category c = new Category();
+        //List<Category>;
+        //Random a = new Random();
+        //c.Name = a;
+        //RandomPageFromCategory(c.Name, c.Name);
+
+    }
+    
     
     /// <summary>
     /// Main feature, random article from desired root category. 
     /// Important: recursing and may be slow sometimes. (10-20secs)
     /// </summary>
     /// 
-    public string RandomPageFromCategory(string categoryTitle, string rootCategoryTitle)
+    public Article RandomPageFromCategory(string categoryTitle, string rootCategoryTitle)
     {
+        //Category catTitle = new Category();
+        //catTitle.Name=categoryTitle;
+        //Category rootCatTitle = new Category();
+        //rootCatTitle.Name = rootCategoryTitle;
+
         string ResponseURI;
         HttpWebRequest myRequest =
         (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/wiki/Special:RandomInCategory/" + categoryTitle);
@@ -115,7 +136,7 @@ public class Article
         }
 
 
-        //cheack for issues with article   
+        //check for issues with article   
         string ResponseText5;
         HttpWebRequest myRequest5 =
         (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&titles=" + title);
@@ -173,7 +194,7 @@ public class Article
         if (content.Contains("<math"))
         {
             //cdn script for translate math formualas to img
-            //ph.Text += "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>";
+            content += "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>";
         }
 
         //testing printing
@@ -216,10 +237,24 @@ public class Article
         //ph.Text += DESCquestion;
         #endregion
 
-        string notification = renderNotification(content, title, rootCategoryTitle);
-        
+        Article a1 = new Article();
 
-        return notification;
+        Category c1 = new Category();
+        c1.Name = rootCategoryTitle;
+
+
+        a1.Category = c1;
+        a1.ArticleId = id;
+        a1.Title = title.Replace("_", " ");
+        a1.ArticleContent = content;
+
+        string notification = renderNotification(content, title, rootCategoryTitle);
+
+        a1.NotificationContent = notification;
+
+        a1.PhotoUrl = getPhotoForArticle(title);
+
+        return a1;
 
         #region isPerson, isAnimal, isEvent tests
         //if (isPerson(title))
@@ -266,6 +301,36 @@ public class Article
         //ph.Text = "<h1>Title: " + title + "</h1>"
         //        + "<h1>ID: " + id + "</h1><br/>"
         //        + "<h3>Content :<h3><br/>" + content;
+    }
+
+    public string getPhotoForArticle(string title)
+    {
+
+        string ResponseText;
+        HttpWebRequest myRequest =
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&format=json&generator=prefixsearch&gpssearch="+title+"&gpslimit=1&prop=pageimages%7Cpageterms&piprop=thumbnail&pithumbsize=250&pilimit=10&redirects=&wbptterms=description"); //
+        using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                ResponseText = reader.ReadToEnd();
+            }
+        }
+
+        string image = "";
+        try
+        {
+
+        JObject root = JObject.Parse(ResponseText);
+
+        image = root["query"]["pages"].First.First["thumbnail"]["source"].ToString();
+        }
+        catch (Exception)
+        {
+            return "https://static.tumblr.com/96a2cb4bb3f1862bdec9cb57c5fd015a/7lj4mpc/ZUxo2472a/tumblr_static_bcf8vu59co0k4kgsoccoo0ck4_640_v2.jpg";
+        }
+
+        return image;
     }
 
     private string renderNotification(string content, string title, string rootCategoryTitle)
@@ -369,7 +434,7 @@ public class Article
         //tempContent = sentences[0].Value;
 
 
-        var endStr = firstOccurence(tempContent, new List<string> { " which has, ", ", though ", " in order to ", ", the most ", ", e.g. ", " in which ", ", whether ", ", consistent with ", ", meaning ", ", originally ", ", in other words ", ", either ", ", including ", ", especially ", ", usually ", ", typically ", ", often ", ", such as ", ", particularly ", " and in which ", ", which ", " which, ", ", in which", ", and in particular:" }); // " whose "   " such as "
+        var endStr = firstOccurence(tempContent, new List<string> { " which has, ", ", though ", " in order to ", ", the most ", ", e.g. ", ", whether ", ", consistent with ", ", meaning ", ", originally ", ", in other words ", ", either ", ", including ", ", especially ", ", usually ", ", typically ", ", often ", ", such as ", ", particularly ", " and in which ", ", which ", " which, ", ", in which", ", and in particular:" }); // " whose "   " such as "   " in which "
 
         int endIndex = tempContent.IndexOf(endStr);
 

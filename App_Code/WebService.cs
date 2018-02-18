@@ -35,22 +35,49 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public string HelloWorld()
+    public string GetArticle()
     {
 
-        Photo p1 = new Photo();
-        p1.AllPhotoOfTheDay();
+        //Photo p1 = new Photo();
+        //p1.AllPhotoOfTheDay();
+        
+        Article a1 = new Article();
 
 
-        //Article a1 = new Article();
-        //var a = a1.RandomPageFromCategory("Sports", "Sports");
+        Random rnd = new Random();
+        var categoriesList = getMainCategories();
+        categoriesList.Remove("Reference works");
+        int randomNum = rnd.Next(0, categoriesList.Count());
+        var a = categoriesList[randomNum].ToString();
+
+
+        a1 = a1.RandomPageFromCategory(a,a);
 
         //a = a.Replace("  " ," ");
 
         //return a;
-        return "";
+
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+        string jsonString = js.Serialize(a1);
+        return jsonString;
     }
 
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string GetPhotos()
+    {
+
+        Photo p1 = new Photo();
+        var a = p1.AllPhotoOfTheDay();
+
+
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+        string jsonString = js.Serialize(a);
+        return jsonString;
+    }
 
 
 
@@ -138,7 +165,7 @@ public class WebService : System.Web.Services.WebService
         }
         catch (Exception)
         {
-            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+             RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             return;
         }
 
@@ -305,7 +332,7 @@ public class WebService : System.Web.Services.WebService
         //        + "<h1>ID: " + id + "</h1><br/>"
         //        + "<h3>Content :<h3><br/>" + content;
     }
-    
+
     private string renderNotification(string content, string title, string rootCategoryTitle)
     {
         var isQuestion = "";

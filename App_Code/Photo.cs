@@ -64,15 +64,15 @@ public class Photo
 
             var b = item.Elements("pubDate").ElementAt(0).FirstNode;
 
-            p1.date = DateTime.Parse(b.ToString());
+            p1.Date = DateTime.Parse(b.ToString());
 
             var html = item.Elements("description").ElementAt(0).Value;
 
-            p1.url = Regex.Match(html, "<img.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase).Groups[1].Value;
+            p1.Url = Regex.Match(html, "<img.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase).Groups[1].Value;
 
             var text = Regex.Replace(html, @"<[^>]*>", String.Empty);
 
-            p1.description = text.Replace("Picture of the day", "").Trim();
+            p1.Description = text.Replace("Picture of the day", "").Trim();
             
              ls.Add(p1);
 
