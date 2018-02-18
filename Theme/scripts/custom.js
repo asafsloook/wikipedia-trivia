@@ -89,6 +89,53 @@ $(document).ready(function () {
         }, 0.01);
 
 
+        if (window.location.href.toString().indexOf('AllPhotos.html') != -1) {
+            $.ajax({ // ajax call starts
+                url: '../WebService.asmx/GetPhotos',   // server side web service method
+                //data: dataString,                          // the parameters sent to the server
+                type: 'POST',                              // can be also GET
+                dataType: 'json',                          // expecting JSON datatype from the server
+                contentType: 'application/json; charset = utf-8', // sent to the server
+                success: successPhotosCB,                // data.d id the Variable data contains the data we get from serverside
+                error: errorPhotosCB
+            }); // end of ajax call
+
+            function successPhotosCB(results) {
+                var results = $.parseJSON(results.d);
+                photos = results;
+
+                //for (var i = 0; i < results.length; i++) {
+                //    var str = '<img class="preload-image" data-original="' + results[i].Url + '" alt="img">'
+                //        + '<strong>' + (new Date(parseInt(results[i].Date.replace('/Date(', ''))).toLocaleDateString()) + '</strong>'
+                //        + '<em>' + results[i].Description + '</em>';
+                //    $("#ph" + i).html(str);}
+
+
+                for (var i = 0; i < results.length; i++) {
+
+                    $("#ph" + i + " img").attr("src", results[i].Url);
+
+                    //$("#ph" + i).attr("href", "Photo.html?id=" + i);
+
+                    $("#ph" + i + " strong").html((new Date(parseInt(results[i].Date.replace('/Date(', ''))).toLocaleDateString()));
+
+                    var short = "";
+                    if (results[i].Description.length > 60) {
+                        short = "...";
+                    }
+
+                    $("#ph" + i + " em").html(results[i].Description.substring(0, 60).trim() + short);
+                }
+
+            }
+
+            function errorPhotosCB(e) {
+                alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
+            }
+        }
+
+
+
         if (window.location.href.toString().indexOf("Article.html") != -1) {
             $('.footer-menu-open').click(function () {
                 $.ajax({ // ajax call starts
