@@ -1,3 +1,72 @@
+
+#loadingTitle {
+    position: relative;
+    top: 65%;
+    text-align: center;
+}
+
+#loading {
+    background-color: white;
+    height: 100%;
+    display:none;
+}
+
+#loadingImg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translateY(-50%) translateX(-50%);
+}
+
+#title {
+    padding-bottom: 20px;
+}
+
+#logo {
+    height: 60px;
+    margin: 0 auto;
+}
+
+#closeBTN, #refreshBTN {
+    font-size: 30px;
+}
+
+#Photo, #ArticleImg {
+    height: 230px;
+    margin: 0 auto;
+    padding-bottom: 20px;
+    max-width: 330px;
+}
+
+
+
+.thumb-layout img {
+    width: 95px;
+    position: absolute;
+    max-height: 95px;
+    object-fit: cover;
+}
+
+.thumb-layout a {
+    height: 95px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*Material Settings*/
 
 .swiper-container {
