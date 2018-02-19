@@ -2,17 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Web.UI.WebControls;
-using System.Net.Http;
 using Newtonsoft.Json;
 using System.Net;
 using System.Xml.Linq;
-using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using System.Xml;
-using System.Xml.Serialization;
 using System.Text.RegularExpressions;
-
 
 public partial class _Default : System.Web.UI.Page
 {
@@ -23,6 +18,8 @@ public partial class _Default : System.Web.UI.Page
         //FirstSentence("Mary Ball Washington");
         //OnlyIntro("Ariel Sharon");
         //AllText("Kenneth Burke");
+
+        
 
         //Random rnd = new Random();
         //var categoriesList = getMainCategories();

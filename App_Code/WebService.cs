@@ -31,6 +31,21 @@ public class WebService : System.Web.Services.WebService
 
         //Uncomment the following line if using designed components 
         //InitializeComponent(); 
+
+        DBConnection db = new DBConnection();
+        //db.readTable("CategoriesP");
+
+        User eli = new User();  // new User('32453453', 'asdfdbg393939', 1, 0, '10:30', 1, 5)
+        eli.Imei = "eli";
+        eli.PushKey = "asdfdbg393939";
+        eli.LocationPush = true;
+        eli.PhotoPush = true;
+        eli.PhotoPushTime = Convert.ToDateTime("10:30");
+        eli.ArticlePush = true;
+        eli.ArticlesPerDay = 9;
+
+
+        db.insert(eli);
     }
 
     [WebMethod]
