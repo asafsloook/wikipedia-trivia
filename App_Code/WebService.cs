@@ -45,7 +45,7 @@ public class WebService : System.Web.Services.WebService
         eli.ArticlesPerDay = 9;
 
 
-        db.insert(eli);
+        //db.insert(eli);
     }
 
     [WebMethod]
