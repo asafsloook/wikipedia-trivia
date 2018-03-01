@@ -23,9 +23,6 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet">
-
     <title>Epsilon 7.0</title>
 
     <link rel="stylesheet" type="text/css" href="styles/style.css">
@@ -37,8 +34,193 @@
     <script type="text/javascript" src="scripts/plugins.js"></script>
     <script type="text/javascript" src="scripts/custom.js"></script>
 
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!--<link rel="stylesheet" href="/resources/demos/style.css">-->
+    <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+
+
+    <script>
+
+        //$(function () {
+        $(document).ready(function () {
+            $("#tags").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + $("#tags").val() + '&limit=10&namespace=0&format=json',
+                        dataType: "jsonp",
+
+                        success: function (data) {
+                            response(data[1]);
+                        }
+                    });
+                },
+                minLength: 1
+            });
+        });
+
+        function checkIfExist(id) {
+            var test = null;
+            try {
+                var selector = '#' + id;
+                test = $(selector).html();
+
+            } catch (e) {
+
+            }
+            if (test == null || test == undefined) {
+                return false;
+            }
+            return true;
+        }
+
+        $(document).ready(function () {
+            $('#addBTN').on('click', function () {
+
+                if ($("#tags").val().trim() == "") {
+                    alert("null");
+                    return;
+                }
+
+                if (checkIfExist($("#tags").val().replace(/\W/g, ''))) {
+                    alert("exist");
+                    return;
+                }
+
+                var str = '<div id="' + $("#tags").val().replace(/\W/g, '') + '">' + $("#tags").val() + '</div>'
+
+                $('.page-interests')[0].innerHTML += str;
+
+            });
+        });
+
+        $(document).ready(function () {
+            $('#addBTN2').on('click', function () {
+                if ($("#selects").val() == "Suggested categories...") {
+                    alert("Please choose a category");
+                    return;
+                }
+
+
+                if ($("#selects").val().trim() == "" ) {
+                    alert("null");
+                    return;
+                }
+
+                if (checkIfExist($("#selects").val().replace(/\W/g, ''))) {
+                    alert("exist");
+                    return;
+                }
+
+                var str = '<div id="' + $("#selects").val().replace(/\W/g, '') + '">' + $("#selects").val() + '</div>'
+
+                $('.page-interests')[0].innerHTML += str;
+
+
+                $('#selects').empty();
+                printCategories(cat);
+            });
+        });
+
+        cat = [];
+
+        $(document).ready(function () {
+            $.ajax({ // ajax call starts
+                url: '../WebService.asmx/GetCategories',   // server side web service method
+                //data: dataString,                          // the parameters sent to the server
+                type: 'POST',                              // can be also GET
+                dataType: 'json',                          // expecting JSON datatype from the server
+                contentType: 'application/json; charset = utf-8', // sent to the server
+                success: successPhotosCB,                // data.d id the Variable data contains the data we get from serverside
+                error: errorPhotosCB
+            }); // end of ajax call
+
+
+            function successPhotosCB(results) {
+                var results = $.parseJSON(results.d);
+
+                cat = results;
+
+                printCategories(results);
+            }
+
+            function errorPhotosCB(e) {
+                alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
+            }
+        });
+
+        function printCategories(results) {
+            var str = '<option>Suggested categories...</option>';
+            for (var i = 0; i < results.length; i++) {
+
+                if (checkIfExist(results[i])) {
+                    continue;
+                }
+
+                str += '<option>' + results[i] + '</option>';
+
+            }
+            $('#selects').append(str);
+            $('#selects').selectmenu('refresh');
+        }
+    </script>
+    <style>
+        .interest-box {
+            padding: 3% 4%;
+        }
+
+        #page-content .ui-widget {
+            text-align: center;
+        }
+
+        #tags, #selects {
+            padding: 5%;
+            width: 70%;
+            float: left;
+        }
+
+        .searchContainer {
+            padding-left: 11%;
+            padding-top: 3%;
+        }
+
+        #addBTN, #addBTN2 {
+            margin-top: 1%;
+            margin-left: 4%;
+        }
+
+        .page-interests input {
+            width: 60%;
+        }
+
+        .page-interests div {
+            background-color: white;
+            margin: 5% 9%;
+            padding: 3%;
+        }
+
+        .searchContainer a i {
+            padding: 25%;
+        }
+
+        .searchContainer a {
+            background-color: dimgrey;
+        }
+        #interestHeader {
+            color: white;
+            text-align: center;
+            padding-bottom: 5%;
+        }
+        #forwardBTN i {
+            background-color: darkgreen;
+            font-size: 30px;
+        }
+    </style>
 </head>
 
 <body>
@@ -50,131 +232,69 @@
 
         <div class="header header-light header-full">
             <a href="#" class="header-icon header-icon-1 open-left-sidebar"><i class="fa fa-navicon"></i></a>
-            <a href="#" class="scale-hover"></a>
+            <!--<a href="#" class="scale-hover">-->
             <img id="logo" src="images/logo.png" />
             <!--</a>-->
             <!--<a href="#" class="header-icon header-icon-4 open-right-sidebar"><i class="fa fa-envelope-o"></i></a>-->
         </div>
 
-        <div id="page-content" class="page-content header-clear-full">
+        <div class="bg bg-full"></div>
+
+        <div id="page-content" class="page-content header-clear bg bg-cover bg-transparent">
             <div id="page-content-scroll">
-
-                <!--<div class="heading-strip bg-2">
-                    <h3>News Post 1</h3>
-                    <p>This is just a template, not a theme</p>
-                    <i class="fa fa-newspaper-o"></i>
-                    <div class="overlay dark-overlay"></div>
-                </div>-->
-                <div class="decoration decoration-margins"></div>
-
-                <div class="content no-material no-top">
-                    <h3 id="title" class="no-bottom"></h3>
-                    <!--<p class="news-article-small-text no-bottom">
-                        Posted by <a href="#">Enabled</a>
-                        about <a href="#">40 minutes ago</a>
-                        in <a href="#">Mobile News</a>
-                    </p>-->
-                </div>
-
-                <!--<div class="single-item">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img class="responsive-image no-bottom" src="images/pictures/1.jpg" alt="img">
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="responsive-image no-bottom" src="images/pictures/2.jpg" alt="img">
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="responsive-image no-bottom" src="images/pictures/3.jpg" alt="img">
-                        </div>
+                <h1 id="interestHeader">Choose your interests</h1>
+                <div class="searchContainer">
+                    <div class="ui-widget">
+                        <input id="tags" placeholder="Try your own interests...">
                     </div>
-                </div>-->
-
-                <div>
-                    <img id="Photo" class="no-bottom" src="https://static.tumblr.com/96a2cb4bb3f1862bdec9cb57c5fd015a/7lj4mpc/ZUxo2472a/tumblr_static_bcf8vu59co0k4kgsoccoo0ck4_640_v2.jpg" alt="img">
+                    <a href="#" id="addBTN" class="icon icon-round"><i class="material-icons">add</i></a>
                 </div>
 
-                <div class="news-article-share full-bottom">
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=your_link_here"><i class="facebook-bg fa fa-facebook"></i></a>
-                    <a href="https://twitter.com/home?status=your_text_here"><i class="twitter-bg fa fa-twitter"></i></a>
-                    <a href="https://plus.google.com/share?url=your_link_here"><i class="google-bg fa fa-google-plus"></i></a>
-                    <a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share"><i class="whatsapp-bg fa fa-whatsapp"></i></a>
-                    <a href="mailto:?&subject=Your_subject&body=Your_text_here"><i class="mail-bg fa fa-envelope-o"></i></a>
-                    <div class="clear"></div>
+                <div class="searchContainer">
+                    <select id="selects">
+                                            </select>
+                    <a href="#" id="addBTN2" class="icon icon-round"><i class="material-icons">add</i></a>
                 </div>
 
-                <div class="content">
-                    <!--<h4>Some awesome title goes here</h4>-->
-                    <p id="articleContent" class="full-bottom">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla gravida rhoncus feugiat.
-                        Maecenas lacinia ut nibh a auctor. Mauris iaculis turpis sollicitudin, cursus nisl vitae,
-                        varius justo.
-                    </p>
-                    <!--<h5>Add a subtitle maybe?</h5>
-                     <p class="half-bottom">
-                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla gravida rhoncus feugiat.
-                         Maecenas lacinia ut nibh a auctor. Mauris iaculis turpis sollicitudin, cursus nisl vitae,
-                         varius justo.
-                     </p>
-                     <div class="decoration"></div>
-                     <img data-original="images/pictures/1ww.jpg" alt="img" class="responsive-image preload-image">
-                     <div class="container">
-                         <p class="dropcaps-1">
-                             Also we have dropcaps ipsum dolor sit amet, consectetur adipiscing elit.
-                             Donec varius dui et erat aliquet rutrum. Nunc vitae tincidunt.
-                             Also we have dropcaps ipsum dolor sit amet, consectetur adipiscing elit.
-                             Donec varius dui et erat aliquet rutrum. Nunc vitae tincidunt.
-                             Also we have dropcaps ipsum dolor sit amet, consectetur adipiscing elit.
-                             Donec varius dui et erat aliquet rutrum. Nunc vitae tincidunt.
-                         </p>
-                     </div>
-                     <h5>Maybe a gallery in here as well?</h5>
-                     <p>
-                         You can also add galleries, without a problem, easy as pie, to show your news content elements even better and even easier.
-                     </p>
-                    <div class="gallery square-thumbs no-bottom">
-                         <a href="images/pictures/1.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/1t.jpg" alt="img"></a>
-                         <a href="images/pictures/2.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/2t.jpg" alt="img"></a>
-                         <a href="images/pictures/3.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/3t.jpg" alt="img"></a>
-                         <a href="images/pictures/4.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/4t.jpg" alt="img"></a>
-                         <a href="images/pictures/5.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/5t.jpg" alt="img"></a>
-                         <a href="images/pictures/6.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/6t.jpg" alt="img"></a>
-                         <a href="images/pictures/7.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/7t.jpg" alt="img"></a>
-                         <a href="images/pictures/8.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/8t.jpg" alt="img"></a>
-                         <a href="images/pictures/1.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/9t.jpg" alt="img"></a>
-                         <a href="images/pictures/2.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/2t.jpg" alt="img"></a>
-                         <a href="images/pictures/3.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/3t.jpg" alt="img"></a>
-                         <a href="images/pictures/4.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/4t.jpg" alt="img"></a>
-                     </div>
-                     <p>
-                         And after all these features, lets' give you even more great news, really, a lot more great news!
-                     </p>
-                     <div class="decoration"></div>
-                     <h4 class="half-bottom">You can use any feature from our pages!</h4>
-                     <p class="half-bottom">
-                         Yes, you got that right! You can add any element from any page inside the news! And we included all the pages
-                         inside for your delight, this is not just a news template. It's a full blown template with a news extension added to it!
-                     </p>-->
-                </div>
+                <div id="pi" class="page-interests">
 
-                <div class="decoration decoration-margins"></div>
 
-                <div class="footer footer-light">
-                    <!--<a href="#" class="footer-logo scale-hover"></a>-->
-                    <p>
-                        Simplicity and complexity packed into a beautiful,
-                        feature filled, powerful, gorgeous mobile template.
-                    </p>
-                    <div class="footer-socials">
-                        <a href="#" class="default-link icon icon-round no-border icon-xs facebook-bg"><i class="fa fa-facebook"></i></a>
-                        <a href="#" class="default-link icon icon-round no-border icon-xs twitter-bg"><i class="fa fa-twitter"></i></a>
-                        <a href="#" class="default-link icon icon-round no-border icon-xs google-bg"><i class="fa fa-google-plus"></i></a>
-                        <a href="#" class="default-link icon icon-round no-border icon-xs phone-bg"><i class="fa fa-phone"></i></a>
-                        <a href="#" class="icon icon-round no-border icon-xs show-share-bottom bg-blue-dark"><i class="fa fa-retweet"></i></a>
-                        <a href="#" class="icon icon-round no-border icon-xs back-to-top bg-night-dark"><i class="fa fa-angle-up"></i></a>
-                    </div>
-                    <div class="decoration"></div>
-                    <p class="copyright-text">Copyright <span id="copyright-year"></span>. All Rights Reserved.</p>
+                    <!--<a href="#" class="interest-box transparent-background bg-blue-dark">
+                        <strong>Technology</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-cog"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>
+                    <a href="#" class="interest-box transparent-background bg-red-dark">
+                        <strong>Sports</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-futbol-o"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>
+                    <a href="#" class="interest-box transparent-background bg-orange-dark">
+                        <strong>Cooking</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-cutlery fa fa-circle-o"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>
+                    <a href="#" class="interest-box transparent-background bg-magenta-dark">
+                        <strong>Driving</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-cutlery"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>
+                    <a href="#" class="interest-box transparent-background bg-teal-dark">
+                        <strong>Social</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-share-alt"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>
+                    <a href="#" class="interest-box transparent-background bg-green-dark">
+                        <strong>Movies</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-youtube-play"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>-->
                 </div>
 
             </div>
@@ -392,7 +512,7 @@
                             <a class="menu-item" href="page-profile-1.html">
                                 <i class="fa fa-user"></i>Profile 1<i class="fa fa-circle"></i>
                             </a>
-                            <a class="menu-item" href="page-profile-2.html">
+                            <a class="menu-item active-item" href="page-profile-2.html">
                                 <i class="fa fa-user"></i> Profile 2<i class="fa fa-circle"></i>
                             </a>
                             <a class="menu-item" href="page-timeline-1.html">
@@ -410,11 +530,11 @@
                         </div>
                     </div>
                     <div class="has-submenu">
-                        <a class="menu-item open-submenu" href="#">
+                        <a class="menu-item open-submenu active-item" href="#">
                             <!-- active-item -->
                             <i class="bg-red-dark fa fa-mobile"></i>App Styled<em class="menu-number">0</em>
                         </a>
-                        <div class="submenu">
+                        <div class="submenu active-submenu">
                             <!--active-submenu-->
                             <a class="menu-item" href="pageapp-chat.html">
                                 <i class="fa fa-comment-o"></i>Chat<i class="fa fa-circle"></i>
@@ -437,7 +557,7 @@
                             <a class="menu-item" href="pageapp-checklist.html">
                                 <i class="fa fa-check"></i>Checklist<i class="fa fa-circle"></i>
                             </a>
-                            <a class="menu-item" href="pageapp-interests.html">
+                            <a class="menu-item active-item" href="pageapp-interests.html">
                                 <i class="fa fa-question"></i>Interests<i class="fa fa-circle"></i>
                             </a>
                             <a class="menu-item" href="pageapp-calendar.html">
@@ -503,11 +623,11 @@
                         </div>
                     </div>
                     <div class="has-submenu">
-                        <a class="menu-item open-submenu active-item" href="#">
+                        <a class="menu-item open-submenu" href="#">
                             <!-- active-item -->
                             <i class="bg-blue-dark fa fa-newspaper-o"></i>News Pages<em class="menu-number">0</em>
                         </a>
-                        <div class="submenu active-submenu">
+                        <div class="submenu">
                             <!--active-submenu-->
                             <a class="menu-item" href="news-faq.html">
                                 <i class="fa fa-question"></i>F.A.Q.<i class="fa fa-circle"></i>
@@ -530,7 +650,7 @@
                             <a class="menu-item" href="news-list-3.html">
                                 <i class="fa fa-list"></i>List 3<i class="fa fa-circle"></i>
                             </a>
-                            <a class="menu-item active-item" href="news-post-1.html">
+                            <a class="menu-item" href="news-post-1.html">
                                 <i class="fa fa-pencil"></i>Post 1<i class="fa fa-circle"></i>
                             </a>
                             <a class="menu-item" href="news-post-2.html">
@@ -691,46 +811,49 @@
             <div class="footer-menu-wrapper remove-menu">
                 <div class="footer-menu-scroll">
                     <div class="footer-menu">
-                        <a href="news-archive.html" class="footer-menu-item">
-                            <em>Archive</em><i class="scale-hover bg-yellow-light fa fa-archive"></i>
+                        <a href="pageapp-map.html" class="footer-menu-item">
+                            <em>Fullscreen Map</em><i class="scale-hover bg-orange-dark fa fa-map-marker"></i>
                         </a>
-                        <a href="news-post-3.html" class="footer-menu-item">
-                            <em>Post 3</em><i class="scale-hover bg-orange-dark fa fa-pencil"></i>
+                        <a href="pageapp-users.html" class="footer-menu-item">
+                            <em>Userlist</em><i class="scale-hover bg-orange-light fa fa-user"></i>
                         </a>
-                        <a href="news-post-2.html" class="footer-menu-item">
-                            <em>Post 2</em><i class="scale-hover bg-red-dark fa fa-pencil"></i>
+                        <a href="pageapp-coverpage.html" class="footer-menu-item">
+                            <em>Coverpage</em><i class="scale-hover bg-red-light fa fa-image"></i>
                         </a>
-                        <a href="news-post-1.html" class="footer-menu-item active-menu">
-                            <em>Post 1</em><i class="scale-hover bg-red-light fa fa-pencil"></i>
+                        <a href="pageapp-calendar.html" class="footer-menu-item">
+                            <em>Calendar</em><i class="scale-hover bg-red-dark fa fa-calendar-o"></i>
                         </a>
-                        <a href="news-list-3.html" class="footer-menu-item">
-                            <em>List 3</em><i class="scale-hover bg-magenta-dark fa fa-list"></i>
+                        <a href="pageapp-interests.html" class="footer-menu-item active-menu">
+                            <em>Interests</em><i class="scale-hover bg-magenta-light fa fa-question"></i>
                         </a>
-                        <a href="news-list-2.html" class="footer-menu-item">
-                            <em>List 2</em><i class="scale-hover bg-night-dark fa fa-list"></i>
+                        <a href="pageapp-checklist.html" class="footer-menu-item">
+                            <em>Checklist</em><i class="scale-hover bg-magenta-dark fa fa-check"></i>
                         </a>
-                        <a href="news-list-1.html" class="footer-menu-item">
-                            <em>List 1</em><i class="scale-hover bg-night-light fa fa-list"></i>
+                        <a href="pageapp-tasklist.html" class="footer-menu-item">
+                            <em>Tasklist</em><i class="scale-hover bg-night-dark fa fa-check"></i>
                         </a>
-                        <a href="news-cover.html" class="footer-menu-item">
-                            <em>Cover</em><i class="scale-hover bg-blue-light fa fa-image"></i>
+                        <a href="pageapp-register.html" class="footer-menu-item">
+                            <em>Register</em><i class="scale-hover bg-night-light fa fa-code"></i>
                         </a>
-                        <a href="news-front-2.html" class="footer-menu-item">
-                            <em>Home 2</em><i class="scale-hover bg-blue-dark fa fa-home"></i>
+                        <a href="pageapp-login.html" class="footer-menu-item">
+                            <em>Login</em><i class="scale-hover bg-blue-light fa fa-lock"></i>
                         </a>
-                        <a href="news-front-1.html" class="footer-menu-item">
-                            <em>Home 1</em><i class="scale-hover bg-green-dark fa fa-home"></i>
+                        <a href="pageapp-soon.html" class="footer-menu-item">
+                            <em>Soon</em><i class="scale-hover bg-blue-dark fa fa-clock-o"></i>
                         </a>
-                        <a href="news-faq.html" class="footer-menu-item">
-                            <em>FAQ</em><i class="scale-hover bg-green-light fa fa-question"></i>
+                        <a href="pageapp-error.html" class="footer-menu-item">
+                            <em>Error</em><i class="scale-hover bg-green-dark fa fa-warning"></i>
+                        </a>
+                        <a href="pageapp-chat.html" class="footer-menu-item">
+                            <em>Chat</em><i class="scale-hover bg-green-light fa fa-comment-o"></i>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="footer-menu-controls light-footer-menu">
-            <a href="allphotos.html" class="footer-menu-open"><i id="closeBTN" class="material-icons bg-blue-dark">close</i></a>
-            <a href="#" class="footer-menu-close remove-menu"><i class="fa fa-times bg-red-dark"></i><em>Close</em></a>
+            <a href="#" id="forwardBTN" class="footer-menu-open"><i class="material-icons">forward</i></a>
+            <!--<a href="#" class="footer-menu-close remove-menu"><i class="fa fa-times bg-red-dark"></i><em>Close</em></a>-->
         </div>
         <div class="footer-menu-tap-close remove-menu"></div>
         <div class="footer-menu-background light-footer-background remove-menu"></div>
@@ -770,3 +893,4 @@
 
     </div>
 </body>
+

@@ -26,7 +26,7 @@ public class Article
         //
     }
 
-    string articleID;
+    string id;
     public string ArticleId { get; set; }
 
     Category category;
@@ -41,7 +41,7 @@ public class Article
     string title;
     public string Title { get; set; }
 
-    string articleContent;
+    string content;
     public string ArticleContent { get; set; }
 
     string url;
@@ -65,11 +65,6 @@ public class Article
     /// 
     public Article RandomPageFromCategory(string categoryTitle, string rootCategoryTitle)
     {
-        //Category catTitle = new Category();
-        //catTitle.Name=categoryTitle;
-        //Category rootCatTitle = new Category();
-        //rootCatTitle.Name = rootCategoryTitle;
-
         string ResponseURI;
         HttpWebRequest myRequest =
         (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/wiki/Special:RandomInCategory/" + categoryTitle);
@@ -78,10 +73,7 @@ public class Article
             ResponseURI = response.ResponseUri.ToString();
         }
         string articleTitle = ResponseURI.Replace("https://en.wikipedia.org/wiki/", "");
-
-        //fix for first sentence wiki api function
-        //articleTitle = articleTitle.Replace("%C3%A9", "é"); 
-        //articleTitle = articleTitle.Replace("%E2%80%93", "-");
+        
 
         string ResponseText;
         HttpWebRequest myRequest2 =
@@ -97,16 +89,7 @@ public class Article
         JObject root = JObject.Parse(ResponseText);
 
         var dig = root["query"]["pages"].First.First;
-
-        //if (dig["extract"] == null)
-        //{
-        //    RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-        //    return;
-        //}
-
-        string content;
-        string id;
-        string title;
+        
 
         try
         {
@@ -120,6 +103,7 @@ public class Article
             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
         }
 
+
         title = title.Replace(' ', '_');
 
         if (content == null || content == "" || title.StartsWith("Category") || content.StartsWith("<p>This") || content.StartsWith("<p>The following") || title.StartsWith("List") || title.StartsWith("Portal") || title.StartsWith("Index") || title.StartsWith("Template") || title.StartsWith("Timeline") || title.StartsWith("Book:") || title.StartsWith("Draft:") || content.Length < 50)
@@ -131,11 +115,10 @@ public class Article
                 return RandomPageFromCategory(title, rootCategoryTitle);
             }
 
-
-            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle); ;
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
         }
 
-
+        
         //check for issues with article   
         string ResponseText5;
         HttpWebRequest myRequest5 =
@@ -170,7 +153,7 @@ public class Article
         }
 
         var views = GetViews(title);
-        if (views == -1 || views < 100)
+        if (views == -1 || views < 50)
         {
 
             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
@@ -186,10 +169,6 @@ public class Article
             content = content.Substring(content.IndexOf("<p>"));
         }
 
-        //printing the title
-        //ph.Text += "title:" + title.ToString() + "<br/><br/>";
-
-        //wikipedia 
 
         if (content.Contains("<math"))
         {
@@ -197,111 +176,34 @@ public class Article
             content += "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>";
         }
 
-        //testing printing
-        //ph.Text += content + "<br/>" + "<br/>";
-        //ph.Text += "FirstSentence: " + FirstSentence(title) + "<br/>" + "<br/>";
-        //ph.Text += "<br/><br/>Root Category: " + rootCategoryTitle + "<br/>" + "<br/>";
-
 
         if (content == title + " may refer to:")
         {
 
             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
         }
-
-
-        #region wikidata
-        // var DESCquestion = "";
-        //if (hasDescription(title) != null)
-        //{
-        //    var desc = hasDescription(title);
-        //    if (desc.Contains("Wikipedia disambiguation page") || desc.Contains("Wikimedia disambiguation page") || content.Substring(0, 25).Contains("list") || desc.Contains("list") || desc.ToLower().StartsWith("of "))
-        //    {
-        //        //RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-        //        //return;
-        //    }
-
-        //    if (desc.ToLower().StartsWith("the ") || desc.ToLower().StartsWith("a ") || desc.ToLower().StartsWith("an "))
-        //    {
-        //        DESCquestion = "<br/><br/> DESC-Q: Do you know what is " + desc + "?<br/>";
-        //    }
-
-        //    else
-        //    {
-        //        var x = startWithVowel(desc);
-
-        //        DESCquestion = "<br/><br/> DESC-Q: Do you know what is " + x + desc + "?<br/>";
-        //    }
-
-        //}
-        //ph.Text += DESCquestion;
-        #endregion
-
-        Article a1 = new Article();
-
+        
         Category c1 = new Category();
         c1.Name = rootCategoryTitle;
-
-
-        a1.Category = c1;
-        a1.ArticleId = id;
-        a1.Title = title.Replace("_", " ");
-        a1.ArticleContent = content;
+        
+        Category = c1;
+        Title = title.Replace("_", " ");
+        ArticleContent = content;
 
         string notification = renderNotification(content, title, rootCategoryTitle);
 
-        a1.NotificationContent = notification;
+        NotificationContent = notification;
 
-        a1.PhotoUrl = getPhotoForArticle(title);
+        PhotoUrl = getPhotoForArticle(title);
 
-        return a1;
+        return this;
 
-        #region isPerson, isAnimal, isEvent tests
-        //if (isPerson(title))
-        //{
-        //    ph.Text += "<br/><br/> isPerson:true <br/>";
-
-        //    var birth_date = hasBirthDate(title);
-        //    if (birth_date != null)
-        //    {
-        //        ph.Text += "<br/>*BD*:" + birth_date.Substring(0, 11).Replace("+", "");
-        //    }
-
-        //    var death_date = hasDeathDate(title);
-        //    if (death_date != null)
-        //    {
-        //        ph.Text += "<br/>*DD*:   " + death_date.Substring(0, 11).Replace("+", "");
-        //    }
-
-        //    var cause_death = hasCauseOfDeath(title);
-        //    if (cause_death != null)
-        //    {
-        //        ph.Text += "<br/>*COD*:   " + cause_death;
-        //    }
-
-        //    //var x = startWithVowel(desc2);
-        //    //personQuestion = "<br/><br/> Q: Do you know who is " + x + desc2 + "?<br/>";
-        //}
-
-        //if (isAnimal(title) != null)
-        //{
-        //    ph.Text += "<br/><br/>Q: Do you know that animal?: " + isAnimal(title);
-        //}
-
-        //ph.Text += personQuestion;
-
-
-        //Unstable// Not for use
-        //if (isEvent(title))
-        //{
-        //    ph.Text += "isEvent: true";
-        //}
-        #endregion
-
-        //ph.Text = "<h1>Title: " + title + "</h1>"
-        //        + "<h1>ID: " + id + "</h1><br/>"
-        //        + "<h3>Content :<h3><br/>" + content;
     }
+
+    //private Article firstFilter(string content, string title, string rootCategoryTitle)
+    //{
+       
+    //}
 
     public string getPhotoForArticle(string title)
     {
@@ -1011,11 +913,15 @@ public class Article
 
 
     /// <summary>
-    /// Text extracts from wiki
+    /// Text extracts from wiki, its crap
     /// </summary>
     /// 
     private string FirstSentence(string articleTitle)
     {
+        //fix for first sentence wiki api function
+        //articleTitle = articleTitle.Replace("%C3%A9", "é"); 
+        //articleTitle = articleTitle.Replace("%E2%80%93", "-");
+
         string ResponseText;
         HttpWebRequest myRequest =
         (HttpWebRequest)WebRequest.Create("https://www.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=true&exsentences=1&format=json&titles=" + articleTitle);
@@ -1468,6 +1374,74 @@ public class Article
 
     }
 
+    #region wikidata
+    // var DESCquestion = "";
+    //if (hasDescription(title) != null)
+    //{
+    //    var desc = hasDescription(title);
+    //    if (desc.Contains("Wikipedia disambiguation page") || desc.Contains("Wikimedia disambiguation page") || content.Substring(0, 25).Contains("list") || desc.Contains("list") || desc.ToLower().StartsWith("of "))
+    //    {
+    //        //RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+    //        //return;
+    //    }
+
+    //    if (desc.ToLower().StartsWith("the ") || desc.ToLower().StartsWith("a ") || desc.ToLower().StartsWith("an "))
+    //    {
+    //        DESCquestion = "<br/><br/> DESC-Q: Do you know what is " + desc + "?<br/>";
+    //    }
+
+    //    else
+    //    {
+    //        var x = startWithVowel(desc);
+
+    //        DESCquestion = "<br/><br/> DESC-Q: Do you know what is " + x + desc + "?<br/>";
+    //    }
+
+    //}
+    //ph.Text += DESCquestion;
+    #endregion
+        
+    #region isPerson, isAnimal, isEvent tests
+    //if (isPerson(title))
+    //{
+    //    ph.Text += "<br/><br/> isPerson:true <br/>";
+
+    //    var birth_date = hasBirthDate(title);
+    //    if (birth_date != null)
+    //    {
+    //        ph.Text += "<br/>*BD*:" + birth_date.Substring(0, 11).Replace("+", "");
+    //    }
+
+    //    var death_date = hasDeathDate(title);
+    //    if (death_date != null)
+    //    {
+    //        ph.Text += "<br/>*DD*:   " + death_date.Substring(0, 11).Replace("+", "");
+    //    }
+
+    //    var cause_death = hasCauseOfDeath(title);
+    //    if (cause_death != null)
+    //    {
+    //        ph.Text += "<br/>*COD*:   " + cause_death;
+    //    }
+
+    //    //var x = startWithVowel(desc2);
+    //    //personQuestion = "<br/><br/> Q: Do you know who is " + x + desc2 + "?<br/>";
+    //}
+
+    //if (isAnimal(title) != null)
+    //{
+    //    ph.Text += "<br/><br/>Q: Do you know that animal?: " + isAnimal(title);
+    //}
+
+    //ph.Text += personQuestion;
+
+
+    //Unstable// Not for use
+    //if (isEvent(title))
+    //{
+    //    ph.Text += "isEvent: true";
+    //}
+    #endregion
 
     /// <summary>
     /// Functions tests, not for use

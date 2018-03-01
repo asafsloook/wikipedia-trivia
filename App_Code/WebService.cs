@@ -96,6 +96,27 @@ public class WebService : System.Web.Services.WebService
 
 
 
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string GetCategories()
+    {
+        Category c = new Category();
+        List<string> categoriesList = c.getMainCategories();
+        categoriesList.Remove("Reference works");
+
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+        string jsonString = js.Serialize(categoriesList);
+        return jsonString;
+    }
+
+
+
+
+    /////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+
     /// <summary>
     /// Get the main/root categories from wikipedia
     /// </summary>

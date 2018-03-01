@@ -1,12 +1,12 @@
 
 $(document).on('pagebeforeshow', function () {
 
-    if (window.location.href.toString().indexOf('AllPhotos.html') != -1) {
+    if (window.location.href.toString().indexOf('allphotos.html') != -1) {
 
         getPhotos();
     }
 
-    if (window.location.href.toString().indexOf("Article.html") != -1) {
+    if (window.location.href.toString().indexOf("article.html") != -1) {
 
         $(document).ajaxStart(function () {
             $('#page-content-scroll').hide();
@@ -15,9 +15,12 @@ $(document).on('pagebeforeshow', function () {
         });
 
         $(document).ajaxStop(function () {
-            $("#loading").fadeOut();
-            $("#refreshBTN").fadeIn();
-            $('#page-content-scroll').fadeIn();
+            setTimeout(function () {
+                $("#loading").fadeOut();
+                $("#refreshBTN").fadeIn();
+                $('#page-content-scroll').fadeIn();
+            }, 500);
+
         });
 
         getArticle();
@@ -141,7 +144,7 @@ $(document).ready(function () {
         }, 0.01);
 
 
-        if (window.location.href.toString().indexOf('AllPhotos.html') != -1) {
+        if (window.location.href.toString().indexOf('allphotos.html') != -1) {
 
             getPhotos();
 
@@ -149,7 +152,7 @@ $(document).ready(function () {
 
 
 
-        if (window.location.href.toString().indexOf("Article.html") != -1) {
+        if (window.location.href.toString().indexOf("article.html") != -1) {
 
 
             $('.footer-menu-open').click(function () {
@@ -168,7 +171,7 @@ $(document).ready(function () {
             localStorage["PhotoDate"] = photos[id].Date;
         });
 
-        if (window.location.href.toString().indexOf('Photo.html') != -1) {
+        if (window.location.href.toString().indexOf('photo.html') != -1) {
             render();
             $("#closeBTN").on('click', function () {
                 closeCLick = true;
