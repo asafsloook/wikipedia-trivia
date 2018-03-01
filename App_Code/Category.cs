@@ -32,7 +32,7 @@ public class Category
     /// Get the main/root categories from wikipedia
     /// </summary>
     /// 
-    private List<string> getMainCategories()
+    public List<string> getMainCategories()
     {
         string ResponseText;
         HttpWebRequest myRequest =
