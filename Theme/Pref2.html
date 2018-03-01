@@ -47,210 +47,85 @@
 
     <script>
 
-        //$(function () {
         $(document).ready(function () {
-            $("#tags").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + $("#tags").val() + '&limit=10&namespace=0&format=json',
-                        dataType: "jsonp",
+            $('#myonoffswitch-1').change(function () {
+                if ($('#myonoffswitch-1').is(':checked')) {
+                    document.getElementById('artPerDay').disabled = false;
 
-                        success: function (data) {
-                            response(data[1]);
-                        }
-                    });
-                },
-                minLength: 1
-            });
-        });
-
-        function checkIfExist(id) {
-            var test = null;
-            try {
-                var selector = '#' + id;
-                test = $(selector).html();
-
-            } catch (e) {
-
-            }
-            if (test == null || test == undefined) {
-                return false;
-            }
-            return true;
-        }
-
-        $(document).ready(function () {
-            $('#addBTN').on('click', function () {
-
-                if ($("#tags").val().trim() == "") {
-                    alert("null");
-                    return;
+                    document.getElementById('artPerDay').value = 5;
+                    $('#rangevalue2').val(5);
                 }
+                else {
+                    document.getElementById('artPerDay').disabled = true;
 
-                if (checkIfExist($("#tags").val().replace(/\W/g, ''))) {
-                    alert("exist");
-                    return;
+                    document.getElementById('artPerDay').value = 0;
+                    $('#rangevalue2').val(0);
                 }
-
-                var str = '<div id="' + $("#tags").val().replace(/\W/g, '') + '">' + $("#tags").val()
-                    + '<a href="#" class="itemDelete"><i class="material-icons">delete</i></a>'
-                    + '</div>'
-
-                $('.page-interests')[0].innerHTML += str;
-                $("#tags").val("");
             });
         });
 
         $(document).ready(function () {
-            $('#addBTN2').on('click', function () {
-                if ($("#selects").val() == "Suggested categories...") {
-                    alert("Please choose a category");
-                    return;
+            $('#myonoffswitch-3').change(function () {
+                if ($('#myonoffswitch-3').is(':checked')) {
+                    document.getElementById('photoTime').disabled = false;
+                    
                 }
-
-
-                if ($("#selects").val().trim() == "") {
-                    alert("null");
-                    return;
+                else {
+                    document.getElementById('photoTime').disabled = true;
+                    
                 }
-
-                if (checkIfExist($("#selects").val().replace(/\W/g, ''))) {
-                    alert("exist");
-                    return;
-                }
-
-                var str = '<div id="' + $("#selects").val().replace(/\W/g, '') + '">' + $("#selects").val()
-                    + '<a href="#" class="itemDelete"><i class="material-icons">delete</i></a>'
-                    + '</div>';
-
-                $('.page-interests')[0].innerHTML += str;
-
-
-                printCategories(cat);
-            });
-        });
-
-        cat = [];
-
-        $(document).ready(function () {
-            $.ajax({ // ajax call starts
-                url: '../WebService.asmx/GetCategories',   // server side web service method
-                //data: dataString,                          // the parameters sent to the server
-                type: 'POST',                              // can be also GET
-                dataType: 'json',                          // expecting JSON datatype from the server
-                contentType: 'application/json; charset = utf-8', // sent to the server
-                success: successPhotosCB,                // data.d id the Variable data contains the data we get from serverside
-                error: errorPhotosCB
-            }); // end of ajax call
-
-
-            function successPhotosCB(results) {
-                var results = $.parseJSON(results.d);
-
-                cat = results;
-
-                printCategories(results);
-            }
-
-            function errorPhotosCB(e) {
-                alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
-            }
-        });
-
-        function printCategories(results) {
-            $('#selects').empty();
-            var str = '<option>Suggested categories...</option>';
-            for (var i = 0; i < results.length; i++) {
-
-                if (checkIfExist(results[i])) {
-                    continue;
-                }
-
-                str += '<option>' + results[i] + '</option>';
-
-            }
-            $('#selects').append(str);
-
-        }
-
-        $(document).ready(function () {
-            $('#pi').on('click', '.itemDelete', function () {
-                var x = $(this).parent()[0].id;
-
-                $('#' + x).animate({ left: '500px' }, function () {
-
-                    $(this).remove();
-                    printCategories(cat);
-                });
-
-                //$('#' + x).fadeOut(300, function () {
-
-                //    $(this).remove();
-                //    printCategories(cat);
-                //});
-
             });
         });
     </script>
+
     <style>
-        .interest-box {
-            padding: 3% 4%;
-        }
-
-        #page-content .ui-widget {
-            text-align: center;
-        }
-
-        #tags, #selects {
-            padding: 5%;
-            width: 70%;
-            float: left;
-        }
-
-        .searchContainer {
-            padding-left: 11%;
-            padding-top: 3%;
-        }
-
-        #addBTN, #addBTN2 {
-            margin-top: 1%;
-            margin-left: 4%;
-        }
-
-        .page-interests input {
-            width: 60%;
-        }
-
-        .page-interests div {
-            background-color: white;
-            margin: 5% 9%;
-            padding: 3%;
-            text-align: center;
-        }
-
-        .searchContainer a i {
-            padding: 25%;
-        }
-
-        .searchContainer a {
-            background-color: dimgrey;
-        }
-
-        #interestHeader {
-            color: white;
-            text-align: center;
-            padding-bottom: 5%;
-        }
 
         #forwardBTN i {
             background-color: darkgreen;
             font-size: 30px;
         }
 
-        .itemDelete {
-            float: left;
+        #prefHeader {
+            color: white;
+            text-align: center;
+            padding-bottom: 5%;
         }
 
+        #artHead, #aroundHead, #photoHead {
+            margin-left: 15%;
+            color: white;
+        }
+
+        #artDiv, #aroundDiv, #photoDiv {
+            margin-right: 15%;
+        }
+
+        #rangevalue2,#rangevalue3 {
+            color: white;
+            margin-left: 0;
+            font-size: 16px;
+        }
+
+        #artPerDay,#photoTime {
+            width: 30%;
+            margin-left: 15%;
+        }
+
+        #artLBL ,#photoLBL{
+            color: white;
+            float: left;
+            margin-top: -11px;
+            font-size: 16px;
+        }
+        #photoTime {
+            width: 53%;
+        }
+        #aroundHead{
+            margin-top:13%;
+        }
+        #photoHead {
+            margin-top: 20%;
+        }
     </style>
 </head>
 
@@ -273,58 +148,53 @@
 
         <div id="page-content" class="page-content header-clear bg bg-cover bg-transparent">
             <div id="page-content-scroll">
-                <h1 id="interestHeader">Choose your interests</h1>
-                <div class="searchContainer">
-                    <div class="ui-widget">
-                        <input id="tags" placeholder="Try your own interests...">
-                    </div>
-                    <a href="#" id="addBTN" class="icon icon-round"><i class="material-icons">add</i></a>
-                </div>
+                <h1 id="prefHeader">Notification Preferences</h1>
 
-                <div class="searchContainer">
-                    <select id="selects"></select>
-                    <a href="#" id="addBTN2" class="icon icon-round"><i class="material-icons">add</i></a>
-                </div>
-                <hr />
+
                 <div id="pi" class="page-interests">
 
+                    <div class="container overflow-show">
+                        <h5 id="artHead" class="onoffswitch-text">Articles by interests</h5>
+                        <div id="artDiv" class="onoffswitch-2">
+                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox-2" id="myonoffswitch-1" checked>
+                            <label class="onoffswitch-label-2" for="myonoffswitch-1"></label>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
 
-                    <!--<a href="#" class="interest-box transparent-background bg-blue-dark">
-            <strong>Technology</strong>
-            <br />
-            <i class="interest-first-icon fa fa-cog"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>
-        <a href="#" class="interest-box transparent-background bg-red-dark">
-            <strong>Sports</strong>
-            <br />
-            <i class="interest-first-icon fa fa-futbol-o"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>
-        <a href="#" class="interest-box transparent-background bg-orange-dark">
-            <strong>Cooking</strong>
-            <br />
-            <i class="interest-first-icon fa fa-cutlery fa fa-circle-o"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>
-        <a href="#" class="interest-box transparent-background bg-magenta-dark">
-            <strong>Driving</strong>
-            <br />
-            <i class="interest-first-icon fa fa-cutlery"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>
-        <a href="#" class="interest-box transparent-background bg-teal-dark">
-            <strong>Social</strong>
-            <br />
-            <i class="interest-first-icon fa fa-share-alt"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>
-        <a href="#" class="interest-box transparent-background bg-green-dark">
-            <strong>Movies</strong>
-            <br />
-            <i class="interest-first-icon fa fa-youtube-play"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>-->
+                    <div>
+                        <input id="artPerDay" class="range-slider range-blue" type="range" value="5" min="1" max="24" onchange="rangevalue2.value=value">
+                        <output class="range-slider-output" id="rangevalue2">5</output>
+                        <label id="artLBL">&nbsp;&nbsp;articles per day</label>
+                        <div class="clear"></div>
+                    </div>
+
+                </div>
+
+                <div class="container overflow-show">
+                    <h5 id="aroundHead" class="onoffswitch-text">Articles around me</h5>
+                    <div id="aroundDiv" class="onoffswitch-2">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox-2" id="myonoffswitch-2" checked>
+                        <label class="onoffswitch-label-2" for="myonoffswitch-2"></label>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+
+                <div class="container overflow-show">
+                    <h5 id="photoHead" class="onoffswitch-text">Photo of the day</h5>
+                    <div id="photoDiv" class="onoffswitch-2">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox-2" id="myonoffswitch-3" checked>
+                        <label class="onoffswitch-label-2" for="myonoffswitch-3"></label>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div>
+                    <input id="photoTime" class="range-slider range-blue" type="range" value="12" min="1" max="24" onchange="rangevalue3.value=value">
+                    <output class="range-slider-output" id="rangevalue3">12</output>
+                    <label id="photoLBL">:00</label>
+                    <div class="clear"></div>
                 </div>
             </div>
         </div>
@@ -881,7 +751,7 @@
             </div>
         </div>
         <div class="footer-menu-controls light-footer-menu">
-            <a href="#" id="forwardBTN" class="footer-menu-open"><i class="material-icons">forward</i></a>
+            <a href="#" id="forwardBTN" class="footer-menu-open"><i class="material-icons">check</i></a>
             <!--<a href="#" class="footer-menu-close remove-menu"><i class="fa fa-times bg-red-dark"></i><em>Close</em></a>-->
         </div>
         <div class="footer-menu-tap-close remove-menu"></div>
