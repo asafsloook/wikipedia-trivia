@@ -93,9 +93,7 @@ public class WebService : System.Web.Services.WebService
         string jsonString = js.Serialize(a);
         return jsonString;
     }
-
-
-
+    
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
@@ -110,6 +108,31 @@ public class WebService : System.Web.Services.WebService
         string jsonString = js.Serialize(categoriesList);
         return jsonString;
     }
+
+
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string checkUser(string IMEI)
+    {
+
+        User u1 = new User();
+        var a = u1.checkUser(IMEI);
+        
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+        string jsonString = js.Serialize(a);
+        return jsonString;
+    }
+
+
+
+
+
+
+
+
+
 
 
 

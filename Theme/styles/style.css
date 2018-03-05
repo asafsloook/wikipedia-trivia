@@ -1,8 +1,7 @@
 
 #loadingTitle {
     position: relative;
-    top: 65%;
-    text-align: center;
+    float:left;
 }
 
 #loading {

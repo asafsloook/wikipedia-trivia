@@ -39,6 +39,12 @@ public class User
     int articlesPerDay;
     public int ArticlesPerDay { get; set; }
 
-    Category[] categories;
-    public Category[] Categories { get; set; }
+    List<Category> categories;
+    public List<Category> Categories { get; set; }
+
+    public User checkUser(string IMEI)
+    {
+        DBConnection db = new DBConnection();
+        return db.checkUser(IMEI);
+    }
 }

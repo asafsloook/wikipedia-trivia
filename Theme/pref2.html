@@ -100,10 +100,12 @@
             margin-right: 15%;
         }
 
-        #rangevalue2,#rangevalue3 {
+        #rangevalue2, #rangevalue3 {
             color: white;
             margin-left: 0;
             font-size: 16px;
+            width: 7%;
+            margin-top: -3%;
         }
 
         #artPerDay,#photoTime {
@@ -111,14 +113,17 @@
             margin-left: 15%;
         }
 
-        #artLBL ,#photoLBL{
+        #artLBL, #photoLBL, #atLBL {
             color: white;
             float: left;
-            margin-top: -11px;
+            margin-top: -3%;
             font-size: 16px;
         }
+        #atLBL {
+            
+        }
         #photoTime {
-            width: 53%;
+            width: 45%;
         }
         #aroundHead{
             margin-top:13%;
@@ -191,7 +196,8 @@
                 </div>
 
                 <div>
-                    <input id="photoTime" class="range-slider range-blue" type="range" value="12" min="1" max="24" onchange="rangevalue3.value=value">
+                    <input id="photoTime" class="range-slider range-blue" type="range" value="12" min="0" max="23" onchange="rangevalue3.value=value">
+                    <label id="atLBL">&nbsp;&nbsp;&nbsp;&nbsp;at</label>
                     <output class="range-slider-output" id="rangevalue3">12</output>
                     <label id="photoLBL">:00</label>
                     <div class="clear"></div>

@@ -47,6 +47,16 @@
 
     <script>
 
+        //user auth
+        $(document).ready(function () {
+            var request = {
+                IMEI: "12345",
+            }
+
+            checkUser(request);
+        });
+
+
         //$(function () {
         $(document).ready(function () {
             $("#tags").autocomplete({
@@ -253,7 +263,6 @@
             top: 0;
             padding-top: 4%;
         }
-
     </style>
 </head>
 
@@ -293,41 +302,41 @@
 
 
                     <!--<a href="#" class="interest-box transparent-background bg-blue-dark">
-            <strong>Technology</strong>
-            <br />
-            <i class="interest-first-icon fa fa-cog"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>
-        <a href="#" class="interest-box transparent-background bg-red-dark">
-            <strong>Sports</strong>
-            <br />
-            <i class="interest-first-icon fa fa-futbol-o"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>
-        <a href="#" class="interest-box transparent-background bg-orange-dark">
-            <strong>Cooking</strong>
-            <br />
-            <i class="interest-first-icon fa fa-cutlery fa fa-circle-o"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>
-        <a href="#" class="interest-box transparent-background bg-magenta-dark">
-            <strong>Driving</strong>
-            <br />
-            <i class="interest-first-icon fa fa-cutlery"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>
-        <a href="#" class="interest-box transparent-background bg-teal-dark">
-            <strong>Social</strong>
-            <br />
-            <i class="interest-first-icon fa fa-share-alt"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>
-        <a href="#" class="interest-box transparent-background bg-green-dark">
-            <strong>Movies</strong>
-            <br />
-            <i class="interest-first-icon fa fa-youtube-play"></i>
-            <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
-        </a>-->
+                        <strong>Technology</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-cog"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>
+                    <a href="#" class="interest-box transparent-background bg-red-dark">
+                        <strong>Sports</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-futbol-o"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>
+                    <a href="#" class="interest-box transparent-background bg-orange-dark">
+                        <strong>Cooking</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-cutlery fa fa-circle-o"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>
+                    <a href="#" class="interest-box transparent-background bg-magenta-dark">
+                        <strong>Driving</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-cutlery"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>
+                    <a href="#" class="interest-box transparent-background bg-teal-dark">
+                        <strong>Social</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-share-alt"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>
+                    <a href="#" class="interest-box transparent-background bg-green-dark">
+                        <strong>Movies</strong>
+                        <br />
+                        <i class="interest-first-icon fa fa-youtube-play"></i>
+                        <i class="interest-second-icon hide-interest-icon fa fa-check"></i>
+                    </a>-->
                 </div>
             </div>
         </div>
