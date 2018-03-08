@@ -47,4 +47,10 @@ public class User
         DBConnection db = new DBConnection();
         return db.checkUser(IMEI);
     }
+
+    public int updatePrefs()
+    {
+        DBConnection db = new DBConnection();
+        return db.updateUserPref(this);
+    }
 }

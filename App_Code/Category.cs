@@ -57,5 +57,22 @@ public class Category
 
         return mainCategories;
     }
-    
+
+    public void updateCategories(string[] arr, string IMEI)
+    {
+        //check categories and insert if nessececececery
+        //return arr of category IDS
+        List<int> catIDS = checkCategories(arr);
+
+
+        //update/insert to userCategories
+        DBConnection db = new DBConnection();
+        db.updateUserCategories(catIDS, IMEI);
+    }
+
+    public List<int> checkCategories(string[] arr)
+    {
+        DBConnection db = new DBConnection();
+        return db.checkCategories(arr);
+    }
 }

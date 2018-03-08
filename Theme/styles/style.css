@@ -1,7 +1,132 @@
 
+/*pref2 styles*/
+
+#forwardBTN i {
+    background-color: darkgreen;
+    font-size: 30px;
+}
+
+#prefHeader {
+    color: white;
+    text-align: center;
+    padding-bottom: 5%;
+}
+
+#artHead, #aroundHead, #photoHead {
+    margin-left: 15%;
+    color: white;
+}
+
+#artDiv, #aroundDiv, #photoDiv {
+    margin-right: 15%;
+}
+
+#rangevalue2, #rangevalue3 {
+    color: white;
+    margin-left: 0;
+    font-size: 16px;
+    width: 7%;
+    margin-top: -3%;
+}
+
+#artPerDay, #photoTime {
+    width: 30%;
+    margin-left: 15%;
+}
+
+#artLBL, #photoLBL, #atLBL {
+    color: white;
+    float: left;
+    margin-top: -3%;
+    font-size: 16px;
+}
+
+#atLBL {
+}
+
+#photoTime {
+    width: 45%;
+}
+
+#aroundHead {
+    margin-top: 13%;
+}
+
+#photoHead {
+    margin-top: 20%;
+}
+
+
+
+/*pref1 styles*/
+
+.interest-box {
+    padding: 3% 4%;
+}
+
+#page-content .ui-widget {
+    text-align: center;
+}
+
+#tags, #selects {
+    padding: 5%;
+    width: 70%;
+    float: left;
+}
+
+.searchContainer {
+    padding-left: 11%;
+    padding-top: 3%;
+}
+
+#addBTN, #addBTN2 {
+    margin-top: 1%;
+    margin-left: 4%;
+}
+
+.page-interests input {
+    width: 60%;
+}
+
+.page-interests div {
+    background-color: white;
+    margin: 5% 9%;
+    padding: 3%;
+    text-align: center;
+}
+
+.searchContainer a i {
+    padding: 25%;
+}
+
+.searchContainer a {
+    background-color: dimgrey;
+}
+
+#interestHeader {
+    color: white;
+    text-align: center;
+    padding-bottom: 5%;
+}
+
+#forwardBTN i {
+    background-color: darkgreen;
+    font-size: 30px;
+}
+
+.itemDelete {
+    float: left;
+    position: absolute;
+    top: 0;
+    padding-top: 4%;
+}
+
+
+/*article, allphotos, photo styles*/
+
 #loadingTitle {
     position: relative;
-    float:left;
+    float: left;
 }
 
 #loading {

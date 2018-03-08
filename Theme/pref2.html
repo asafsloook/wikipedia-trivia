@@ -44,94 +44,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
 
-
-    <script>
-
-        $(document).ready(function () {
-            $('#myonoffswitch-1').change(function () {
-                if ($('#myonoffswitch-1').is(':checked')) {
-                    document.getElementById('artPerDay').disabled = false;
-
-                    document.getElementById('artPerDay').value = 5;
-                    $('#rangevalue2').val(5);
-                }
-                else {
-                    document.getElementById('artPerDay').disabled = true;
-
-                    document.getElementById('artPerDay').value = 0;
-                    $('#rangevalue2').val(0);
-                }
-            });
-        });
-
-        $(document).ready(function () {
-            $('#myonoffswitch-3').change(function () {
-                if ($('#myonoffswitch-3').is(':checked')) {
-                    document.getElementById('photoTime').disabled = false;
-                    
-                }
-                else {
-                    document.getElementById('photoTime').disabled = true;
-                    
-                }
-            });
-        });
-    </script>
-
-    <style>
-
-        #forwardBTN i {
-            background-color: darkgreen;
-            font-size: 30px;
-        }
-
-        #prefHeader {
-            color: white;
-            text-align: center;
-            padding-bottom: 5%;
-        }
-
-        #artHead, #aroundHead, #photoHead {
-            margin-left: 15%;
-            color: white;
-        }
-
-        #artDiv, #aroundDiv, #photoDiv {
-            margin-right: 15%;
-        }
-
-        #rangevalue2, #rangevalue3 {
-            color: white;
-            margin-left: 0;
-            font-size: 16px;
-            width: 7%;
-            margin-top: -3%;
-        }
-
-        #artPerDay,#photoTime {
-            width: 30%;
-            margin-left: 15%;
-        }
-
-        #artLBL, #photoLBL, #atLBL {
-            color: white;
-            float: left;
-            margin-top: -3%;
-            font-size: 16px;
-        }
-        #atLBL {
-            
-        }
-        #photoTime {
-            width: 45%;
-        }
-        #aroundHead{
-            margin-top:13%;
-        }
-        #photoHead {
-            margin-top: 20%;
-        }
-    </style>
 </head>
 
 <body>
@@ -156,7 +68,7 @@
                 <h1 id="prefHeader">Notification Preferences</h1>
 
 
-                <div id="pi" class="page-interests">
+                <div id="pi">
 
                     <div class="container overflow-show">
                         <h5 id="artHead" class="onoffswitch-text">Articles by interests</h5>

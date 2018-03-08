@@ -126,16 +126,36 @@ public class WebService : System.Web.Services.WebService
     }
 
 
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public void UpdateCategories(string[] arr, string IMEI)
+    {
+        var a = arr;
 
+        Category c = new Category();
+        c.updateCategories(arr,IMEI);
 
+        //JavaScriptSerializer js = new JavaScriptSerializer();
 
+        //string jsonString = js.Serialize();
+        //return jsonString;
+    }
 
-
-
-
-
-
-
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public void UpdateUserPrefs(string articleBOOL,string articleQUAN, string aroundBOOL, string photoBOOL, string photoTIME, int userID)
+    {
+        User u = new User();
+        u.ArticlePush = Convert.ToBoolean(articleBOOL);
+        u.ArticlesPerDay = Convert.ToInt32(articleQUAN);
+        u.LocationPush = Convert.ToBoolean(aroundBOOL);
+        u.PhotoPush = Convert.ToBoolean(photoBOOL);
+        u.PhotoPushTime = Convert.ToDateTime(photoTIME+":00");
+        u.Id = userID;
+        u.updatePrefs();
+    }
+    
+    
 
     /////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////

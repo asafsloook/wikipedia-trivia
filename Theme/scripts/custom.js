@@ -1,27 +1,22 @@
 
-$(document).on('pagebeforeshow', function() {
-
-    if (window.location.href.toString().indexOf('allphotos.html') != -1) {
-
-        getPhotos();
-    }
+$(document).on('pagebeforeshow', function () {
 
     if (window.location.href.toString().indexOf("article.html") != -1) {
 
-        $(document).ajaxStart(function() {
+        $(document).ajaxStart(function () {
             $('#page-content-scroll').hide();
             $('.back-to-top-badge').hide();
             $("#refreshBTN").hide();
             $("#loading").show();
 
-            
+
             //popWriter();
             //typeWriter();
 
         });
 
-        $(document).ajaxStop(function() {
-            setTimeout(function() {
+        $(document).ajaxStop(function () {
+            setTimeout(function () {
                 $("#loading").fadeOut();
                 $("#refreshBTN").fadeIn();
                 $('.back-to-top-badge').show();
@@ -35,11 +30,6 @@ $(document).on('pagebeforeshow', function() {
         getArticle();
     }
 
-
-    if (window.location.href.toString().indexOf("pref1.html") != -1) {
-
-
-    }
 
 });
 
@@ -91,35 +81,6 @@ $(document).on('pagebeforeshow', function() {
 //    }
 //}
 
-
-function checkUser(request) {
-
-    var dataSrting = JSON.stringify(request);
-
-    $.ajax({ // ajax call starts
-        url: '../WebService.asmx/checkUser',   // server side web service method
-        data: dataSrting,                          // the parameters sent to the server
-        type: 'POST',                              // can be also GET
-        dataType: 'json',                          // expecting JSON datatype from the server
-        contentType: 'application/json; charset = utf-8', // sent to the server
-        success: checkUserSCB,                // data.d id the Variable data contains the data we get from serverside
-        error: checkUserECB
-    }); // end of ajax call
-
-    function checkUserSCB(results) {
-        
-        var results = $.parseJSON(results.d);
-
-        userPref = results;
-    }
-
-    function checkUserECB(e) {
-        alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
-
-    }
-}
-
-
 function getArticle() {
 
     //$('.footer-menu-open').click(function () {
@@ -159,54 +120,14 @@ function getArticle() {
 }
 
 
-function getPhotos() {
-
-    $.ajax({ // ajax call starts
-        url: '../WebService.asmx/GetPhotos',   // server side web service method
-        //data: dataString,                          // the parameters sent to the server
-        type: 'POST',                              // can be also GET
-        dataType: 'json',                          // expecting JSON datatype from the server
-        contentType: 'application/json; charset = utf-8', // sent to the server
-        success: successPhotosCB,                // data.d id the Variable data contains the data we get from serverside
-        error: errorPhotosCB
-    }); // end of ajax call
-
-
-    function successPhotosCB(results) {
-        var results = $.parseJSON(results.d);
-        photos = results;
-
-        for (var i = 0; i < results.length; i++) {
-
-            $("#ph" + i + " img").attr("src", results[i].Url);
-
-            $("#ph" + i + " strong").html((new Date(parseInt(results[i].Date.replace('/Date(', ''))).toLocaleDateString()));
-
-            var short = "";
-            if (results[i].Description.length > 60) {
-                short = "...";
-            }
-
-            $("#ph" + i + " em").html(results[i].Description.substring(0, 60).trim() + short);
-        }
-
-    }
-
-    function errorPhotosCB(e) {
-        alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
-    }
-
-}
-
-
-$(document).ready(function() {
+$(document).ready(function () {
 
     function init_template() {//Class is vital to run AJAX Pages 
 
-        $(function() {
+        $(function () {
 
 
-            $('.button, .icon, .footer-menu-item i, .footer-menu-controls a, .mobileui-home a i, .landing-homepage ul li a i').on('click', function(event) {
+            $('.button, .icon, .footer-menu-item i, .footer-menu-controls a, .mobileui-home a i, .landing-homepage ul li a i').on('click', function (event) {
                 //event.preventDefault();
 
                 var $div = $('<div/>'),
@@ -226,7 +147,7 @@ $(document).ready(function() {
                     })
                     .appendTo($(this));
 
-                window.setTimeout(function() {
+                window.setTimeout(function () {
                     $div.remove();
                 }, 800);
             });
@@ -234,7 +155,7 @@ $(document).ready(function() {
         });
 
         //Timeout required to allow menu scrolling to bottom position
-        setTimeout(function() {
+        setTimeout(function () {
             $('.footer-menu .footer-menu-item').addClass('remove-menu');
             $('.footer-menu-wrapper').addClass('remove-wrapper');
             $('.footer-menu-wrapper').removeClass('remove-menu');
@@ -246,49 +167,418 @@ $(document).ready(function() {
 
             getPhotos();
 
+            $("#photos a").on('click', function () {
+
+                var id = parseInt(this.id.toString().substring(2, 3));
+
+                localStorage["PhotoUrl"] = photos[id].Url;
+                localStorage["PhotoDesc"] = photos[id].Description;
+                localStorage["PhotoDate"] = photos[id].Date;
+            });
+
+            function getPhotos() {
+
+                $.ajax({ // ajax call starts
+                    url: '../WebService.asmx/GetPhotos',   // server side web service method
+                    //data: dataString,                          // the parameters sent to the server
+                    type: 'POST',                              // can be also GET
+                    dataType: 'json',                          // expecting JSON datatype from the server
+                    contentType: 'application/json; charset = utf-8', // sent to the server
+                    success: successPhotosCB,                // data.d id the Variable data contains the data we get from serverside
+                    error: errorPhotosCB
+                }); // end of ajax call
+
+
+                function successPhotosCB(results) {
+                    var results = $.parseJSON(results.d);
+                    photos = results;
+
+                    for (var i = 0; i < results.length; i++) {
+
+                        $("#ph" + i + " img").attr("src", results[i].Url);
+
+                        $("#ph" + i + " strong").html((new Date(parseInt(results[i].Date.replace('/Date(', ''))).toLocaleDateString()));
+
+                        var short = "";
+                        if (results[i].Description.length > 60) {
+                            short = "...";
+                        }
+
+                        $("#ph" + i + " em").html(results[i].Description.substring(0, 55).trim() + short);
+                    }
+
+                }
+
+                function errorPhotosCB(e) {
+                    alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
+                }
+
+            }
+
         }
-
-
 
         if (window.location.href.toString().indexOf("article.html") != -1) {
 
 
-            $('.footer-menu-open').click(function() {
+            $('.footer-menu-open').click(function () {
 
                 getArticle();
 
             });
         }
 
-        $("#photos a").on('click', function() {
-
-            var id = parseInt(this.id.toString().substring(2, 3));
-
-            localStorage["PhotoUrl"] = photos[id].Url;
-            localStorage["PhotoDesc"] = photos[id].Description;
-            localStorage["PhotoDate"] = photos[id].Date;
-        });
-
         if (window.location.href.toString().indexOf('photo.html') != -1) {
             render();
-            $("#closeBTN").on('click', function() {
+            $("#closeBTN").on('click', function () {
                 closeCLick = true;
             });
+
+            function render() {
+
+                var a1 = localStorage["PhotoUrl"];
+                var a2 = localStorage["PhotoDate"];
+                var a3 = localStorage["PhotoDesc"];
+
+
+                $("#Photo").attr("src", a1);
+                $("#title").html("Photo of the Day: " + (new Date(parseInt(a2.replace('/Date(', ''))).toLocaleDateString()));
+                $("#articleContent").html(a3);
+
+            }
         }
 
-        function render() {
+        if (window.location.href.toString().indexOf('pref1.html') != -1) {
+            cat = [];
 
-            var a1 = localStorage["PhotoUrl"];
-            var a2 = localStorage["PhotoDate"];
-            var a3 = localStorage["PhotoDesc"];
+            var request = {
+                IMEI: "12345",
+            }
+
+            checkUser(request);
 
 
-            $("#Photo").attr("src", a1);
-            $("#title").html("Photo of the Day: " + (new Date(parseInt(a2.replace('/Date(', ''))).toLocaleDateString()));
-            $("#articleContent").html(a3);
+            function checkUser(request) {
 
+                var dataSrting = JSON.stringify(request);
+
+                $.ajax({ // ajax call starts
+                    url: '../WebService.asmx/checkUser',   // server side web service method
+                    data: dataSrting,                          // the parameters sent to the server
+                    type: 'POST',                              // can be also GET
+                    dataType: 'json',                          // expecting JSON datatype from the server
+                    contentType: 'application/json; charset = utf-8', // sent to the server
+                    success: checkUserSCB,                // data.d id the Variable data contains the data we get from serverside
+                    error: checkUserECB
+                }); // end of ajax call
+
+                function checkUserSCB(results) {
+
+                    var results = $.parseJSON(results.d);
+
+                    userPref = results;
+                    var str = "";
+
+                    results.Categories.forEach(function (element) {
+                        str += '<div id="' + element.Name.replace(/\W/g, '') + '">' + element.Name
+                            + '<a href="#" class="itemDelete"><i class="material-icons">delete</i></a>'
+                            + '</div>';
+                    });
+
+                    $('.page-interests')[0].innerHTML += str;
+                }
+
+                function checkUserECB(e) {
+                    alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
+
+                }
+            }
+
+
+            $("#tags").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + $("#tags").val() + '&limit=10&namespace=0&format=json',
+                        dataType: "jsonp",
+
+                        success: function (data) {
+                            response(data[1]);
+                        }
+                    });
+                },
+                minLength: 1
+            });
+
+
+            function checkIfExist(id) {
+                var test = null;
+                try {
+                    var selector = '#' + id;
+                    test = $(selector).html();
+
+                } catch (e) {
+
+                }
+                if (test == null || test == undefined) {
+                    return false;
+                }
+                return true;
+            }
+
+            $('#addBTN').on('click', function () {
+
+                if ($("#tags").val().trim() == "") {
+                    alert("null");
+                    return;
+                }
+
+                if (checkIfExist($("#tags").val().replace(/\W/g, ''))) {
+                    alert("exist");
+                    return;
+                }
+
+                var str = '<div id="' + $("#tags").val().replace(/\W/g, '') + '">' + $("#tags").val()
+                    + '<a href="#" class="itemDelete"><i class="material-icons">delete</i></a>'
+                    + '</div>'
+
+                $('.page-interests')[0].innerHTML += str;
+                $("#tags").val("");
+            });
+
+            $('#addBTN2').on('click', function () {
+                if ($("#selects").val() == "Suggested categories...") {
+                    alert("Please choose a category");
+                    return;
+                }
+
+
+                if ($("#selects").val().trim() == "") {
+                    alert("null");
+                    return;
+                }
+
+                if (checkIfExist($("#selects").val().replace(/\W/g, ''))) {
+                    alert("exist");
+                    return;
+                }
+
+                var str = '<div id="' + $("#selects").val().replace(/\W/g, '') + '">' + $("#selects").val()
+                    + '<a href="#" class="itemDelete"><i class="material-icons">delete</i></a>'
+                    + '</div>';
+
+                $('.page-interests')[0].innerHTML += str;
+
+
+                printCategories(cat);
+            });
+
+            $.ajax({ // ajax call starts
+                url: '../WebService.asmx/GetCategories',   // server side web service method
+                //data: dataString,                          // the parameters sent to the server
+                type: 'POST',                              // can be also GET
+                dataType: 'json',                          // expecting JSON datatype from the server
+                contentType: 'application/json; charset = utf-8', // sent to the server
+                success: successGetCategoriesCB,                // data.d id the Variable data contains the data we get from serverside
+                error: errorGetCategoriesCB
+            }); // end of ajax call
+
+            function successGetCategoriesCB(results) {
+                var results = $.parseJSON(results.d);
+
+                cat = results;
+
+                printCategories(results);
+            }
+
+            function errorGetCategoriesCB(e) {
+                alert("I caught the exception : failed in GetCategories \n The exception message is : " + e.responseText);
+            }
+
+            function printCategories(results) {
+                $('#selects').empty();
+                var str = '<option>Suggested categories...</option>';
+                for (var i = 0; i < results.length; i++) {
+
+                    if (checkIfExist(results[i].replace(/\W/g, ''))) {
+                        continue;
+                    }
+
+                    str += '<option>' + results[i] + '</option>';
+
+                }
+                $('#selects').append(str);
+
+            }
+
+            $('#pi').on('click', '.itemDelete', function () {
+                var x = $(this).parent()[0].id;
+
+                $('#' + x).animate({ left: '500px' }, function () {
+
+                    $(this).remove();
+                    printCategories(cat);
+                });
+
+                //$('#' + x).fadeOut(300, function () {
+
+                //    $(this).remove();
+                //    printCategories(cat);
+                //});
+
+            });
+
+
+            $('#forwardBTN').on('click', function () {
+
+                var catArr = [];
+
+                for (var i = 0; i < $("#pi").children().length; i++) {
+
+                    var a = $("#pi").children()[i].innerHTML;
+                    var b = a.substring(0, a.indexOf("<"));
+
+                    catArr.push(b);
+                }
+
+                var request = {
+                    arr: catArr,
+                    IMEI: "12345"
+                }
+
+                updateCategories(request);
+            });
+
+            function updateCategories(request) {
+
+
+                var dataString = JSON.stringify(request);
+
+
+                $.ajax({ // ajax call starts
+                    url: '../WebService.asmx/UpdateCategories',   // server side web service method
+                    data: dataString,                          // the parameters sent to the server
+                    type: 'POST',                              // can be also GET
+                    dataType: 'json',                          // expecting JSON datatype from the server
+                    contentType: 'application/json; charset = utf-8', // sent to the server
+                    success: successupdateCategoriesCB,                // data.d id the Variable data contains the data we get from serverside
+                    error: errorupdateCategoriesCB
+                }); // end of ajax call
+
+                function successupdateCategoriesCB(results) {
+                    //var results = $.parseJSON(results.d);
+
+                    //cat = results;
+
+                    //printCategories(results);
+                }
+
+                function errorupdateCategoriesCB(e) {
+                    alert("I caught the exception : failed in updateCategories \n The exception message is : " + e.responseText);
+                }
+            }
         }
 
+        if (window.location.href.toString().indexOf('pref2.html') != -1) {
+
+            
+            document.getElementById("myonoffswitch-1").checked = userPref.ArticlePush;
+
+            $('#artPerDay').val(userPref.ArticlesPerDay);
+            $('#rangevalue2').val(userPref.ArticlesPerDay);
+
+
+            document.getElementById("myonoffswitch-2").checked = userPref.LocationPush;
+            document.getElementById("myonoffswitch-3").checked = userPref.PhotoPush;
+
+            var hours = new Date(parseInt(userPref.PhotoPushTime.replace("/Date(", ""))).getHours();
+            $('#photoTime').val(hours);
+            $('#rangevalue3').val(hours);
+
+            changeSwitches();
+
+            $('#myonoffswitch-1').change(function () {
+                changeSwitches();
+            });
+
+            $('#myonoffswitch-3').change(function () {
+                changeSwitches();
+            });
+
+            $('#forwardBTN').on('click', function () {
+
+                var articleBOOL1 = $('#myonoffswitch-1').is(':checked');
+                var articleQUAN1 = $('#artPerDay').val();
+
+                var aroundBOOL1 = $('#myonoffswitch-2').is(':checked');
+
+                var photoBOOL1 = $('#myonoffswitch-3').is(':checked');
+                var photoTIME1 = $('#photoTime').val();
+
+
+                var request = {
+                    articleBOOL: articleBOOL1,
+                    articleQUAN: articleQUAN1,
+                    aroundBOOL: aroundBOOL1,
+                    photoBOOL: photoBOOL1,
+                    photoTIME: photoTIME1,
+                    userID: userPref.Id
+                }
+
+                updateUserPref(request);
+            });
+
+            function updateUserPref(request) {
+
+                var dataString = JSON.stringify(request);
+
+
+                $.ajax({ // ajax call starts
+                    url: '../WebService.asmx/UpdateUserPrefs',   // server side web service method
+                    data: dataString,                          // the parameters sent to the server
+                    type: 'POST',                              // can be also GET
+                    dataType: 'json',                          // expecting JSON datatype from the server
+                    contentType: 'application/json; charset = utf-8', // sent to the server
+                    success: successUpdateUserPrefCB,                // data.d id the Variable data contains the data we get from serverside
+                    error: errorUpdateUserPrefsCB
+                }); // end of ajax call
+
+                function successUpdateUserPrefCB(results) {
+                    //var results = $.parseJSON(results.d);
+
+                    //cat = results;
+
+                    //printCategories(results);
+                }
+
+                function errorUpdateUserPrefsCB(e) {
+                    alert("I caught the exception : failed in UpdateUserPrefs \n The exception message is : " + e.responseText);
+                }
+            }
+
+            function changeSwitches() {
+                if ($('#myonoffswitch-1').is(':checked')) {
+                    document.getElementById('artPerDay').disabled = false;
+
+                    document.getElementById('artPerDay').value = 5;
+                    $('#rangevalue2').val(5);
+                }
+                else {
+                    document.getElementById('artPerDay').disabled = true;
+
+                    document.getElementById('artPerDay').value = 0;
+                    $('#rangevalue2').val(0);
+                }
+
+                if ($('#myonoffswitch-3').is(':checked')) {
+                    document.getElementById('photoTime').disabled = false;
+                }
+                else {
+                    document.getElementById('photoTime').disabled = true;
+
+                }
+            }
+
+
+        }
 
 
         //Activate Menu
@@ -350,7 +640,7 @@ $(document).ready(function() {
             $('.footer-menu').css('width', menu_screen_width);
         };
 
-        $(window).resize(function() {
+        $(window).resize(function () {
             calculate_menu();
         });
         calculate_menu();
@@ -387,7 +677,7 @@ $(document).ready(function() {
         }
 
         //Sidebar Settings
-        $('.open-left-sidebar').click(function() {
+        $('.open-left-sidebar').click(function () {
             $('.sidebar-left').addClass('active-sidebar-box');
             $('.sidebar-right').removeClass('active-sidebar-box');
             $('.sidebar-tap-close').addClass('active-tap-close');
@@ -402,7 +692,7 @@ $(document).ready(function() {
             //}, 250);
         }
 
-        $('.open-right-sidebar').click(function() {
+        $('.open-right-sidebar').click(function () {
             $('.sidebar-right').addClass('active-sidebar-box');
             $('.sidebar-left').removeClass('active-sidebar-box');
             $('.sidebar-tap-close').addClass('active-tap-close');
@@ -410,7 +700,7 @@ $(document).ready(function() {
             return false;
         });
 
-        $('.open-submenu').click(function() {
+        $('.open-submenu').click(function () {
             $(this).toggleClass('active-item');
             $(this).parent().find('.submenu').removeClass('sub-0');
             var total_submenu_items = $(this).parent().find('.submenu').children().length;
@@ -423,20 +713,20 @@ $(document).ready(function() {
             $('.active-submenu').toggleClass('sub-' + total_submenu_items);
         }
 
-        $('.has-submenu').each(function() {
+        $('.has-submenu').each(function () {
             var count_menus = $(this).find('.submenu').children().length;
             $(this).find('.menu-number').text(count_menus);
         });
 
-        $(function() {
+        $(function () {
             $("#page-content").swipe({
-                swipeRight: function(event, direction, distance, duration, fingerCount) {
+                swipeRight: function (event, direction, distance, duration, fingerCount) {
                     $('.sidebar-left').addClass('active-sidebar-box');
                     $('.sidebar-right').removeClass('active-sidebar-box');
                     $('.sidebar-tap-close').addClass('active-tap-close');
                     $('.back-to-top-badge').removeClass('back-to-top-badge-visible');
                 },
-                swipeLeft: function(event, direction, distance, duration, fingerCount) {
+                swipeLeft: function (event, direction, distance, duration, fingerCount) {
                     $('.sidebar-right').addClass('active-sidebar-box');
                     $('.sidebar-left').removeClass('active-sidebar-box');
                     $('.sidebar-tap-close').addClass('active-tap-close');
@@ -446,9 +736,9 @@ $(document).ready(function() {
             });
         });
 
-        $(function() {
+        $(function () {
             $(".sidebar-left").swipe({
-                swipeLeft: function(event, direction, distance, duration, fingerCount) {
+                swipeLeft: function (event, direction, distance, duration, fingerCount) {
                     $('.material-menu').removeClass('opacity-out');
                     $('.sidebar-left, .sidebar-right').removeClass('active-sidebar-box');
                     $('.sidebar-tap-close').removeClass('active-tap-close');
@@ -457,9 +747,9 @@ $(document).ready(function() {
             });
         });
 
-        $(function() {
+        $(function () {
             $(".sidebar-right").swipe({
-                swipeRight: function(event, direction, distance, duration, fingerCount) {
+                swipeRight: function (event, direction, distance, duration, fingerCount) {
                     $('.sidebar-left, .sidebar-right').removeClass('active-sidebar-box');
                     $('.sidebar-tap-close').removeClass('active-tap-close');
                 },
@@ -467,7 +757,7 @@ $(document).ready(function() {
             });
         });
 
-        $('.sidebar-tap-close, .close-sidebar').click(function() { //
+        $('.sidebar-tap-close, .close-sidebar').click(function () { //
             $('.material-menu').removeClass('opacity-out');
             $('.sidebar-left, .sidebar-right').removeClass('active-sidebar-box');
             $('.sidebar-tap-close').removeClass('active-tap-close');
@@ -481,7 +771,7 @@ $(document).ready(function() {
             return false;
         });
 
-        $('.sidebar-left .menu-item, .sidebar-right .menu-item').click(function() {
+        $('.sidebar-left .menu-item, .sidebar-right .menu-item').click(function () {
             if ($(this).hasClass('open-submenu')) {
                 return;
             }
@@ -498,16 +788,16 @@ $(document).ready(function() {
         });
 
 
-        $('tabs a').click(function() {
+        $('tabs a').click(function () {
             preventDefault();
             return false;
         });
 
         //FastClick
-        $(function() { FastClick.attach(document.body); });
+        $(function () { FastClick.attach(document.body); });
 
         //Preload Image
-        $(function() {
+        $(function () {
             $(".preload-image").lazyload({
                 threshold: 4000,
                 effect: "fadeIn",
@@ -515,30 +805,30 @@ $(document).ready(function() {
             });
         });
 
-        $('.hide-notification').click(function() {
+        $('.hide-notification').click(function () {
             $(this).parent().slideUp();
             return false;
         });
-        $('.tap-hide').click(function() {
+        $('.tap-hide').click(function () {
             $(this).slideUp();
             return false;
         });
 
-        $('.activate-toggle').click(function() {
+        $('.activate-toggle').click(function () {
             $(this).parent().find('.toggle-content').slideToggle(250);
-            $(this).parent().find('input').each(function() { this.checked = !this.checked; });
+            $(this).parent().find('input').each(function () { this.checked = !this.checked; });
             $(this).parent().find('.toggle-45').toggleClass('rotate-45 color-red-dark');
             $(this).parent().find('.toggle-180').toggleClass('rotate-180 color-red-dark');
             return false;
         });
 
-        $('.accordion-item').click(function() {
+        $('.accordion-item').click(function () {
             $(this).find('.accordion-content').slideToggle(250);
             $(this).find('i').toggleClass('rotate-135 color-red-dark');
             return false;
         });
 
-        $('.dropdown-toggle').click(function() {
+        $('.dropdown-toggle').click(function () {
             $(this).parent().find('.dropdown-content').slideToggle(250);
             $(this).find('i:last-child').toggleClass('rotate-135');
             return false;
@@ -546,22 +836,22 @@ $(document).ready(function() {
 
         //Portfolio Wide
 
-        $('.portfolio-wide-caption a').click(function() {
+        $('.portfolio-wide-caption a').click(function () {
             $(this).parent().parent().find('.portfolio-wide-content').slideToggle(250);
             return false;
         });
 
         //Detect if iOS WebApp Engaged and permit navigation without deploying Safari
-        (function(a, b, c) { if (c in b && b[c]) { var d, e = a.location, f = /^(a|html)$/i; a.addEventListener("click", function(a) { d = a.target; while (!f.test(d.nodeName)) d = d.parentNode; "href" in d && (d.href.indexOf("http") || ~d.href.indexOf(e.host)) && (a.preventDefault(), e.href = d.href) }, !1) } })(document, window.navigator, "standalone")
+        (function (a, b, c) { if (c in b && b[c]) { var d, e = a.location, f = /^(a|html)$/i; a.addEventListener("click", function (a) { d = a.target; while (!f.test(d.nodeName)) d = d.parentNode; "href" in d && (d.href.indexOf("http") || ~d.href.indexOf(e.host)) && (a.preventDefault(), e.href = d.href) }, !1) } })(document, window.navigator, "standalone")
 
         //Detecting Mobiles//
         var isMobile = {
-            Android: function() { return navigator.userAgent.match(/Android/i); },
-            BlackBerry: function() { return navigator.userAgent.match(/BlackBerry/i); },
-            iOS: function() { return navigator.userAgent.match(/iPhone|iPad|iPod/i); },
-            Opera: function() { return navigator.userAgent.match(/Opera Mini/i); },
-            Windows: function() { return navigator.userAgent.match(/IEMobile/i); },
-            any: function() { return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()); }
+            Android: function () { return navigator.userAgent.match(/Android/i); },
+            BlackBerry: function () { return navigator.userAgent.match(/BlackBerry/i); },
+            iOS: function () { return navigator.userAgent.match(/iPhone|iPad|iPod/i); },
+            Opera: function () { return navigator.userAgent.match(/Opera Mini/i); },
+            Windows: function () { return navigator.userAgent.match(/IEMobile/i); },
+            any: function () { return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()); }
         };
 
         if (!isMobile.any()) {
@@ -598,21 +888,21 @@ $(document).ready(function() {
         $(".gallery a, .show-gallery").swipebox();
 
         //Adaptive Folios
-        $('.adaptive-one').click(function() {
+        $('.adaptive-one').click(function () {
             $('.portfolio-switch').removeClass('active-adaptive');
             $(this).addClass('active-adaptive');
             $('.portfolio-adaptive').removeClass('portfolio-adaptive-two portfolio-adaptive-three');
             $('.portfolio-adaptive').addClass('portfolio-adaptive-one');
             return false;
         });
-        $('.adaptive-two').click(function() {
+        $('.adaptive-two').click(function () {
             $('.portfolio-switch').removeClass('active-adaptive');
             $(this).addClass('active-adaptive');
             $('.portfolio-adaptive').removeClass('portfolio-adaptive-one portfolio-adaptive-three');
             $('.portfolio-adaptive').addClass('portfolio-adaptive-two');
             return false;
         });
-        $('.adaptive-three').click(function() {
+        $('.adaptive-three').click(function () {
             $('.portfolio-switch').removeClass('active-adaptive');
             $(this).addClass('active-adaptive');
             $('.portfolio-adaptive').removeClass('portfolio-adaptive-two portfolio-adaptive-one');
@@ -621,7 +911,7 @@ $(document).ready(function() {
         });
 
         //Show Back To Home When Scrolling
-        $('#page-content-scroll').on('scroll', function() {
+        $('#page-content-scroll').on('scroll', function () {
             var total_scroll_height = $('#page-content-scroll')[0].scrollHeight
             var inside_header = ($(this).scrollTop() <= 100);
             var passed_header = ($(this).scrollTop() >= 0); //250
@@ -640,7 +930,7 @@ $(document).ready(function() {
         });
 
         //Back to top Badge
-        $('.back-to-top-badge, .back-to-top').click(function(e) {
+        $('.back-to-top-badge, .back-to-top').click(function (e) {
             e.preventDefault();
             $('#page-content-scroll').animate({
                 scrollTop: 0
@@ -651,12 +941,12 @@ $(document).ready(function() {
 
         //Bottom Share Fly-up    
         $('body').append('<div class="share-bottom-tap-close"></div>');
-        $('.show-share-bottom, .show-share-box').click(function() {
+        $('.show-share-bottom, .show-share-box').click(function () {
             $('.share-bottom-tap-close').addClass('share-bottom-tap-close-active');
             $('.share-bottom').toggleClass('active-share-bottom');
             return false;
         });
-        $('.close-share-bottom, .share-bottom-tap-close').click(function() {
+        $('.close-share-bottom, .share-bottom-tap-close').click(function () {
             $('.share-bottom-tap-close').removeClass('share-bottom-tap-close-active');
             $('.share-bottom').removeClass('active-share-bottom');
             return false;
@@ -674,14 +964,14 @@ $(document).ready(function() {
         $('.set-today').val(set_input_today);
 
         //Countdown Timer
-        $(function() { $('.countdown-class').countdown({ date: "June 7, 2087 15:03:26" }); });
+        $(function () { $('.countdown-class').countdown({ date: "June 7, 2087 15:03:26" }); });
 
         //Copyright Year 
         if ($("#copyright-year")[0]) { document.getElementById('copyright-year').appendChild(document.createTextNode(new Date().getFullYear())) }
         if ($("#copyright-year-sidebar")[0]) { document.getElementById('copyright-year-sidebar').appendChild(document.createTextNode(new Date().getFullYear())) }
 
         //Contact Form
-        var formSubmitted = "false"; jQuery(document).ready(function(e) { function t(t, n) { formSubmitted = "true"; var r = e("#" + t).serialize(); e.post(e("#" + t).attr("action"), r, function(n) { e("#" + t).hide(); e("#formSuccessMessageWrap").fadeIn(500) }) } function n(n, r) { e(".formValidationError").hide(); e(".fieldHasError").removeClass("fieldHasError"); e("#" + n + " .requiredField").each(function(i) { if (e(this).val() == "" || e(this).val() == e(this).attr("data-dummy")) { e(this).val(e(this).attr("data-dummy")); e(this).focus(); e(this).addClass("fieldHasError"); e("#" + e(this).attr("id") + "Error").fadeIn(300); return false } if (e(this).hasClass("requiredEmailField")) { var s = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/; var o = "#" + e(this).attr("id"); if (!s.test(e(o).val())) { e(o).focus(); e(o).addClass("fieldHasError"); e(o + "Error2").fadeIn(300); return false } } if (formSubmitted == "false" && i == e("#" + n + " .requiredField").length - 1) { t(n, r) } }) } e("#formSuccessMessageWrap").hide(0); e(".formValidationError").fadeOut(0); e('input[type="text"], input[type="password"], textarea').focus(function() { if (e(this).val() == e(this).attr("data-dummy")) { e(this).val("") } }); e("input, textarea").blur(function() { if (e(this).val() == "") { e(this).val(e(this).attr("data-dummy")) } }); e("#contactSubmitButton").click(function() { n(e(this).attr("data-formId")); return false }) })
+        var formSubmitted = "false"; jQuery(document).ready(function (e) { function t(t, n) { formSubmitted = "true"; var r = e("#" + t).serialize(); e.post(e("#" + t).attr("action"), r, function (n) { e("#" + t).hide(); e("#formSuccessMessageWrap").fadeIn(500) }) } function n(n, r) { e(".formValidationError").hide(); e(".fieldHasError").removeClass("fieldHasError"); e("#" + n + " .requiredField").each(function (i) { if (e(this).val() == "" || e(this).val() == e(this).attr("data-dummy")) { e(this).val(e(this).attr("data-dummy")); e(this).focus(); e(this).addClass("fieldHasError"); e("#" + e(this).attr("id") + "Error").fadeIn(300); return false } if (e(this).hasClass("requiredEmailField")) { var s = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/; var o = "#" + e(this).attr("id"); if (!s.test(e(o).val())) { e(o).focus(); e(o).addClass("fieldHasError"); e(o + "Error2").fadeIn(300); return false } } if (formSubmitted == "false" && i == e("#" + n + " .requiredField").length - 1) { t(n, r) } }) } e("#formSuccessMessageWrap").hide(0); e(".formValidationError").fadeOut(0); e('input[type="text"], input[type="password"], textarea').focus(function () { if (e(this).val() == e(this).attr("data-dummy")) { e(this).val("") } }); e("input, textarea").blur(function () { if (e(this).val() == "") { e(this).val(e(this).attr("data-dummy")) } }); e("#contactSubmitButton").click(function () { n(e(this).attr("data-formId")); return false }) })
 
         // Image Sliders
         var pricing_table = new Swiper('.pricing-table-slider', {
@@ -823,7 +1113,7 @@ $(document).ready(function() {
             }
         });
 
-        setTimeout(function() {
+        setTimeout(function () {
             var swiper_coverflow_thumbnails = new Swiper('.coverflow-thumbnails', {
                 pagination: '.swiper-pagination',
                 effect: 'coverflow',
@@ -977,32 +1267,32 @@ $(document).ready(function() {
         };
 
         center_content();
-        $(window).resize(function() {
+        $(window).resize(function () {
             center_content();
             calculate_lockscreen();
         });
 
         //Fullscreen Map
-        $('.map-text, .overlay').click(function() {
+        $('.map-text, .overlay').click(function () {
             $('.map-text, .map-fullscreen .overlay').addClass('hide-map');
             $('.deactivate-map').removeClass('hide-map');
             return false;
         });
-        $('.deactivate-map').click(function() {
+        $('.deactivate-map').click(function () {
             $('.map-text, .map-fullscreen .overlay').removeClass('hide-map');
             $('.deactivate-map').addClass('hide-map');
             return false;
         });
 
         //Classic Toggles
-        $('.toggle-title').click(function() {
+        $('.toggle-title').click(function () {
             $(this).parent().find('.toggle-content').slideToggle(250);
             $(this).find('i').toggleClass('rotate-toggle');
             return false;
         });
 
         //Checklist Item
-        $('.checklist-item').click(function() {
+        $('.checklist-item').click(function () {
             $(this).find('.fa-circle-o').toggle(250);
             $(this).find('strong').toggleClass('completed-checklist');
             $(this).find('.fa-check, .fa-times, .fa-check-circle-o, .fa-check-circle, .fa-times-circle, .fa-times-circle-o').toggle(250);
@@ -1015,27 +1305,27 @@ $(document).ready(function() {
         }
 
         //Tasklist Item
-        $('.tasklist-incomplete').click(function() {
+        $('.tasklist-incomplete').click(function () {
             $(this).removeClass('tasklist-incomplete');
             $(this).addClass('tasklist-completed');
             return false;
         });
-        $('.tasklist-item').click(function() {
+        $('.tasklist-item').click(function () {
             $(this).toggleClass('tasklist-completed');
             return false;
         });
 
         //Interests
-        $('.interest-box').click(function() {
+        $('.interest-box').click(function () {
             $(this).toggleClass('transparent-background');
             $(this).find('.interest-first-icon, .interest-second-icon').toggleClass('hide-interest-icon');
             return false;
         });
 
         //Loading Thumb Layout for News, 10 articles at a time
-        $(function() {
+        $(function () {
             $(".thumb-layout-page a").slice(0, 5).show(); // select the first ten
-            $(".load-more-thumbs").click(function(e) { // click event for load more
+            $(".load-more-thumbs").click(function (e) { // click event for load more
                 e.preventDefault();
                 $(".thumb-layout-page a:hidden").slice(0, 5).show(0); // select next 10 hidden divs and show them
                 if ($(".thumb-layout-page a:hidden").length == 0) { // check if any hidden divs still exist
@@ -1044,9 +1334,9 @@ $(document).ready(function() {
             });
         });
 
-        $(function() {
+        $(function () {
             $(".card-large-layout-page .card-large-layout").slice(0, 2).show(); // select the first ten
-            $(".load-more-large-cards").click(function(e) { // click event for load more
+            $(".load-more-large-cards").click(function (e) { // click event for load more
                 e.preventDefault();
                 $(".card-large-layout-page .card-large-layout:hidden").slice(0, 2).show(0); // select next 10 hidden divs and show them
                 if ($(".card-large-layout-page div:hidden").length == 0) { // check if any hidden divs still exist
@@ -1055,9 +1345,9 @@ $(document).ready(function() {
             });
         });
 
-        $(function() {
+        $(function () {
             $(".card-small-layout-page .card-small-layout").slice(0, 3).show(); // select the first ten
-            $(".load-more-small-cards").click(function(e) { // click event for load more
+            $(".load-more-small-cards").click(function (e) { // click event for load more
                 e.preventDefault();
                 $(".card-small-layout-page .card-small-layout:hidden").slice(0, 3).show(0); // select next 10 hidden divs and show them
                 if ($(".card-small-layout-page a:hidden").length == 0) { // check if any hidden divs still exist
@@ -1067,19 +1357,19 @@ $(document).ready(function() {
         });
 
         //News Tabs
-        $('.activate-tab-1').click(function() {
+        $('.activate-tab-1').click(function () {
             $('#tab-2, #tab-3').slideUp(250); $('#tab-1').slideDown(250);
             $('.home-tabs a').removeClass('active-home-tab');
             $('.activate-tab-1').addClass('active-home-tab');
             return false;
         });
-        $('.activate-tab-2').click(function() {
+        $('.activate-tab-2').click(function () {
             $('#tab-1, #tab-3').slideUp(250); $('#tab-2').slideDown(250);
             $('.home-tabs a').removeClass('active-home-tab');
             $('.activate-tab-2').addClass('active-home-tab');
             return false;
         });
-        $('.activate-tab-3').click(function() {
+        $('.activate-tab-3').click(function () {
             $('#tab-1, #tab-2').slideUp(250); $('#tab-3').slideDown(250);
             $('.home-tabs a').removeClass('active-home-tab');
             $('.activate-tab-3').addClass('active-home-tab');
@@ -1087,7 +1377,7 @@ $(document).ready(function() {
         });
 
         //Tabs
-        $('ul.tabs li').click(function() {
+        $('ul.tabs li').click(function () {
             var tab_id = $(this).attr('data-tab');
 
             $(this).parent().parent().find('ul.tabs li').removeClass('current');
@@ -1098,8 +1388,8 @@ $(document).ready(function() {
         })
 
         //Store Cart Add / Substract Numbers
-        $(function() {
-            $('.add-qty').on('click', function() {
+        $(function () {
+            $('.add-qty').on('click', function () {
                 var $qty = $(this).closest('div').find('.qty');
                 var currentVal = parseInt($qty.val());
                 if (!isNaN(currentVal)) {
@@ -1107,7 +1397,7 @@ $(document).ready(function() {
                 }
                 return false;
             });
-            $('.substract-qty').on('click', function() {
+            $('.substract-qty').on('click', function () {
                 var $qty = $(this).closest('div').find('.qty');
                 var currentVal = parseInt($qty.val());
                 if (!isNaN(currentVal) && currentVal > 0) {
@@ -1117,7 +1407,7 @@ $(document).ready(function() {
             });
         });
 
-        $('.remove-cart-item').click(function() {
+        $('.remove-cart-item').click(function () {
             $(this).parent().parent().slideUp(250);
             return false;
         });
@@ -1125,20 +1415,20 @@ $(document).ready(function() {
         //Mobile UI Controls//
 
         //Dial Screen
-        $('.phone-pad-1').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '1'); });
-        $('.phone-pad-2').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '2'); });
-        $('.phone-pad-3').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '3'); });
-        $('.phone-pad-4').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '4'); });
-        $('.phone-pad-5').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '5'); });
-        $('.phone-pad-6').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '6'); });
-        $('.phone-pad-7').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '7'); });
-        $('.phone-pad-8').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '8'); });
-        $('.phone-pad-9').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '9'); });
-        $('.phone-pad-0').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '0'); });
-        $('.phone-pad-star').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '*'); });
-        $('.phone-pad-hash').click(function() { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '#'); });
+        $('.phone-pad-1').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '1'); });
+        $('.phone-pad-2').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '2'); });
+        $('.phone-pad-3').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '3'); });
+        $('.phone-pad-4').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '4'); });
+        $('.phone-pad-5').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '5'); });
+        $('.phone-pad-6').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '6'); });
+        $('.phone-pad-7').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '7'); });
+        $('.phone-pad-8').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '8'); });
+        $('.phone-pad-9').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '9'); });
+        $('.phone-pad-0').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '0'); });
+        $('.phone-pad-star').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '*'); });
+        $('.phone-pad-hash').click(function () { var this_value = $('.mobileui-dialpad input').val(); $('.mobileui-dialpad input').val(this_value + '#'); });
 
-        $('.call-dial').click(function() {
+        $('.call-dial').click(function () {
             $(this).toggleClass('bg-red-dark');
             $(this).find('i').toggleClass('rotate-135');
             $('.mobileui-dialpad-numbers').slideToggle(250);
@@ -1175,7 +1465,7 @@ $(document).ready(function() {
 
 
     setTimeout(init_template, 0);//Activating all the plugins
-    $(function() {
+    $(function () {
         'use strict';
         var options = {
             prefetch: false,
@@ -1184,7 +1474,7 @@ $(document).ready(function() {
             forms: 'contactForm',
             onStart: {
                 duration: 250, // Duration of our animation
-                render: function($container) {
+                render: function ($container) {
                     // Add your CSS animation reversing class
                     $container.addClass('is-exiting');
 
@@ -1204,7 +1494,7 @@ $(document).ready(function() {
             },
             onReady: {
                 duration: 0,
-                render: function($container, $newContent) {
+                render: function ($container, $newContent) {
                     // Remove your CSS animation reversing class
                     $container.removeClass('is-exiting');
 
@@ -1223,10 +1513,10 @@ $(document).ready(function() {
                 }
             },
 
-            onAfter: function($container, $newContent) {
+            onAfter: function ($container, $newContent) {
                 setTimeout(init_template, 0)//Timeout required to properly initiate all JS Functions. 
                 $('.page-preloader').removeClass('show-preloader');
-                setTimeout(function() {
+                setTimeout(function () {
                     $('#page-content, .header, .footer-menu-open').css({
                         "transform": "translateX(" + 0 * (1) + "px)",
                         "-webkit-transform": "translateX(" + 0 * (1) + "px)",
