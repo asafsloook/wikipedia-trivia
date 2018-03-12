@@ -50,18 +50,20 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public string GetArticle()
+    public string GetArticle(string IMEI)
     {
-
+        //string id = IMEI;
         //Photo p1 = new Photo();
         //p1.AllPhotoOfTheDay();
+        //User u = new User();
         
+
         Article a1 = new Article();
-
-
+        var categoriesList = a1.getCatByImei(IMEI);
+        
         Random rnd = new Random();
-        var categoriesList = getMainCategories();
-        categoriesList.Remove("Reference works");
+        //var categoriesList = getMainCategories();
+        //categoriesList.Remove("Reference works");
         int randomNum = rnd.Next(0, categoriesList.Count());
         var a = categoriesList[randomNum].ToString();
 

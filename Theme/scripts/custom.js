@@ -27,7 +27,11 @@ $(document).on('pagebeforeshow', function () {
 
         });
 
-        getArticle();
+        var request = {
+            IMEI: "12345",
+        }
+
+        getArticle(request);
     }
 
 
@@ -81,12 +85,13 @@ $(document).on('pagebeforeshow', function () {
 //    }
 //}
 
-function getArticle() {
+function getArticle(request) {
 
+    var dataString = JSON.stringify(request);
     //$('.footer-menu-open').click(function () {
     $.ajax({ // ajax call starts
         url: '../WebService.asmx/GetArticle',   // server side web service method
-        //data: dataString,                          // the parameters sent to the server
+        data: dataString,                          // the parameters sent to the server
         type: 'POST',                              // can be also GET
         dataType: 'json',                          // expecting JSON datatype from the server
         contentType: 'application/json; charset = utf-8', // sent to the server
@@ -219,10 +224,17 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf("article.html") != -1) {
 
+            
+
+            
 
             $('.footer-menu-open').click(function () {
 
-                getArticle();
+                var request = {
+                    IMEI: "12345",
+                }
+
+                getArticle(request);
 
             });
         }

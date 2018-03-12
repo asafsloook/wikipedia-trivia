@@ -304,12 +304,12 @@ public class DBConnection
 
         string cStr = "update UsersP "
             + " set "
-            + " LocationPush = '"+ user.LocationPush.ToString() + "', "
-            + " PhotoPush = '"+ user.PhotoPush.ToString() + "',"
-            + " PhotoPushTime = '"+ user.PhotoPushTime.ToShortTimeString() + "', "
-            + " RandomArticlePush = '"+ user.ArticlePush.ToString() + "', "
-            + " RandomArticleQuantity = '"+ user.ArticlesPerDay + "' "
-            + " where userId = "+user.Id;
+            + " LocationPush = '" + user.LocationPush.ToString() + "', "
+            + " PhotoPush = '" + user.PhotoPush.ToString() + "',"
+            + " PhotoPushTime = '" + user.PhotoPushTime.ToShortTimeString() + "', "
+            + " RandomArticlePush = '" + user.ArticlePush.ToString() + "', "
+            + " RandomArticleQuantity = '" + user.ArticlesPerDay + "' "
+            + " where userId = " + user.Id;
 
         //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
 
@@ -471,6 +471,31 @@ public class DBConnection
             c.CategoryId = int.Parse(item.ItemArray[1].ToString());
             c.Name = item.ItemArray[0].ToString();
             lc.Add(c);
+        }
+
+
+        return lc;
+    }
+
+    public List<string> getUserCategoriesByImei(string IMEI)
+    {
+        SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
+
+        String selectStr = "Select CategoryName from userCategoriesView where IMEI = '" + IMEI+"' and Active='true'"; // create the select that will be used by the adapter to select data from the DB
+
+        SqlDataAdapter da = new SqlDataAdapter(selectStr, con); // create the data adapter
+
+        DataSet ds = new DataSet("DS"); // create a DataSet and give it a name (not mandatory) as defualt it will be the same name as the DB
+
+        da.Fill(ds);       // Fill the datatable (in the dataset), using the Select command
+
+        dt = ds.Tables[0]; // point to the cars table , which is the only table in this case
+
+        List<string> lc = new List<string>();
+
+        foreach (DataRow item in dt.Rows)
+        {
+            lc.Add(item.ItemArray[0].ToString());
         }
 
 
