@@ -52,28 +52,17 @@ public class WebService : System.Web.Services.WebService
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public string GetArticle(string IMEI)
     {
-        //string id = IMEI;
-        //Photo p1 = new Photo();
-        //p1.AllPhotoOfTheDay();
-        //User u = new User();
-        
 
         Article a1 = new Article();
         var categoriesList = a1.getCatByImei(IMEI);
         
         Random rnd = new Random();
-        //var categoriesList = getMainCategories();
-        //categoriesList.Remove("Reference works");
+        
         int randomNum = rnd.Next(0, categoriesList.Count());
         var a = categoriesList[randomNum].ToString();
-
-
+        
         a1 = a1.RandomPageFromCategory(a,a);
-
-        //a = a.Replace("  " ," ");
-
-        //return a;
-
+        
         JavaScriptSerializer js = new JavaScriptSerializer();
 
         string jsonString = js.Serialize(a1);

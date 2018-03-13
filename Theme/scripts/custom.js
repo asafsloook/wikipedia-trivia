@@ -38,41 +38,6 @@ $(document).on('pagebeforeshow', function () {
 });
 
 
-//var words = ['amazing', 'exciting', 'fabulous', 'inspiring', 'fascinating', 'amazing', 'exciting', 'fabulous', 'inspiring', 'fascinating', 'amazing', 'exciting', 'fabulous', 'inspiring', 'fascinating', 'amazing', 'exciting', 'fabulous', 'inspiring', 'fascinating', 'amazing', 'exciting', 'fabulous', 'inspiring', 'fascinating'];
-//h = setInterval(function() {
-//    var rand = Math.floor(Math.random() * 4);
-
-//    $('#animationTitle').html(words[0]);
-//    words.shift();
-//    popWriter();
-//}, 1500);
-//function popWriter() {
-//    // Wrap every letter in a span
-//    $('.ml2').each(function() {
-//        $(this).html($(this).text().replace(/([^\x00-\x80]|\w)/g, "<span class='letter'>$&</span>"));
-//    });
-
-//    anime.timeline({ loop: true })
-//        .add({
-//            targets: '.ml2 .letter',
-//            scale: [4, 1],
-//            opacity: [0, 1],
-//            translateZ: 0,
-//            easing: "easeOutExpo",
-//            duration: 1250,
-//            delay: function(el, i) {
-//                return 70 * i;
-//            }
-//        }).add({
-//            targets: '.ml2',
-//            opacity: 0,
-//            duration: 1300,
-//            easing: "easeOutExpo",
-//            delay: 1300
-//        });
-//}
-
-
 //var i = 0;
 //var txt = ' intersting...';
 //var speed = 250;
@@ -114,8 +79,7 @@ function getArticle(request) {
         //results.ArticleContent
         $("#articleContent").empty();
         $("#articleContent").html(results.ArticleContent);
-
-
+        
     }
 
     function errorArticlesCB(e) {

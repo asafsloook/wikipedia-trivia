@@ -205,11 +205,7 @@ public class Article
         DBConnection db = new DBConnection();
         return db.getUserCategoriesByImei(IMEI);
     }
-
-    //private Article firstFilter(string content, string title, string rootCategoryTitle)
-    //{
-
-    //}
+    
 
     public string getPhotoForArticle(string title)
     {
