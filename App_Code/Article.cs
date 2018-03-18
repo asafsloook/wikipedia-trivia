@@ -853,7 +853,7 @@ public class Article
     /// 
     private int GetViews(string articleTitle)
     {
-        var dateYesterday = DateTime.Now.AddDays(-1);
+        var dateYesterday = DateTime.Now.AddDays(-2);
 
         string yearStr = dateYesterday.Year.ToString();
         int dayInt = dateYesterday.Day;

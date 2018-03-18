@@ -1,43 +1,4 @@
 
-$(document).on('pagebeforeshow', function () {
-
-    if (window.location.href.toString().indexOf("article.html") != -1) {
-
-        $(document).ajaxStart(function () {
-            $('#page-content-scroll').hide();
-            $('.back-to-top-badge').hide();
-            $("#refreshBTN").hide();
-            $("#loading").show();
-
-
-            //popWriter();
-            //typeWriter();
-
-        });
-
-        $(document).ajaxStop(function () {
-            setTimeout(function () {
-                $("#loading").fadeOut();
-                $("#refreshBTN").fadeIn();
-                $('.back-to-top-badge').show();
-                $('#page-content-scroll').fadeIn();
-                $('#page-content-scroll').scrollTop(0);
-                h = false;
-            }, 500);
-
-        });
-
-        var request = {
-            IMEI: "12345",
-        }
-
-        getArticle(request);
-    }
-
-
-});
-
-
 //var i = 0;
 //var txt = ' intersting...';
 //var speed = 250;
@@ -49,45 +10,6 @@ $(document).on('pagebeforeshow', function () {
 //        setTimeout(typeWriter, speed);
 //    }
 //}
-
-function getArticle(request) {
-
-    var dataString = JSON.stringify(request);
-    //$('.footer-menu-open').click(function () {
-    $.ajax({ // ajax call starts
-        url: '../WebService.asmx/GetArticle',   // server side web service method
-        data: dataString,                          // the parameters sent to the server
-        type: 'POST',                              // can be also GET
-        dataType: 'json',                          // expecting JSON datatype from the server
-        contentType: 'application/json; charset = utf-8', // sent to the server
-        success: successArticlesCB,                // data.d id the Variable data contains the data we get from serverside
-        error: errorArticlesCB
-    }); // end of ajax call
-    //});
-
-    function successArticlesCB(results) {
-
-
-        var results = $.parseJSON(results.d);
-        var a = "";
-
-        $("#ArticleImg").attr("src", results.PhotoUrl);
-
-        $("#title").empty();
-        $("#title").html(results.Title);
-
-        //results.ArticleContent
-        $("#articleContent").empty();
-        $("#articleContent").html(results.ArticleContent);
-        
-    }
-
-    function errorArticlesCB(e) {
-        alert("I caught the exception : failed in GetArticles \n The exception message is : " + e.responseText);
-
-    }
-}
-
 
 $(document).ready(function () {
 
@@ -132,11 +54,23 @@ $(document).ready(function () {
         }, 0.01);
 
 
+
+        urlDomain = "";
+        if (window.location.href.toString().indexOf('http') == -1) {
+
+            urlDomain = 'https://proj.ruppin.ac.il/bgroup54/test2/tar1/';
+        }
+        else {
+            urlDomain = '../';
+        }
+
+
+
         if (window.location.href.toString().indexOf('allphotos.html') != -1) {
 
             getPhotos();
 
-            $("#photos a").on('click', function () {
+            $("#photos a[id*='ph']").on('click', function () {
 
                 var id = parseInt(this.id.toString().substring(2, 3));
 
@@ -148,7 +82,7 @@ $(document).ready(function () {
             function getPhotos() {
 
                 $.ajax({ // ajax call starts
-                    url: '../WebService.asmx/GetPhotos',   // server side web service method
+                    url: urlDomain + 'WebService.asmx/GetPhotos',   // server side web service method
                     //data: dataString,                          // the parameters sent to the server
                     type: 'POST',                              // can be also GET
                     dataType: 'json',                          // expecting JSON datatype from the server
@@ -188,9 +122,11 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf("article.html") != -1) {
 
-            
+            var request = {
+                IMEI: "12345",
+            }
 
-            
+            getArticle(request);
 
             $('.footer-menu-open').click(function () {
 
@@ -201,6 +137,68 @@ $(document).ready(function () {
                 getArticle(request);
 
             });
+
+
+            function getArticle(request) {
+
+                var dataString = JSON.stringify(request);
+
+                $.ajax({ // ajax call starts
+                    url: urlDomain + 'WebService.asmx/GetArticle',   // server side web service method
+                    data: dataString,                          // the parameters sent to the server
+                    type: 'POST',                              // can be also GET
+                    dataType: 'json',                          // expecting JSON datatype from the server
+                    contentType: 'application/json; charset = utf-8', // sent to the server
+                    success: successArticlesCB,                // data.d id the Variable data contains the data we get from serverside
+                    error: errorArticlesCB,
+                    beforeSend: showLoading()
+                }); // end of ajax call
+
+                function showLoading() {
+                    $("#loading").show();
+                    $('#page-content-scroll').hide();
+                    $('.back-to-top-badge').hide();
+                    $("#refreshBTN").hide();
+                    $("#burgerMenu").hide();
+                }
+
+                function hideLoading() {
+                    setTimeout(function () {
+                        $("#loading").fadeOut();
+                        $("#refreshBTN").fadeIn();
+                        $('.back-to-top-badge').show();
+                        $('#page-content-scroll').fadeIn();
+                        $('#page-content-scroll').scrollTop(0);
+                        $("#burgerMenu").show();
+                    }, 500)
+                }
+
+                function successArticlesCB(results) {
+
+                    var results = $.parseJSON(results.d);
+                    var a = "";
+
+                    $("#ArticleImg").attr("src", results.PhotoUrl);
+
+                    $("#title").empty();
+                    $("#title").html(results.Title);
+
+                    //results.ArticleContent
+                    $("#articleContent").empty();
+                    $("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
+
+                    $("#articleContent").append("<b>Question:</b> " + results.NotificationContent + "<br><br>");
+
+                    $("#articleContent").append(results.ArticleContent);
+                    hideLoading();
+                }
+
+                function errorArticlesCB(e) {
+                    alert("I caught the exception : failed in GetArticles \n The exception message is : " + e.responseText);
+
+                }
+            }
+
         }
 
         if (window.location.href.toString().indexOf('photo.html') != -1) {
@@ -224,6 +222,9 @@ $(document).ready(function () {
         }
 
         if (window.location.href.toString().indexOf('pref1.html') != -1) {
+
+            $("#burgerMenu").hide();
+
             cat = [];
 
             var request = {
@@ -238,7 +239,7 @@ $(document).ready(function () {
                 var dataSrting = JSON.stringify(request);
 
                 $.ajax({ // ajax call starts
-                    url: '../WebService.asmx/checkUser',   // server side web service method
+                    url: urlDomain + 'WebService.asmx/checkUser',   // server side web service method
                     data: dataSrting,                          // the parameters sent to the server
                     type: 'POST',                              // can be also GET
                     dataType: 'json',                          // expecting JSON datatype from the server
@@ -252,15 +253,13 @@ $(document).ready(function () {
                     var results = $.parseJSON(results.d);
 
                     userPref = results;
-                    var str = "";
 
-                    results.Categories.forEach(function (element) {
-                        str += '<div id="' + element.Name.replace(/\W/g, '') + '">' + element.Name
-                            + '<a href="#" class="itemDelete"><i class="material-icons">delete</i></a>'
-                            + '</div>';
-                    });
+                    if (userPref.Categories.length == 0) {
+                        $('#forwardBTN').hide;
+                    }
 
-                    $('.page-interests')[0].innerHTML += str;
+                    printUserCategories();
+                    checkPrefList();
                 }
 
                 function checkUserECB(e) {
@@ -270,12 +269,27 @@ $(document).ready(function () {
             }
 
 
+            function printUserCategories() {
+                var str = "";
+
+                userPref.Categories.forEach(function (element) {
+                    str += '<div id="' + element.Name.replace(/\W/g, '') + '">' + element.Name
+                        + '<a href="#" class="itemDelete"><i class="material-icons">delete</i></a>'
+                        + '</div>';
+                });
+
+                $('.page-interests')[0].innerHTML += str;
+
+                checkPrefList();
+            }
+
+
             $("#tags").autocomplete({
                 source: function (request, response) {
                     $.ajax({
                         url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + $("#tags").val() + '&limit=10&namespace=0&format=json',
                         dataType: "jsonp",
-
+                        global: false,
                         success: function (data) {
                             response(data[1]);
                         }
@@ -348,7 +362,7 @@ $(document).ready(function () {
             });
 
             $.ajax({ // ajax call starts
-                url: '../WebService.asmx/GetCategories',   // server side web service method
+                url: urlDomain + 'WebService.asmx/GetCategories',   // server side web service method
                 //data: dataString,                          // the parameters sent to the server
                 type: 'POST',                              // can be also GET
                 dataType: 'json',                          // expecting JSON datatype from the server
@@ -383,9 +397,11 @@ $(document).ready(function () {
                 }
                 $('#selects').append(str);
 
+                checkPrefList();
             }
 
             $('#pi').on('click', '.itemDelete', function () {
+
                 var x = $(this).parent()[0].id;
 
                 $('#' + x).animate({ left: '500px' }, function () {
@@ -394,14 +410,7 @@ $(document).ready(function () {
                     printCategories(cat);
                 });
 
-                //$('#' + x).fadeOut(300, function () {
-
-                //    $(this).remove();
-                //    printCategories(cat);
-                //});
-
             });
-
 
             $('#forwardBTN').on('click', function () {
 
@@ -430,7 +439,7 @@ $(document).ready(function () {
 
 
                 $.ajax({ // ajax call starts
-                    url: '../WebService.asmx/UpdateCategories',   // server side web service method
+                    url: urlDomain + 'WebService.asmx/UpdateCategories',   // server side web service method
                     data: dataString,                          // the parameters sent to the server
                     type: 'POST',                              // can be also GET
                     dataType: 'json',                          // expecting JSON datatype from the server
@@ -440,22 +449,29 @@ $(document).ready(function () {
                 }); // end of ajax call
 
                 function successupdateCategoriesCB(results) {
-                    //var results = $.parseJSON(results.d);
 
-                    //cat = results;
-
-                    //printCategories(results);
+                    checkPrefList();
                 }
 
                 function errorupdateCategoriesCB(e) {
                     alert("I caught the exception : failed in updateCategories \n The exception message is : " + e.responseText);
                 }
             }
+
+            function checkPrefList() {
+                if ($("#pi").children().length == 0) {
+                    $('#forwardBTN').hide();
+                }
+                else {
+                    $('#forwardBTN').show();
+                }
+            }
         }
 
         if (window.location.href.toString().indexOf('pref2.html') != -1) {
 
-            
+            $("#burgerMenu").hide();
+
             document.getElementById("myonoffswitch-1").checked = userPref.ArticlePush;
 
             $('#artPerDay').val(userPref.ArticlesPerDay);
@@ -500,6 +516,7 @@ $(document).ready(function () {
                 }
 
                 updateUserPref(request);
+
             });
 
             function updateUserPref(request) {
@@ -508,7 +525,7 @@ $(document).ready(function () {
 
 
                 $.ajax({ // ajax call starts
-                    url: '../WebService.asmx/UpdateUserPrefs',   // server side web service method
+                    url: urlDomain + 'WebService.asmx/UpdateUserPrefs',   // server side web service method
                     data: dataString,                          // the parameters sent to the server
                     type: 'POST',                              // can be also GET
                     dataType: 'json',                          // expecting JSON datatype from the server
@@ -554,6 +571,65 @@ $(document).ready(function () {
             }
 
 
+        }
+
+        if (window.location.href.toString().indexOf('index.html') != -1) {
+
+            imeiStr = "12345";
+
+            //imeiStr = device.uuid;
+
+            var request = {
+                IMEI: imeiStr
+            }
+
+            checkUser(request);
+
+            $('#splashLogo').fadeOut(500);
+            $('#splashLogo').fadeIn(500);
+            h = setInterval(function () {
+                $('#splashLogo').fadeOut(500);
+                $('#splashLogo').fadeIn(500);
+            }, 1000);
+
+
+        }
+
+        function checkUser(request) {
+
+            var dataSrting = JSON.stringify(request);
+
+            $.ajax({ // ajax call starts
+                url: urlDomain + 'WebService.asmx/checkUser',   // server side web service method
+                data: dataSrting,                          // the parameters sent to the server
+                type: 'POST',                              // can be also GET
+                dataType: 'json',                          // expecting JSON datatype from the server
+                contentType: 'application/json; charset = utf-8', // sent to the server
+                success: checkUserSCB,                // data.d id the Variable data contains the data we get from serverside
+                error: checkUserECB
+            }); // end of ajax call
+
+            function checkUserSCB(results) {
+
+                var results = $.parseJSON(results.d);
+
+                userPref = results;
+
+                setTimeout(function () {
+                    if (userPref.Categories.length == 0) {
+                        window.location.replace("pref1.html");
+                    }
+                    else {
+                        window.location.replace("article.html");
+                    }
+                    h = false;
+                }, 3000);
+            }
+
+            function checkUserECB(e) {
+                alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
+
+            }
         }
 
 

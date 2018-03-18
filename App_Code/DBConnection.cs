@@ -356,8 +356,9 @@ public class DBConnection
             throw (ex);
         }
 
-        string cStr = "insert into UsersP (IMEI)";
-        cStr += string.Format("values('{0}')", IMEI);
+        //Default preferences for a new user
+        string cStr = "insert into UsersP (IMEI,LocationPush,PhotoPush,PhotoPushTime,RandomArticlePush,RandomArticleQuantity) ";
+        cStr += string.Format("values('{0}',{1},{2},'{3}',{4},{5})", IMEI,1,1,"12:00",1,5);
 
         //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
 
