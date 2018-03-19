@@ -357,8 +357,8 @@ public class DBConnection
         }
 
         //Default preferences for a new user
-        string cStr = "insert into UsersP (IMEI,LocationPush,PhotoPush,PhotoPushTime,RandomArticlePush,RandomArticleQuantity) ";
-        cStr += string.Format("values('{0}',{1},{2},'{3}',{4},{5})", IMEI,1,1,"12:00",1,5);
+        string cStr = "insert into UsersP (IMEI,pushKey,LocationPush,PhotoPush,PhotoPushTime,RandomArticlePush,RandomArticleQuantity) ";
+        cStr += "values('" + IMEI + "','www',1,1,'12:00',1,5)";
 
         //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
 
@@ -482,7 +482,7 @@ public class DBConnection
     {
         SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
 
-        String selectStr = "Select CategoryName from userCategoriesView where IMEI = '" + IMEI+"' and Active='true'"; // create the select that will be used by the adapter to select data from the DB
+        String selectStr = "Select CategoryName from userCategoriesView where IMEI = '" + IMEI + "' and Active='true'"; // create the select that will be used by the adapter to select data from the DB
 
         SqlDataAdapter da = new SqlDataAdapter(selectStr, con); // create the data adapter
 

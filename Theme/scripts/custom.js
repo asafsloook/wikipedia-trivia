@@ -1,4 +1,5 @@
 
+
 //var i = 0;
 //var txt = ' intersting...';
 //var speed = 250;
@@ -52,20 +53,39 @@ $(document).ready(function () {
             $('.footer-menu-wrapper').removeClass('remove-menu');
             $('.page-menu').addClass('remove-menu');
         }, 0.01);
-
+        
 
 
         urlDomain = "";
         if (window.location.href.toString().indexOf('http') == -1) {
 
             urlDomain = 'https://proj.ruppin.ac.il/bgroup54/test2/tar1/';
+
+            document.addEventListener("deviceready", onDeviceReady, false);
         }
         else {
             urlDomain = '../';
+            localStorage.uuid = "12345";
+        }
+
+        
+        function onDeviceReady() {
+            if (localStorage.uuid == null || localStorage.uuid == undefined) {
+                localStorage.uuid = device.uuid;
+            }
+           
+            if (window.location.href.toString().indexOf('index.html') != -1) {
+                var request = {
+                    IMEI: localStorage.uuid
+                }
+
+                checkUser2(request);
+            }
+
         }
 
 
-
+        
         if (window.location.href.toString().indexOf('allphotos.html') != -1) {
 
             getPhotos();
@@ -91,39 +111,40 @@ $(document).ready(function () {
                     error: errorPhotosCB
                 }); // end of ajax call
 
+            }
 
-                function successPhotosCB(results) {
-                    var results = $.parseJSON(results.d);
-                    photos = results;
+            function successPhotosCB(results) {
+                var results = $.parseJSON(results.d);
+                photos = results;
 
-                    for (var i = 0; i < results.length; i++) {
+                for (var i = 0; i < results.length; i++) {
 
-                        $("#ph" + i + " img").attr("src", results[i].Url);
+                    $("#ph" + i + " img").attr("src", results[i].Url);
 
-                        $("#ph" + i + " strong").html((new Date(parseInt(results[i].Date.replace('/Date(', ''))).toLocaleDateString()));
+                    $("#ph" + i + " strong").html((new Date(parseInt(results[i].Date.replace('/Date(', ''))).toLocaleDateString()));
 
-                        var short = "";
-                        if (results[i].Description.length > 60) {
-                            short = "...";
-                        }
-
-                        $("#ph" + i + " em").html(results[i].Description.substring(0, 55).trim() + short);
+                    var short = "";
+                    if (results[i].Description.length > 60) {
+                        short = "...";
                     }
 
-                }
-
-                function errorPhotosCB(e) {
-                    alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
+                    $("#ph" + i + " em").html(results[i].Description.substring(0, 55).trim() + short);
                 }
 
             }
+
+            function errorPhotosCB(e) {
+                alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
+            }
+
 
         }
 
         if (window.location.href.toString().indexOf("article.html") != -1) {
 
+
             var request = {
-                IMEI: "12345",
+                IMEI: localStorage.uuid
             }
 
             getArticle(request);
@@ -131,7 +152,7 @@ $(document).ready(function () {
             $('.footer-menu-open').click(function () {
 
                 var request = {
-                    IMEI: "12345",
+                    IMEI: localStorage.uuid
                 }
 
                 getArticle(request);
@@ -154,49 +175,50 @@ $(document).ready(function () {
                     beforeSend: showLoading()
                 }); // end of ajax call
 
-                function showLoading() {
-                    $("#loading").show();
-                    $('#page-content-scroll').hide();
-                    $('.back-to-top-badge').hide();
-                    $("#refreshBTN").hide();
-                    $("#burgerMenu").hide();
-                }
+            }
 
-                function hideLoading() {
-                    setTimeout(function () {
-                        $("#loading").fadeOut();
-                        $("#refreshBTN").fadeIn();
-                        $('.back-to-top-badge').show();
-                        $('#page-content-scroll').fadeIn();
-                        $('#page-content-scroll').scrollTop(0);
-                        $("#burgerMenu").show();
-                    }, 500)
-                }
+            function showLoading() {
+                $("#loading").show();
+                $('#page-content-scroll').hide();
+                $('.back-to-top-badge').hide();
+                $("#refreshBTN").hide();
+                $("#burgerMenu").hide();
+            }
 
-                function successArticlesCB(results) {
+            function hideLoading() {
+                setTimeout(function () {
+                    $("#loading").fadeOut();
+                    $("#refreshBTN").fadeIn();
+                    $('.back-to-top-badge').show();
+                    $('#page-content-scroll').fadeIn();
+                    $('#page-content-scroll').scrollTop(0);
+                    $("#burgerMenu").show();
+                }, 500)
+            }
 
-                    var results = $.parseJSON(results.d);
-                    var a = "";
+            function successArticlesCB(results) {
 
-                    $("#ArticleImg").attr("src", results.PhotoUrl);
+                var results = $.parseJSON(results.d);
+                var a = "";
 
-                    $("#title").empty();
-                    $("#title").html(results.Title);
+                $("#ArticleImg").attr("src", results.PhotoUrl);
 
-                    //results.ArticleContent
-                    $("#articleContent").empty();
-                    $("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
+                $("#title").empty();
+                $("#title").html(results.Title);
 
-                    $("#articleContent").append("<b>Question:</b> " + results.NotificationContent + "<br><br>");
+                //results.ArticleContent
+                $("#articleContent").empty();
+                $("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
 
-                    $("#articleContent").append(results.ArticleContent);
-                    hideLoading();
-                }
+                $("#articleContent").append("<b>Question:</b> " + results.NotificationContent + "<br><br>");
 
-                function errorArticlesCB(e) {
-                    alert("I caught the exception : failed in GetArticles \n The exception message is : " + e.responseText);
+                $("#articleContent").append(results.ArticleContent);
+                hideLoading();
+            }
 
-                }
+            function errorArticlesCB(e) {
+                alert("I caught the exception : failed in GetArticles \n The exception message is : " + e.responseText);
+
             }
 
         }
@@ -223,12 +245,14 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf('pref1.html') != -1) {
 
+            alert(localStorage.uuid);
+
             $("#burgerMenu").hide();
 
             cat = [];
 
             var request = {
-                IMEI: "12345",
+                IMEI: localStorage.uuid
             }
 
             checkUser(request);
@@ -236,11 +260,11 @@ $(document).ready(function () {
 
             function checkUser(request) {
 
-                var dataSrting = JSON.stringify(request);
+                var dataString = JSON.stringify(request);
 
                 $.ajax({ // ajax call starts
                     url: urlDomain + 'WebService.asmx/checkUser',   // server side web service method
-                    data: dataSrting,                          // the parameters sent to the server
+                    data: dataString,                          // the parameters sent to the server
                     type: 'POST',                              // can be also GET
                     dataType: 'json',                          // expecting JSON datatype from the server
                     contentType: 'application/json; charset = utf-8', // sent to the server
@@ -248,29 +272,34 @@ $(document).ready(function () {
                     error: checkUserECB
                 }); // end of ajax call
 
-                function checkUserSCB(results) {
+            }
 
-                    var results = $.parseJSON(results.d);
+            function checkUserSCB(results) {
 
-                    userPref = results;
+                var results = $.parseJSON(results.d);
 
-                    if (userPref.Categories.length == 0) {
-                        $('#forwardBTN').hide;
-                    }
+                userPref = results;
 
-                    printUserCategories();
-                    checkPrefList();
+                if (userPref.Categories == null || userPref.Categories.length == 0) {
+                    $('#forwardBTN').hide;
                 }
 
-                function checkUserECB(e) {
-                    alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
+                printUserCategories();
+                checkPrefList();
+            }
 
-                }
+            function checkUserECB(e) {
+                alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
+
             }
 
 
             function printUserCategories() {
                 var str = "";
+
+                if (userPref.Categories == null || userPref.Categories.length == 0) {
+                    return;
+                }
 
                 userPref.Categories.forEach(function (element) {
                     str += '<div id="' + element.Name.replace(/\W/g, '') + '">' + element.Name
@@ -426,7 +455,7 @@ $(document).ready(function () {
 
                 var request = {
                     arr: catArr,
-                    IMEI: "12345"
+                    IMEI: localStorage.uuid
                 }
 
                 updateCategories(request);
@@ -534,17 +563,18 @@ $(document).ready(function () {
                     error: errorUpdateUserPrefsCB
                 }); // end of ajax call
 
-                function successUpdateUserPrefCB(results) {
-                    //var results = $.parseJSON(results.d);
+            }
 
-                    //cat = results;
+            function successUpdateUserPrefCB(results) {
+                //var results = $.parseJSON(results.d);
 
-                    //printCategories(results);
-                }
+                //cat = results;
 
-                function errorUpdateUserPrefsCB(e) {
-                    alert("I caught the exception : failed in UpdateUserPrefs \n The exception message is : " + e.responseText);
-                }
+                //printCategories(results);
+            }
+
+            function errorUpdateUserPrefsCB(e) {
+                alert("I caught the exception : failed in UpdateUserPrefs \n The exception message is : " + e.responseText);
             }
 
             function changeSwitches() {
@@ -575,61 +605,50 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf('index.html') != -1) {
 
-            imeiStr = "12345";
-
-            //imeiStr = device.uuid;
-
-            var request = {
-                IMEI: imeiStr
-            }
-
-            checkUser(request);
-
-            $('#splashLogo').fadeOut(500);
-            $('#splashLogo').fadeIn(500);
+            $('#splashLogo').fadeOut(1000);
+            $('#splashLogo').fadeIn(1000);
             h = setInterval(function () {
-                $('#splashLogo').fadeOut(500);
-                $('#splashLogo').fadeIn(500);
+                $('#splashLogo').fadeOut(1000);
+                $('#splashLogo').fadeIn(1000);
             }, 1000);
-
 
         }
 
-        function checkUser(request) {
 
-            var dataSrting = JSON.stringify(request);
+        function checkUser2(request) {
+            var dataString = JSON.stringify(request);
 
             $.ajax({ // ajax call starts
                 url: urlDomain + 'WebService.asmx/checkUser',   // server side web service method
-                data: dataSrting,                          // the parameters sent to the server
+                data: dataString,                          // the parameters sent to the server
                 type: 'POST',                              // can be also GET
                 dataType: 'json',                          // expecting JSON datatype from the server
                 contentType: 'application/json; charset = utf-8', // sent to the server
-                success: checkUserSCB,                // data.d id the Variable data contains the data we get from serverside
-                error: checkUserECB
+                success: checkUserSCB2,                // data.d id the Variable data contains the data we get from serverside
+                error: checkUserECB2
             }); // end of ajax call
+        }
 
-            function checkUserSCB(results) {
+        function checkUserSCB2(results) {
 
-                var results = $.parseJSON(results.d);
+            var results = $.parseJSON(results.d);
 
-                userPref = results;
+            userPref = results;
 
-                setTimeout(function () {
-                    if (userPref.Categories.length == 0) {
-                        window.location.replace("pref1.html");
-                    }
-                    else {
-                        window.location.replace("article.html");
-                    }
-                    h = false;
-                }, 3000);
-            }
+            setTimeout(function () {
+                if (userPref.Categories == null || userPref.Categories.length == 0) {
+                    window.location.replace("pref1.html");
+                }
+                else {
+                    window.location.replace("article.html");
+                }
+                h = false;
+            }, 3000);
+        }
 
-            function checkUserECB(e) {
-                alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
+        function checkUserECB2(e) {
+            alert("I caught the exception : failed in checkUser2 \n The exception message is : " + e.responseText);
 
-            }
         }
 
 
@@ -1585,3 +1604,4 @@ $(document).ready(function () {
     });
 
 });
+
