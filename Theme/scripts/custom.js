@@ -244,9 +244,7 @@ $(document).ready(function () {
         }
 
         if (window.location.href.toString().indexOf('pref1.html') != -1) {
-
-            alert(localStorage.uuid);
-
+            
             $("#burgerMenu").hide();
 
             cat = [];
@@ -361,6 +359,8 @@ $(document).ready(function () {
 
                 $('.page-interests')[0].innerHTML += str;
                 $("#tags").val("");
+
+                checkPrefList();
             });
 
             $('#addBTN2').on('click', function () {

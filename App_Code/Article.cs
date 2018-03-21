@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
+using System.Text;
 
 /// <summary>
 /// Summary description for Article
@@ -65,6 +66,16 @@ public class Article
     /// 
     public Article RandomPageFromCategory(string categoryTitle, string rootCategoryTitle)
     {
+
+        //log test
+        //StringBuilder sb = new StringBuilder();
+        
+        //sb.Append("log something");
+        
+        //// flush every 20 seconds as you do it
+        //File.AppendAllText(filePath + "log.txt", sb.ToString());
+        //sb.Clear();
+        
         string ResponseURI;
         HttpWebRequest myRequest =
         (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/wiki/Special:RandomInCategory/" + categoryTitle);
