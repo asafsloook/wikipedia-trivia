@@ -1,16 +1,91 @@
 
 
-//var i = 0;
-//var txt = ' intersting...';
-//var speed = 250;
-//function typeWriter() {
+function showLoading() {
+    $("#loading").show();
+    $('#page-content-scroll').hide();
+    $('.back-to-top-badge').hide();
+    $("#refreshBTN").hide();
+    $("#burgerMenu").hide();
+}
 
-//    if (i < txt.length) {
-//        document.getElementById("loadingTitle").innerHTML += txt.charAt(i);
-//        i++;
-//        setTimeout(typeWriter, speed);
-//    }
-//}
+function hideLoading() {
+    setTimeout(function () {
+        $("#loading").fadeOut();
+        $("#refreshBTN").fadeIn();
+        $('.back-to-top-badge').show();
+        $('#page-content-scroll').fadeIn();
+        $('#page-content-scroll').scrollTop(0);
+        $("#burgerMenu").show();
+    }, 500)
+}
+
+
+$(document).ready(function () {
+    if (window.location.href.toString().indexOf('index.html') != -1) {
+
+        $('#splashLogo').fadeOut(1000);
+        $('#splashLogo').fadeIn(1000);
+        h = setInterval(function () {
+            $('#splashLogo').fadeOut(1000);
+            $('#splashLogo').fadeIn(1000);
+        }, 1000);
+    }
+    if (window.location.href.toString().indexOf('article') != -1) {
+
+        showLoading();
+
+        txtCounter = 0;
+        txts = [' intersting', ' amazing', ' fascinating', ' impressive', ' delightful', ' striking', ' pleasing', ' lovely', ' refreshing', ' intriguing'];
+
+        txt = txts[txtCounter];
+        iTW = 0;
+
+
+        typeWriter();
+
+
+        function typeWriter() {
+            //writing chars of word
+            if (iTW < txt.length) {
+                $("#animationTitle").append(txt.charAt(iTW));
+                iTW++;
+                setTimeout(typeWriter, 120);
+                return;
+            }
+            //end of writing word
+            if (iTW == txt.length) {
+                setTimeout(typeDelete, 250);
+                return;
+            }
+            return;
+        }
+
+
+        function typeDelete() {
+            //delete word chars
+            if (iTW != 0) {
+                var title = $("#animationTitle").html();
+                $("#animationTitle").html(title.substring(0, iTW - 1));
+                iTW--;
+                setTimeout(typeDelete, 75);
+                return;
+            }
+            //end of delete word
+            if (iTW == 0) {
+                if (txtCounter == txts.length - 1) {
+                    txtCounter = -1;
+                }
+                txt = txts[++txtCounter];
+                setTimeout(typeWriter, 120);
+                return;
+            }
+            return;
+        }
+
+
+    }
+});
+
 
 $(document).ready(function () {
 
@@ -53,7 +128,7 @@ $(document).ready(function () {
             $('.footer-menu-wrapper').removeClass('remove-menu');
             $('.page-menu').addClass('remove-menu');
         }, 0.01);
-        
+
 
 
         urlDomain = "";
@@ -68,12 +143,12 @@ $(document).ready(function () {
             localStorage.uuid = "12345";
         }
 
-        
+
         function onDeviceReady() {
             if (localStorage.uuid == null || localStorage.uuid == undefined) {
                 localStorage.uuid = device.uuid;
             }
-           
+
             if (window.location.href.toString().indexOf('index.html') != -1) {
                 var request = {
                     IMEI: localStorage.uuid
@@ -85,7 +160,7 @@ $(document).ready(function () {
         }
 
 
-        
+
         if (window.location.href.toString().indexOf('allphotos.html') != -1) {
 
             getPhotos();
@@ -143,6 +218,7 @@ $(document).ready(function () {
         if (window.location.href.toString().indexOf("article.html") != -1) {
 
 
+
             var request = {
                 IMEI: localStorage.uuid
             }
@@ -177,24 +253,6 @@ $(document).ready(function () {
 
             }
 
-            function showLoading() {
-                $("#loading").show();
-                $('#page-content-scroll').hide();
-                $('.back-to-top-badge').hide();
-                $("#refreshBTN").hide();
-                $("#burgerMenu").hide();
-            }
-
-            function hideLoading() {
-                setTimeout(function () {
-                    $("#loading").fadeOut();
-                    $("#refreshBTN").fadeIn();
-                    $('.back-to-top-badge').show();
-                    $('#page-content-scroll').fadeIn();
-                    $('#page-content-scroll').scrollTop(0);
-                    $("#burgerMenu").show();
-                }, 500)
-            }
 
             function successArticlesCB(results) {
 
@@ -244,7 +302,7 @@ $(document).ready(function () {
         }
 
         if (window.location.href.toString().indexOf('pref1.html') != -1) {
-            
+
             $("#burgerMenu").hide();
 
             cat = [];
@@ -605,12 +663,13 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf('index.html') != -1) {
 
-            $('#splashLogo').fadeOut(1000);
-            $('#splashLogo').fadeIn(1000);
-            h = setInterval(function () {
-                $('#splashLogo').fadeOut(1000);
-                $('#splashLogo').fadeIn(1000);
-            }, 1000);
+
+            //testing localy (no deviceready event)
+            //var request = {
+            //    IMEI: localStorage.uuid
+            //}
+
+            //checkUser2(request);
 
         }
 

@@ -1,41 +1,63 @@
 ﻿<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>jQuery UI Autocomplete - Default functionality</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0 minimal-ui" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="shortcut icon" href="images/splash/favicon.ico" type="image/x-icon" />
+
+    <link href="scripts/rob.css" rel="stylesheet" />
+    <link href="scripts/sat.css" rel="stylesheet" />
+
+    <link href="scripts/icon.css" rel="stylesheet" />
+
+    <script src="scripts/anime.min.js"></script>
+
+    <title>Epsilon 7.0</title>
+
+    <link rel="stylesheet" type="text/css" href="styles/style.css">
+    <link rel="stylesheet" type="text/css" href="styles/skin.css">
+    <link rel="stylesheet" type="text/css" href="styles/framework.css">
+    <link rel="stylesheet" type="text/css" href="styles/font-awesome.css">
+
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/plugins.js"></script>
+    <script type="text/javascript" src="scripts/custom.js"></script>
+
+    <link href="scripts/jquery-ui.css" rel="stylesheet" />
+    <script src="scripts/jquery-uiJS.js"></script>
+
 
     <script>
 
+        //autocomplete testing
         //$(function () {
-        $(document).ready(function () {
-            $("#tags").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + $("#tags").val() + '&limit=10&namespace=0&format=json',
-                        dataType: "jsonp",
+        //$(document).ready(function () {
+        //    $("#tags").autocomplete({
+        //        source: function (request, response) {
+        //            $.ajax({
+        //                url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + $("#tags").val() + '&limit=10&namespace=0&format=json',
+        //                dataType: "jsonp",
 
-                        success: function (data) {
-                            response(data[1]);
-                        }
-                    });
-                },
-                minLength: 1
-            });
-            
-        });
+        //                success: function (data) {
+        //                    response(data[1]);
+        //                }
+        //            });
+        //        },
+        //        minLength: 1
+        //    });
+        //});
+
     </script>
 </head>
 <body>
 
-    <div class="ui-widget">
+    <!--autocomplete testing-->
+    <!--<div class="ui-widget">
         <input id="tags">
-    </div>
+    </div>-->
 
 </body>
 </html>
