@@ -64,18 +64,18 @@ public class Article
     /// Important: recursing and may be slow sometimes. (10-20secs)
     /// </summary>
     /// 
-    public Article RandomPageFromCategory(string categoryTitle, string rootCategoryTitle)
+    public Article RandomPageFromCategory(string categoryTitle, string rootCategoryTitle, string userID)
     {
 
-        //log test
+        ////log test
         //StringBuilder sb = new StringBuilder();
-        
+
         //sb.Append("log something");
-        
+
         //// flush every 20 seconds as you do it
         //File.AppendAllText(filePath + "log.txt", sb.ToString());
         //sb.Clear();
-        
+
         string ResponseURI;
         HttpWebRequest myRequest =
         (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/wiki/Special:RandomInCategory/" + categoryTitle);
@@ -111,7 +111,7 @@ public class Article
         catch (Exception)
         {
 
-            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
 
 
@@ -123,10 +123,10 @@ public class Article
             {
                 title = title.Replace("Category:", "");
 
-                return RandomPageFromCategory(title, rootCategoryTitle);
+                return RandomPageFromCategory(title, rootCategoryTitle, userID);
             }
 
-            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
 
         
@@ -154,7 +154,7 @@ public class Article
             if (hasIssues)
             {
 
-                return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+                return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
             }
 
         }
@@ -163,11 +163,22 @@ public class Article
 
         }
 
+
+
+        DBConnection db = new DBConnection();
+        bool test = db.isUserRead(id, userID);
+
+        if (test)
+        {
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
+        }
+
+
+
         var views = GetViews(title);
         if (views == -1 || views < 50)
         {
-
-            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
 
         if (content.Contains("(<span></span>)"))
@@ -191,9 +202,11 @@ public class Article
         if (content == title + " may refer to:")
         {
 
-            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
-        
+
+        ArticleId = id;
+
         Category c1 = new Category();
         c1.Name = rootCategoryTitle;
         
@@ -211,10 +224,10 @@ public class Article
 
     }
 
-    public List<string> getCatByImei(string IMEI)
+    public List<string> getCatByImei(string userId)
     {
         DBConnection db = new DBConnection();
-        return db.getUserCategoriesByImei(IMEI);
+        return db.getUserCategoriesByImei(userId);
     }
     
 
@@ -1293,7 +1306,7 @@ public class Article
         catch (Exception)
         {
             return null;
-        }
+          }
     }
 
 

@@ -1,4 +1,4 @@
-
+userPref = {};
 
 function showLoading() {
     $("#loading").show();
@@ -6,6 +6,7 @@ function showLoading() {
     $('.back-to-top-badge').hide();
     $("#refreshBTN").hide();
     $("#burgerMenu").hide();
+
 }
 
 function hideLoading() {
@@ -30,66 +31,73 @@ $(document).ready(function () {
             $('#splashLogo').fadeIn(1000);
         }, 1000);
     }
-    if (window.location.href.toString().indexOf('article') != -1) {
-
-        showLoading();
-
-        txtCounter = 0;
-        txts = [' intersting', ' amazing', ' fascinating', ' impressive', ' delightful', ' striking', ' pleasing', ' lovely', ' refreshing', ' intriguing'];
-
-        txt = txts[txtCounter];
-        iTW = 0;
+    if (window.location.href.toString().indexOf('article.html') != -1) {
 
 
-        typeWriter();
-
-
-        function typeWriter() {
-            //writing chars of word
-            if (iTW < txt.length) {
-                $("#animationTitle").append(txt.charAt(iTW));
-                iTW++;
-                setTimeout(typeWriter, 120);
-                return;
-            }
-            //end of writing word
-            if (iTW == txt.length) {
-                setTimeout(typeDelete, 250);
-                return;
-            }
-            return;
-        }
-
-
-        function typeDelete() {
-            //delete word chars
-            if (iTW != 0) {
-                var title = $("#animationTitle").html();
-                $("#animationTitle").html(title.substring(0, iTW - 1));
-                iTW--;
-                setTimeout(typeDelete, 75);
-                return;
-            }
-            //end of delete word
-            if (iTW == 0) {
-                if (txtCounter == txts.length - 1) {
-                    txtCounter = -1;
-                }
-                txt = txts[++txtCounter];
-                setTimeout(typeWriter, 120);
-                return;
-            }
-            return;
-        }
-
+        loadingTyper();
 
     }
+    
 });
+
+function loadingTyper() {
+    showLoading();
+
+
+    txtCounter = 0;
+    txts = [' intersting', ' amazing', ' fascinating', ' impressive', ' delightful', ' striking', ' pleasing', ' lovely', ' refreshing', ' intriguing'];
+
+    txt = txts[txtCounter];
+    iTW = 0;
+
+
+    typeWriter();
+
+}
+
+function typeWriter() {
+    //writing chars of word
+    if (iTW < txt.length) {
+        $("#animationTitle").append(txt.charAt(iTW));
+        iTW++;
+        setTimeout(typeWriter, 120);
+        return;
+    }
+    //end of writing word
+    if (iTW == txt.length) {
+        setTimeout(typeDelete, 250);
+        return;
+    }
+    return;
+}
+
+function typeDelete() {
+    //delete word chars
+    if (iTW != 0) {
+        var title = $("#animationTitle").html();
+        $("#animationTitle").html(title.substring(0, iTW - 1));
+        iTW--;
+        setTimeout(typeDelete, 75);
+        return;
+    }
+    //end of delete word
+    if (iTW == 0) {
+        if (txtCounter == txts.length - 1) {
+            txtCounter = -1;
+        }
+        txt = txts[++txtCounter];
+        setTimeout(typeWriter, 120);
+        return;
+    }
+    return;
+}
+
 
 
 $(document).ready(function () {
 
     function init_template() {//Class is vital to run AJAX Pages 
+        
 
         $(function () {
 
@@ -140,7 +148,9 @@ $(document).ready(function () {
         }
         else {
             urlDomain = '../';
-            localStorage.uuid = "12345";
+            localStorage.uuid = "7ef84f559ce02690";
+            userPref.Id = 193;
+            onDeviceReady();
         }
 
 
@@ -220,7 +230,7 @@ $(document).ready(function () {
 
 
             var request = {
-                IMEI: localStorage.uuid
+                userId: parseInt(localStorage.Id)
             }
 
             getArticle(request);
@@ -228,7 +238,7 @@ $(document).ready(function () {
             $('.footer-menu-open').click(function () {
 
                 var request = {
-                    IMEI: localStorage.uuid
+                    userId: parseInt(localStorage.Id)
                 }
 
                 getArticle(request);
@@ -599,7 +609,7 @@ $(document).ready(function () {
                     aroundBOOL: aroundBOOL1,
                     photoBOOL: photoBOOL1,
                     photoTIME: photoTIME1,
-                    userID: userPref.Id
+                    userID: parseInt(localStorage.Id)
                 }
 
                 updateUserPref(request);
@@ -693,6 +703,8 @@ $(document).ready(function () {
             var results = $.parseJSON(results.d);
 
             userPref = results;
+
+            localStorage.Id = userPref.Id;
 
             setTimeout(function () {
                 if (userPref.Categories == null || userPref.Categories.length == 0) {
@@ -849,6 +861,11 @@ $(document).ready(function () {
         });
 
         $(function () {
+
+            if ($("#loading:visible").length == 1 || window.location.href.toString().indexOf('pref')) {
+                return;
+            }
+
             $("#page-content").swipe({
                 swipeRight: function (event, direction, distance, duration, fingerCount) {
                     $('.sidebar-left').addClass('active-sidebar-box');
@@ -857,10 +874,10 @@ $(document).ready(function () {
                     $('.back-to-top-badge').removeClass('back-to-top-badge-visible');
                 },
                 swipeLeft: function (event, direction, distance, duration, fingerCount) {
-                    $('.sidebar-right').addClass('active-sidebar-box');
-                    $('.sidebar-left').removeClass('active-sidebar-box');
-                    $('.sidebar-tap-close').addClass('active-tap-close');
-                    $('.back-to-top-badge').removeClass('back-to-top-badge-visible');
+                    //$('.sidebar-right').addClass('active-sidebar-box');
+                    //$('.sidebar-left').removeClass('active-sidebar-box');
+                    //$('.sidebar-tap-close').addClass('active-tap-close');
+                    //$('.back-to-top-badge').removeClass('back-to-top-badge-visible');
                 },
                 threshold: 50
             });

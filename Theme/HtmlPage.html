@@ -57,6 +57,50 @@
             });
 
         }
+
+        //wiki geo call
+        $.ajax({
+            url: 'https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord=32.1%7C34.8&gsradius=10000&gslimit=100&format=json',
+            dataType: "jsonp",
+            success: function (data) {
+                var x = data;
+                markers = [];
+
+                for (var i = 0; i < data.query.geosearch.length; i++) {
+
+                    var lat = data.query.geosearch[i].lat;
+                    var lng = data.query.geosearch[i].lon;
+                    var dist = data.query.geosearch[i].dist;
+                    var pageid = data.query.geosearch[i].pageid;
+                    var title_ = data.query.geosearch[i].title;
+
+                    var latLng = new google.maps.LatLng(lat, lng);
+                    var marker = new google.maps.Marker({
+                        position: latLng,
+                        map: map,
+                        title: title_
+                    });
+
+                    markers.push(marker);
+                }
+
+                for (var i = 0; i < markers.length; i++) {
+
+                    var title_ = data.query.geosearch[i].title;
+                    var contentString = '<h4>' + title_ + '</h4>';
+
+                    markers[i].infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                    });
+                    google.maps.event.addListener(markers[i], 'click', function () {
+                        this.infowindow.open(map, this);
+                    });
+                }
+            },
+            error: function (data) {
+                var y = data;
+            }
+        });
     </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKr_zZ9DFMiysm4BXKu0Olsww6eBlcup0&callback=initMap">

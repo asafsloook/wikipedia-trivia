@@ -22,6 +22,75 @@ public class DBConnection
         //
     }
 
+    internal void insertReading(string userID, string articleId, string date, string categoryname)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("GraspDBConnectionString"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        int categoryID = getCategoryId(categoryname);
+
+        string cStr = " insert into ReadingP (userId, ArticleId,ReadingTime,CategoryId) values( " + userID + " , '" + articleId + "' ,'" + date + "','" + categoryID + "') ";
+
+        cmd = new SqlCommand(cStr, con);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            //return numEffected;
+        }
+        catch (Exception ex)
+        {
+            //return 0;
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+
+    public bool isUserRead(string articleId, string userId)
+    {
+        SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
+
+        String selectStr = "Select * from ReadingP where UserID = " + userId + " and ArticleId='" + articleId + "'"; // create the select that will be used by the adapter to select data from the DB
+
+        SqlDataAdapter da = new SqlDataAdapter(selectStr, con); // create the data adapter
+
+        DataSet ds = new DataSet("DS"); // create a DataSet and give it a name (not mandatory) as defualt it will be the same name as the DB
+
+        da.Fill(ds);       // Fill the datatable (in the dataset), using the Select command
+
+        dt = ds.Tables[0]; // point to the cars table , which is the only table in this case
+
+
+        if (dt.Rows.Count == 0)
+        {
+            return false;
+        }
+
+
+        return true; 
+    }
+
+
     //--------------------------------------------------------------------------------------------------
     // This method creates a connection to the database according to the connectionString name in the web.config 
     //--------------------------------------------------------------------------------------------------
@@ -478,11 +547,11 @@ public class DBConnection
         return lc;
     }
 
-    public List<string> getUserCategoriesByImei(string IMEI)
+    public List<string> getUserCategoriesByImei(string userId)
     {
         SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
 
-        String selectStr = "Select CategoryName from userCategoriesView where IMEI = '" + IMEI + "' and Active='true'"; // create the select that will be used by the adapter to select data from the DB
+        String selectStr = "Select CategoryName from userCategoriesView where UserID = " + userId + " and Active='true'"; // create the select that will be used by the adapter to select data from the DB
 
         SqlDataAdapter da = new SqlDataAdapter(selectStr, con); // create the data adapter
 

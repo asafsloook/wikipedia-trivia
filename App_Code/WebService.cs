@@ -50,18 +50,22 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public string GetArticle(string IMEI)
+    public string GetArticle(string userId)
     {
+        var userID = userId;
 
         Article a1 = new Article();
-        var categoriesList = a1.getCatByImei(IMEI);
+        var categoriesList = a1.getCatByImei(userID);
         
         Random rnd = new Random();
         
         int randomNum = rnd.Next(0, categoriesList.Count());
         var a = categoriesList[randomNum].ToString();
         
-        a1 = a1.RandomPageFromCategory(a,a);
+        a1 = a1.RandomPageFromCategory(a,a, userID);
+
+        Reading r = new Reading();
+        r.insert(userID, a1.ArticleId, DateTime.Now.ToString(), a.ToString());
         
         JavaScriptSerializer js = new JavaScriptSerializer();
 

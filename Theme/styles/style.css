@@ -1,3 +1,9 @@
+
+
+
+
+
+
 /*Splash screen*/
 #splashLogo {
     margin: auto;
@@ -9,6 +15,48 @@
 
 
 /*Loading*/
+
+.loaderNew {
+    position: relative;
+    transform-style: preserve-3d;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -32px;
+    margin-top: -32px;
+    transform: scale(0.5, 0.5) !important;
+
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 80px !important;
+    height: 80px !important;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
 .ml2 .letter {
     display: inline-block;
     line-height: 1em;
@@ -27,6 +75,23 @@
     height: 5%;
     padding: 0% 10%;
 }
+
+
+#loadingTitle {
+    position: relative;
+    float: left;
+}
+
+#loading {
+    background-color: white;
+    height: 100%;
+    display: none;
+}
+
+
+
+
+
 
 
 /*pref2 styles*/
@@ -154,23 +219,6 @@
 
 /*article, allphotos, photo styles*/
 
-#loadingTitle {
-    position: relative;
-    float: left;
-}
-
-#loading {
-    background-color: white;
-    height: 100%;
-    display:none;
-}
-
-#loadingImg {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translateY(-50%) translateX(-50%);
-}
 
 #title {
     padding-bottom: 20px;
@@ -573,7 +621,7 @@
 .light-footer-menu .active-menu em{color:#000000!important; font-weight:700!important; font-size:16px}
 
 .dark-footer-menu .footer-menu-item i{border:solid 2px rgba(255,255,255,0.2);    color:#FFFFFF;}
-.dark-footer-menu .footer-menu-item em{color:#FFFFFF; box-shadow:none!important; background-color:transparent!important; 255,255,0.6); font-weight:300;}
+.dark-footer-menu .footer-menu-item em{color:#FFFFFF; box-shadow:none!important; background-color:transparent!important; font-weight:300;}
 .dark-footer-background{background-color:rgba(0,0,0,0.9);}
 .dark-footer-menu .active-menu{color:#FFFFFF; opacity:1;}
 .dark-footer-menu .active-menu em{color:#FFFFFF!important; font-weight:700!important; font-size:15px}
