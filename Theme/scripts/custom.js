@@ -1,4 +1,3 @@
-userPref = {};
 
 function showLoading() {
     $("#loading").show();
@@ -32,8 +31,7 @@ $(document).ready(function () {
         }, 1000);
     }
     if (window.location.href.toString().indexOf('article.html') != -1) {
-
-
+        
         loadingTyper();
 
     }
@@ -149,6 +147,7 @@ $(document).ready(function () {
         else {
             urlDomain = '../';
             localStorage.uuid = "7ef84f559ce02690";
+            userPref = [];
             userPref.Id = 193;
             onDeviceReady();
         }
@@ -160,6 +159,7 @@ $(document).ready(function () {
             }
 
             if (window.location.href.toString().indexOf('index.html') != -1) {
+                
                 var request = {
                     IMEI: localStorage.uuid
                 }
@@ -567,6 +567,9 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf('pref2.html') != -1) {
 
+            userPref = $.parseJSON(localStorage.userPref);
+            
+
             $("#burgerMenu").hide();
 
             document.getElementById("myonoffswitch-1").checked = userPref.ArticlePush;
@@ -602,6 +605,7 @@ $(document).ready(function () {
                 var photoBOOL1 = $('#myonoffswitch-3').is(':checked');
                 var photoTIME1 = $('#photoTime').val();
 
+                var uid = parseInt(localStorage.Id);
 
                 var request = {
                     articleBOOL: articleBOOL1,
@@ -609,7 +613,7 @@ $(document).ready(function () {
                     aroundBOOL: aroundBOOL1,
                     photoBOOL: photoBOOL1,
                     photoTIME: photoTIME1,
-                    userID: parseInt(localStorage.Id)
+                    userID: uid
                 }
 
                 updateUserPref(request);
@@ -703,6 +707,8 @@ $(document).ready(function () {
             var results = $.parseJSON(results.d);
 
             userPref = results;
+
+            localStorage.userPref = JSON.stringify(userPref);
 
             localStorage.Id = userPref.Id;
 
