@@ -659,6 +659,8 @@ $(document).ready(function () {
                 //cat = results;
 
                 //printCategories(results);
+
+                window.location.replace('article.html');
             }
 
             function errorUpdateUserPrefsCB(e) {
