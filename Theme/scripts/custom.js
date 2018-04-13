@@ -39,6 +39,11 @@ $(document).ready(function () {
 });
 
 function loadingTyper() {
+
+    if (window.location.href.toString().indexOf('article.html') == -1) {
+        return;
+    }
+
     showLoading();
 
 
@@ -54,6 +59,11 @@ function loadingTyper() {
 }
 
 function typeWriter() {
+
+    if (window.location.href.toString().indexOf('article.html') == -1) {
+        return;
+    }
+
     //writing chars of word
     if (iTW < txt.length) {
         $("#animationTitle").append(txt.charAt(iTW));
@@ -70,8 +80,14 @@ function typeWriter() {
 }
 
 function typeDelete() {
+
+    if (window.location.href.toString().indexOf('article.html') == -1) {
+        return;
+    }
+
     //delete word chars
     if (iTW != 0) {
+        
         var title = $("#animationTitle").html();
         $("#animationTitle").html(title.substring(0, iTW - 1));
         iTW--;

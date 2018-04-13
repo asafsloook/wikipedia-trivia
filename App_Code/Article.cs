@@ -176,7 +176,7 @@ public class Article
 
 
         var views = GetViews(title);
-        if (views == -1 || views < 50)
+        if (views == -1 || views < 25)
         {
             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }

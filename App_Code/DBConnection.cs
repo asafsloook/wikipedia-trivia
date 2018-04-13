@@ -39,7 +39,7 @@ public class DBConnection
 
         int categoryID = getCategoryId(categoryname);
 
-        string cStr = " insert into ReadingP (userId, ArticleId,ReadingTime,CategoryId) values( " + userID + " , '" + articleId + "' ,'" + date + "','" + categoryID + "') ";
+        string cStr = " insert into ReadingP (userId, ArticleId,ReadingTime,CategoryId) values( " + userID + " , '" + articleId + "' , '" + date + "' , " + categoryID +" ) ";
 
         cmd = new SqlCommand(cStr, con);             // create the command
 
@@ -87,7 +87,7 @@ public class DBConnection
         }
 
 
-        return true; 
+        return true;
     }
 
 
