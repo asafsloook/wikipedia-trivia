@@ -31,11 +31,11 @@ $(document).ready(function () {
         }, 1000);
     }
     if (window.location.href.toString().indexOf('article.html') != -1) {
-        
+
         loadingTyper();
 
     }
-    
+
 });
 
 function loadingTyper() {
@@ -87,7 +87,7 @@ function typeDelete() {
 
     //delete word chars
     if (iTW != 0) {
-        
+
         var title = $("#animationTitle").html();
         $("#animationTitle").html(title.substring(0, iTW - 1));
         iTW--;
@@ -111,7 +111,7 @@ function typeDelete() {
 $(document).ready(function () {
 
     function init_template() {//Class is vital to run AJAX Pages 
-        
+
 
         $(function () {
 
@@ -152,7 +152,6 @@ $(document).ready(function () {
         }, 0.01);
 
 
-
         urlDomain = "";
         if (window.location.href.toString().indexOf('http') == -1) {
 
@@ -175,7 +174,7 @@ $(document).ready(function () {
             }
 
             if (window.location.href.toString().indexOf('index.html') != -1) {
-                
+
                 var request = {
                     IMEI: localStorage.uuid
                 }
@@ -184,7 +183,6 @@ $(document).ready(function () {
             }
 
         }
-
 
 
         if (window.location.href.toString().indexOf('allphotos.html') != -1) {
@@ -584,7 +582,7 @@ $(document).ready(function () {
         if (window.location.href.toString().indexOf('pref2.html') != -1) {
 
             userPref = $.parseJSON(localStorage.userPref);
-            
+
 
             $("#burgerMenu").hide();
 
@@ -704,6 +702,14 @@ $(document).ready(function () {
             //checkUser2(request);
 
         }
+
+        if (window.location.href.toString().indexOf('aroundme.html') != -1) {
+
+
+        }
+
+
+
 
 
         function checkUser2(request) {
