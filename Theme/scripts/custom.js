@@ -704,12 +704,93 @@ $(document).ready(function () {
         }
 
         if (window.location.href.toString().indexOf('aroundme.html') != -1) {
+            
+            var lat = parseFloat(localStorage.lastLAT);
+            var lng = parseFloat(localStorage.lastLNG);
 
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center: new google.maps.LatLng(lat, lng),
+                mapTypeId: 'terrain'
+            });
+            
 
+            getMyPosition(); // activate it for the first time
+            h = setInterval(getMyPosition(), 5000); // run the getPosition every timeInterval
         }
 
 
+        function onSuccess(position) {
 
+            localStorage.lastLAT = position.coords.latitude.toString().substring(0, 10);
+            localStorage.lastLNG = position.coords.longitude.toString().substring(0, 10);
+
+
+            map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+
+            wiki();
+
+        }
+
+        function onError(error) {
+            alert('code: ' + error.code + '\n' +
+                'message: ' + error.message + '\n');
+        }
+
+        function getMyPosition() {
+            var options = {
+                enableHighAccuracy: true
+            };
+            navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+        }
+
+
+        function wiki() {
+            //wiki geo call
+            $.ajax({
+                url: 'https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord=' + localStorage.lastLAT + '%7C' + localStorage.lastLNG + '&gsradius=5000&gslimit=100&format=json',
+                dataType: "jsonp",
+                success: function (data) {
+                    var x = data;
+                    markers = [];
+
+                    for (var i = 0; i < data.query.geosearch.length; i++) {
+
+                        var lat = data.query.geosearch[i].lat;
+                        var lng = data.query.geosearch[i].lon;
+                        var dist = data.query.geosearch[i].dist;
+                        var pageid = data.query.geosearch[i].pageid;
+                        var title_ = data.query.geosearch[i].title;
+
+                        var latLng = new google.maps.LatLng(lat, lng);
+                        var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: title_
+                        });
+
+                        markers.push(marker);
+                    }
+
+                    for (var i = 0; i < markers.length; i++) {
+
+                        var title_ = data.query.geosearch[i].title;
+                        var contentString = '<h4>' + title_ + '</h4>';
+
+                        markers[i].infowindow = new google.maps.InfoWindow({
+                            content: contentString
+                        });
+                        google.maps.event.addListener(markers[i], 'click', function () {
+                            this.infowindow.open(map, this);
+                        });
+                    }
+                },
+                error: function (data) {
+                    var y = data;
+                }
+            });
+
+        }
 
 
         function checkUser2(request) {
