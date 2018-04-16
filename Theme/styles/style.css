@@ -90,7 +90,11 @@
     display: none;
 }
 
-
+#loading2 {
+    background-color: white;
+    height: 100%;
+    display: none;
+}
 
 
 
@@ -222,7 +226,7 @@
 /*article, allphotos, photo styles*/
 
 
-#title {
+#title,#aroundTitle {
     padding-bottom: 20px;
 }
 
@@ -235,7 +239,7 @@
     font-size: 30px;
 }
 
-#Photo, #ArticleImg {
+#Photo, #ArticleImg, #aroundPhoto {
     height: 230px;
     margin: 0 auto;
     padding-bottom: 20px;

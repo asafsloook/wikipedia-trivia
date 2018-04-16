@@ -43,7 +43,7 @@ $(document).ready(function () {
         getMyPosition();
     });
 
-    
+
 });
 
 function closeAllInfoWindows() {
@@ -74,7 +74,7 @@ function getMyPosition() {
     var options = {
         enableHighAccuracy: true,
         timeout: 5000,
-        maximumAge:10000
+        maximumAge: 10000
     };
     navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
 }
@@ -106,7 +106,8 @@ function wiki() {
                 var marker = new google.maps.Marker({
                     position: latLng,
                     map: map,
-                    title: title_
+                    title: title_,
+                    id: pageid
                 });
 
                 markers.push(marker);
@@ -115,10 +116,9 @@ function wiki() {
             for (var i = 0; i < markers.length; i++) {
 
                 var title_ = data.query.geosearch[i].title;
-                var pageid = data.query.geosearch[i].pageid;
-                
-                var contentString = '<h4><a href="#" class="locationMarker">' + title_+ '</a><h4>';
-                
+
+                var contentString = '<h4><a href="articlearound.html">' + title_ + '</a><h4>';
+
                 markers[i].infowindow = new google.maps.InfoWindow({
                     content: contentString
                 });
@@ -127,11 +127,13 @@ function wiki() {
 
                 google.maps.event.addListener(markers[i], 'click', function () {
 
+                    localStorage.lastPageid = this.id;
+                    localStorage.lastPageTitle = this.title;
+
                     closeAllInfoWindows();
 
                     this.infowindow.open(map, this);
                 });
-                
             }
         },
         error: function (data) {
@@ -148,7 +150,27 @@ function getArticleById(pageid) {
         url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&pageids=' + pageid,
         dataType: "jsonp",
         success: function (data) {
-            return data.query.pages[Object.keys(data.query.pages)[0]].extract
+            var x = data.query.pages[Object.keys(data.query.pages)[0]].extract;
+            $("#aroundContent").html(x);
+
+            getArticlePhoto(localStorage.lastPageTitle);
+
+        }
+    });
+}
+
+
+function getArticlePhoto(title) {
+    $.ajax({
+
+        url: 'https://en.wikipedia.org/w/api.php?action=query&format=json&generator=prefixsearch&gpssearch=' + title + '&gpslimit=1&prop=pageimages%7Cpageterms&piprop=thumbnail&pithumbsize=250&pilimit=10&redirects=&wbptterms=description',
+        dataType: "jsonp",
+        success: function (data) {
+            var x = data.query.pages[Object.keys(data.query.pages)[0]].thumbnail.source;
+            $("#aroundPhoto").attr("src", x);
+
+            $("#aroundTitle").html(localStorage.lastPageTitle);
+
         }
     });
 }
@@ -357,7 +379,7 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf("article.html") != -1) {
 
-            
+
             var request = {
                 userId: parseInt(localStorage.Id)
             }
@@ -422,9 +444,9 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf('photo.html') != -1) {
 
-            render();
-            
-            function render() {
+            renderPhoto();
+
+            function renderPhoto() {
 
                 var a1 = localStorage["PhotoUrl"];
                 var a2 = localStorage["PhotoDate"];
@@ -815,10 +837,9 @@ $(document).ready(function () {
             //checkUser2(request);
 
         }
-        
+
         if (window.location.href.toString().indexOf('aroundme.html') != -1) {
 
-            getMyPosition();
 
             var lat = parseFloat(localStorage.lastLAT);
             var lng = parseFloat(localStorage.lastLNG);
@@ -829,15 +850,23 @@ $(document).ready(function () {
                 mapTypeId: 'terrain'
             });
 
+            getMyPosition();
 
             $('#refreshLocationBTN').on('click', function () {
                 getMyPosition();
             });
 
-            $('a.locationMarker').on('click', function () {
-                alert("hi");
-            });
+
+
         }
+
+        if (window.location.href.toString().indexOf('articlearound.html') != -1) {
+
+
+            getArticleById(localStorage.lastPageid);
+
+        }
+
 
 
         function checkUser2(request) {
