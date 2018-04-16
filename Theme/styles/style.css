@@ -231,7 +231,7 @@
     margin: 0 auto;
 }
 
-#closeBTN, #refreshBTN {
+#closeBTN, #refreshBTN, #refreshLocationBTN{
     font-size: 30px;
 }
 

@@ -1,4 +1,5 @@
 
+
 function showLoading() {
     $("#loading").show();
     $('#page-content-scroll').hide();
@@ -21,6 +22,7 @@ function hideLoading() {
 
 
 $(document).ready(function () {
+
     if (window.location.href.toString().indexOf('index.html') != -1) {
 
         $('#splashLogo').fadeOut(1000);
@@ -30,13 +32,127 @@ $(document).ready(function () {
             $('#splashLogo').fadeIn(1000);
         }, 1000);
     }
+
     if (window.location.href.toString().indexOf('article.html') != -1) {
 
         loadingTyper();
 
     }
 
+    $("a[href$='aroundme.html']").on('click', function () {
+        getMyPosition();
+    });
+
+    
 });
+
+function closeAllInfoWindows() {
+    for (var i = 0; i < InfoWindows.length; i++) {
+        InfoWindows[i].close();
+    }
+}
+
+function onSuccess(position) {
+
+    localStorage.lastLAT = position.coords.latitude;
+    localStorage.lastLNG = position.coords.longitude;
+
+
+    map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+
+    wiki();
+
+}
+
+function onError(error) {
+    alert('code: ' + error.code + '\n' +
+        'message: ' + error.message + '\n');
+    getMyPosition();
+}
+
+function getMyPosition() {
+    var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge:10000
+    };
+    navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+}
+
+function wiki() {
+    //wiki geo call
+    $.ajax({
+
+        url: 'https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord='
+        + localStorage.lastLAT.toString().substring(0, 10) + '%7C'
+        + localStorage.lastLNG.toString().substring(0, 10)
+        + '&gsradius=5000&gslimit=100&format=json',
+
+        dataType: "jsonp",
+        success: function (data) {
+            var x = data;
+            markers = [];
+            InfoWindows = [];
+
+            for (var i = 0; i < data.query.geosearch.length; i++) {
+
+                var lat = data.query.geosearch[i].lat;
+                var lng = data.query.geosearch[i].lon;
+                var dist = data.query.geosearch[i].dist;
+                var pageid = data.query.geosearch[i].pageid;
+                var title_ = data.query.geosearch[i].title;
+
+                var latLng = new google.maps.LatLng(lat, lng);
+                var marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: title_
+                });
+
+                markers.push(marker);
+            }
+
+            for (var i = 0; i < markers.length; i++) {
+
+                var title_ = data.query.geosearch[i].title;
+                var pageid = data.query.geosearch[i].pageid;
+                
+                var contentString = '<h4><a href="#" class="locationMarker">' + title_+ '</a><h4>';
+                
+                markers[i].infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                InfoWindows.push(markers[i].infowindow);
+
+                google.maps.event.addListener(markers[i], 'click', function () {
+
+                    closeAllInfoWindows();
+
+                    this.infowindow.open(map, this);
+                });
+                
+            }
+        },
+        error: function (data) {
+            var y = data;
+        }
+    });
+
+}
+
+
+function getArticleById(pageid) {
+    $.ajax({
+
+        url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&pageids=' + pageid,
+        dataType: "jsonp",
+        success: function (data) {
+            return data.query.pages[Object.keys(data.query.pages)[0]].extract
+        }
+    });
+}
+
 
 function loadingTyper() {
 
@@ -241,8 +357,7 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf("article.html") != -1) {
 
-
-
+            
             var request = {
                 userId: parseInt(localStorage.Id)
             }
@@ -306,11 +421,9 @@ $(document).ready(function () {
         }
 
         if (window.location.href.toString().indexOf('photo.html') != -1) {
-            render();
-            $("#closeBTN").on('click', function () {
-                closeCLick = true;
-            });
 
+            render();
+            
             function render() {
 
                 var a1 = localStorage["PhotoUrl"];
@@ -702,9 +815,11 @@ $(document).ready(function () {
             //checkUser2(request);
 
         }
-
+        
         if (window.location.href.toString().indexOf('aroundme.html') != -1) {
-            
+
+            getMyPosition();
+
             var lat = parseFloat(localStorage.lastLAT);
             var lng = parseFloat(localStorage.lastLNG);
 
@@ -713,83 +828,15 @@ $(document).ready(function () {
                 center: new google.maps.LatLng(lat, lng),
                 mapTypeId: 'terrain'
             });
-            
-
-            getMyPosition(); // activate it for the first time
-            h = setInterval(getMyPosition(), 5000); // run the getPosition every timeInterval
-        }
 
 
-        function onSuccess(position) {
-
-            localStorage.lastLAT = position.coords.latitude.toString().substring(0, 10);
-            localStorage.lastLNG = position.coords.longitude.toString().substring(0, 10);
-
-
-            map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-
-            wiki();
-
-        }
-
-        function onError(error) {
-            alert('code: ' + error.code + '\n' +
-                'message: ' + error.message + '\n');
-        }
-
-        function getMyPosition() {
-            var options = {
-                enableHighAccuracy: true
-            };
-            navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
-        }
-
-
-        function wiki() {
-            //wiki geo call
-            $.ajax({
-                url: 'https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord=' + localStorage.lastLAT + '%7C' + localStorage.lastLNG + '&gsradius=5000&gslimit=100&format=json',
-                dataType: "jsonp",
-                success: function (data) {
-                    var x = data;
-                    markers = [];
-
-                    for (var i = 0; i < data.query.geosearch.length; i++) {
-
-                        var lat = data.query.geosearch[i].lat;
-                        var lng = data.query.geosearch[i].lon;
-                        var dist = data.query.geosearch[i].dist;
-                        var pageid = data.query.geosearch[i].pageid;
-                        var title_ = data.query.geosearch[i].title;
-
-                        var latLng = new google.maps.LatLng(lat, lng);
-                        var marker = new google.maps.Marker({
-                            position: latLng,
-                            map: map,
-                            title: title_
-                        });
-
-                        markers.push(marker);
-                    }
-
-                    for (var i = 0; i < markers.length; i++) {
-
-                        var title_ = data.query.geosearch[i].title;
-                        var contentString = '<h4>' + title_ + '</h4>';
-
-                        markers[i].infowindow = new google.maps.InfoWindow({
-                            content: contentString
-                        });
-                        google.maps.event.addListener(markers[i], 'click', function () {
-                            this.infowindow.open(map, this);
-                        });
-                    }
-                },
-                error: function (data) {
-                    var y = data;
-                }
+            $('#refreshLocationBTN').on('click', function () {
+                getMyPosition();
             });
 
+            $('a.locationMarker').on('click', function () {
+                alert("hi");
+            });
         }
 
 
