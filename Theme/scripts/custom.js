@@ -60,17 +60,18 @@ function onSuccess(position) {
 
     map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 
+    map.setZoom(14);
+
     wiki();
 
 }
 
 function onError(error) {
-    alert('code: ' + error.code + '\n' +
-        'message: ' + error.message + '\n');
-    getMyPosition();
+    alert("Please activate Location services and refresh the page");
 }
 
 function getMyPosition() {
+
     var options = {
         enableHighAccuracy: true,
         timeout: 5000,
@@ -318,6 +319,8 @@ $(document).ready(function () {
                 }
 
                 checkUser2(request);
+
+                navigator.geolocation.getCurrentPosition();
             }
 
         }
@@ -849,14 +852,13 @@ $(document).ready(function () {
                 center: new google.maps.LatLng(lat, lng),
                 mapTypeId: 'terrain'
             });
-
-            getMyPosition();
+            
 
             $('#refreshLocationBTN').on('click', function () {
                 getMyPosition();
             });
 
-
+            getMyPosition();
 
         }
 
