@@ -118,7 +118,16 @@ function wiki() {
 
                 var title_ = data.query.geosearch[i].title;
 
-                var contentString = '<h4><a href="articlearound.html">' + title_ + '</a><h4>';
+                //add space for long titles
+                if (title_.length > 19) {
+                    var temp = title_.split(" ");
+                    var mid = parseInt(temp.length / 2)+1;
+                    var space = "<br>";
+                    temp.splice(mid, 0, space);
+                    title_ = temp.join(" ");
+                }
+
+                var contentString = '<h5><a href="articlearound.html">' + title_ + '</a></h5><img class="infoWindowPic" id="' + markers[i].id + 'pic" />';
 
                 markers[i].infowindow = new google.maps.InfoWindow({
                     content: contentString
@@ -127,6 +136,8 @@ function wiki() {
                 InfoWindows.push(markers[i].infowindow);
 
                 google.maps.event.addListener(markers[i], 'click', function () {
+
+                    getArticlePhoto(this.title);
 
                     localStorage.lastPageid = this.id;
                     localStorage.lastPageTitle = this.title;
@@ -167,10 +178,18 @@ function getArticlePhoto(title) {
         url: 'https://en.wikipedia.org/w/api.php?action=query&format=json&generator=prefixsearch&gpssearch=' + title + '&gpslimit=1&prop=pageimages%7Cpageterms&piprop=thumbnail&pithumbsize=250&pilimit=10&redirects=&wbptterms=description',
         dataType: "jsonp",
         success: function (data) {
-            var x = data.query.pages[Object.keys(data.query.pages)[0]].thumbnail.source;
-            $("#aroundPhoto").attr("src", x);
 
-            $("#aroundTitle").html(localStorage.lastPageTitle);
+            var x = data.query.pages[Object.keys(data.query.pages)[0]].thumbnail.source;
+
+            if (window.location.href.toString().indexOf('articlearound.html') != -1) {
+                $("#aroundPhoto").attr("src", x);
+                $("#aroundTitle").html(localStorage.lastPageTitle);
+
+            }
+            else if (window.location.href.toString().indexOf('aroundme.html') != -1) {
+                var selector = "#" + localStorage.lastPageid + "pic";
+                $(selector).attr("src", x);
+            }
 
         }
     });
@@ -852,7 +871,7 @@ $(document).ready(function () {
                 center: new google.maps.LatLng(lat, lng),
                 mapTypeId: 'terrain'
             });
-            
+
 
             $('#refreshLocationBTN').on('click', function () {
                 getMyPosition();
