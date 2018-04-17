@@ -54,13 +54,20 @@ function closeAllInfoWindows() {
 
 function onSuccess(position) {
 
+    //location based
     localStorage.lastLAT = position.coords.latitude;
     localStorage.lastLNG = position.coords.longitude;
-
-
     map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 
-    map.setZoom(14);
+    //haifa
+    //localStorage.lastLAT = 32.814103;
+    //localStorage.lastLNG = 34.996188;
+    //map.setCenter(new google.maps.LatLng(32.814103, 34.996188));
+    
+    //nyc
+    //localStorage.lastLAT =  40.73152200000;
+    //localStorage.lastLNG = -73.99736000000;
+    //map.setCenter(new google.maps.LatLng(40.731522, -73.997360));
 
     wiki();
 
@@ -114,6 +121,20 @@ function wiki() {
                 markers.push(marker);
             }
 
+            
+            if (markers.length > 99) {
+                map.setZoom(16);
+            }
+            else if (markers.length > 50) {
+                map.setZoom(15);
+            }
+            else if (markers.length > 25) {
+                map.setZoom(14);
+            }
+            else {
+                map.setZoom(13);
+            }
+
             for (var i = 0; i < markers.length; i++) {
 
                 var title_ = data.query.geosearch[i].title;
@@ -127,7 +148,7 @@ function wiki() {
                     title_ = temp.join(" ");
                 }
 
-                var contentString = '<h5 style="text-align:center"><a href="articlearound.html">' + title_ + '</a></h5><img class="infoWindowPic" id="' + markers[i].id + 'pic" />';
+                var contentString = '<div><h5 style="text-align:center"><a href="articlearound.html">' + title_ + '</a></h5><img class="infoWindowPic" id="' + markers[i].id + 'pic" /></div>';
 
                 markers[i].infowindow = new google.maps.InfoWindow({
                     content: contentString
@@ -179,7 +200,13 @@ function getArticlePhoto(title) {
         dataType: "jsonp",
         success: function (data) {
 
-            var x = data.query.pages[Object.keys(data.query.pages)[0]].thumbnail.source;
+            try {
+                var x = data.query.pages[Object.keys(data.query.pages)[0]].thumbnail.source;
+            }
+            catch (err) {
+                
+            }
+            
 
             if (window.location.href.toString().indexOf('articlearound.html') != -1) {
                 $("#aroundPhoto").attr("src", x);
