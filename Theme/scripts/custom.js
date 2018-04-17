@@ -47,6 +47,11 @@ $(document).ready(function () {
 });
 
 function closeAllInfoWindows() {
+
+    if (InfoWindows == null) {
+        return;
+    }
+
     for (var i = 0; i < InfoWindows.length; i++) {
         InfoWindows[i].close();
     }
@@ -233,7 +238,7 @@ function loadingTyper() {
 
 
     txtCounter = 0;
-    txts = [' intersting', ' amazing', ' fascinating', ' impressive', ' delightful', ' striking', ' pleasing', ' lovely', ' refreshing', ' intriguing'];
+    txts = [' interesting', ' amazing', ' fascinating', ' impressive', ' delightful', ' striking', ' pleasing', ' lovely', ' refreshing', ' intriguing'];
 
     txt = txts[txtCounter];
     iTW = 0;
@@ -901,6 +906,7 @@ $(document).ready(function () {
 
 
             $('#refreshLocationBTN').on('click', function () {
+                closeAllInfoWindows();
                 getMyPosition();
             });
 
