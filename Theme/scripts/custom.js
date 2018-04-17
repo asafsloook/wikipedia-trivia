@@ -127,7 +127,7 @@ function wiki() {
                     title_ = temp.join(" ");
                 }
 
-                var contentString = '<h5><a href="articlearound.html">' + title_ + '</a></h5><img class="infoWindowPic" id="' + markers[i].id + 'pic" />';
+                var contentString = '<h5 style="text-align:center"><a href="articlearound.html">' + title_ + '</a></h5><img class="infoWindowPic" id="' + markers[i].id + 'pic" />';
 
                 markers[i].infowindow = new google.maps.InfoWindow({
                     content: contentString
