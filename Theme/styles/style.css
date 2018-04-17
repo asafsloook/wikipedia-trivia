@@ -1,7 +1,7 @@
 
 #locationBTN {
-    margin: 2% 35%;
-    top: 540px;
+    right: calc(50vw - (56px/2));
+    bottom: 2%;
     position: fixed;
     z-index: 999;
 }
@@ -10,7 +10,7 @@
 }
 
 #map {
-    height: 540px;
+    height: calc(100vh - 60px);
 }
 
 
