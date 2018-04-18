@@ -1,7 +1,7 @@
 
 
 function showLoading() {
-
+    
     $("#loading").show();
     $('#page-content-scroll').hide();
     $('.back-to-top-badge').hide();
@@ -11,7 +11,6 @@ function showLoading() {
 
 function hideLoading() {
     setTimeout(function () {
-        
         $("#loading").fadeOut();
         $("#refreshBTN").fadeIn();
         $('.back-to-top-badge').show();
@@ -26,20 +25,30 @@ $(document).ready(function () {
 
     if (window.location.href.toString().indexOf('index.html') != -1) {
 
-        $('#splashLogo').fadeOut(750);
-        $('#splashLogo').fadeIn(750);
+        $('#splashLogo').fadeOut(1000);
+        $('#splashLogo').fadeIn(1000);
+
         h = setInterval(function () {
-            $('#splashLogo').fadeOut(750);
-            $('#splashLogo').fadeIn(750);
-        }, 750);
+            $('#splashLogo').fadeOut(1000);
+            $('#splashLogo').fadeIn(1000);
+        }, 2000);
     }
-    
+
+    if (window.location.href.toString().indexOf('article.html') != -1) {
+
+        showLoading();
+
+        if (typeof typer === 'undefined' || !typer) {
+            loadingTyper();
+        }
+        
+
+    }
 
     $("a[href$='aroundme.html']").on('click', function () {
         getMyPosition();
     });
-
-
+    
 });
 
 
@@ -65,7 +74,7 @@ function onSuccess(position) {
     //localStorage.lastLAT = 32.814103;
     //localStorage.lastLNG = 34.996188;
     //map.setCenter(new google.maps.LatLng(32.814103, 34.996188));
-    
+
     //nyc
     //localStorage.lastLAT =  40.73152200000;
     //localStorage.lastLNG = -73.99736000000;
@@ -123,7 +132,7 @@ function wiki() {
                 markers.push(marker);
             }
 
-            
+
             if (markers.length > 99) {
                 map.setZoom(16);
             }
@@ -144,7 +153,7 @@ function wiki() {
                 //add space for long titles
                 if (title_.length > 19) {
                     var temp = title_.split(" ");
-                    var mid = parseInt(temp.length / 2)+1;
+                    var mid = parseInt(temp.length / 2) + 1;
                     var space = "<br>";
                     temp.splice(mid, 0, space);
                     title_ = temp.join(" ");
@@ -206,9 +215,9 @@ function getArticlePhoto(title) {
                 var x = data.query.pages[Object.keys(data.query.pages)[0]].thumbnail.source;
             }
             catch (err) {
-                
+
             }
-            
+
 
             if (window.location.href.toString().indexOf('articlearound.html') != -1) {
                 $("#aroundPhoto").attr("src", x);
@@ -228,15 +237,17 @@ function getArticlePhoto(title) {
 function loadingTyper() {
 
     if (window.location.href.toString().indexOf('article.html') == -1) {
+        typer = false;
         return;
     }
-    
+
     txtCounter = 0;
     txts = [' interesting', ' amazing', ' fascinating', ' impressive', ' delightful', ' striking', ' pleasing', ' lovely', ' refreshing', ' intriguing'];
 
     txt = txts[txtCounter];
     iTW = 0;
 
+    typer = true;
 
     typeWriter();
 
@@ -245,6 +256,7 @@ function loadingTyper() {
 function typeWriter() {
 
     if (window.location.href.toString().indexOf('article.html') == -1) {
+        typer = false;
         return;
     }
 
@@ -266,6 +278,7 @@ function typeWriter() {
 function typeDelete() {
 
     if (window.location.href.toString().indexOf('article.html') == -1) {
+        typer = false;
         return;
     }
 
@@ -427,22 +440,29 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf("article.html") != -1) {
 
+            showLoading();
+            if (typeof typer === 'undefined' || !typer) {
+                loadingTyper();
+            }
 
             var request = {
                 userId: parseInt(localStorage.Id)
             }
-
-
-            loadingTyper();
+            
             getArticle(request);
 
 
             $('.footer-menu-open').click(function () {
 
+                showLoading();
+                if (typeof typer === 'undefined' || !typer) {
+                    loadingTyper();
+                }
+
                 var request = {
                     userId: parseInt(localStorage.Id)
                 }
-
+                
                 getArticle(request);
 
             });
@@ -459,8 +479,7 @@ $(document).ready(function () {
                     dataType: 'json',                          // expecting JSON datatype from the server
                     contentType: 'application/json; charset = utf-8', // sent to the server
                     success: successArticlesCB,                // data.d id the Variable data contains the data we get from serverside
-                    error: errorArticlesCB,
-                    beforeSend: showLoading()
+                    error: errorArticlesCB
                 }); // end of ajax call
 
             }
@@ -879,7 +898,6 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf('index.html') != -1) {
 
-
             //testing localy (no deviceready event)
             //var request = {
             //    IMEI: localStorage.uuid
@@ -947,12 +965,13 @@ $(document).ready(function () {
             setTimeout(function () {
                 if (userPref.Categories == null || userPref.Categories.length == 0) {
                     window.location.replace("pref1.html");
+
                 }
                 else {
                     window.location.replace("article.html");
                 }
                 h = false;
-            }, 2000);
+            }, 3000);
         }
 
         function checkUserECB2(e) {
