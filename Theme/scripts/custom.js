@@ -1,6 +1,7 @@
 
 
 function showLoading() {
+    loadingTyper();
     $("#loading").show();
     $('#page-content-scroll').hide();
     $('.back-to-top-badge').hide();
@@ -32,12 +33,7 @@ $(document).ready(function () {
             $('#splashLogo').fadeIn(1000);
         }, 1000);
     }
-
-    if (window.location.href.toString().indexOf('article.html') != -1) {
-
-        loadingTyper();
-
-    }
+    
 
     $("a[href$='aroundme.html']").on('click', function () {
         getMyPosition();
@@ -233,10 +229,7 @@ function loadingTyper() {
     if (window.location.href.toString().indexOf('article.html') == -1) {
         return;
     }
-
-    showLoading();
-
-
+    
     txtCounter = 0;
     txts = [' interesting', ' amazing', ' fascinating', ' impressive', ' delightful', ' striking', ' pleasing', ' lovely', ' refreshing', ' intriguing'];
 
@@ -437,6 +430,7 @@ $(document).ready(function () {
             var request = {
                 userId: parseInt(localStorage.Id)
             }
+
 
             getArticle(request);
 
