@@ -37,6 +37,11 @@ $(document).ready(function () {
         }, 2000);
     }
 
+    if (window.location.href.toString().indexOf('article.html') != -1) {
+
+        showLoading();
+    }
+
     $("a[href$='aroundme.html']").on('click', function () {
         getMyPosition();
     });
