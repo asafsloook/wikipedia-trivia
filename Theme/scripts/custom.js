@@ -1,17 +1,17 @@
 
 
 function showLoading() {
-    loadingTyper();
+
     $("#loading").show();
     $('#page-content-scroll').hide();
     $('.back-to-top-badge').hide();
     $("#refreshBTN").hide();
     $("#burgerMenu").hide();
-
 }
 
 function hideLoading() {
     setTimeout(function () {
+        
         $("#loading").fadeOut();
         $("#refreshBTN").fadeIn();
         $('.back-to-top-badge').show();
@@ -26,12 +26,12 @@ $(document).ready(function () {
 
     if (window.location.href.toString().indexOf('index.html') != -1) {
 
-        $('#splashLogo').fadeOut(1000);
-        $('#splashLogo').fadeIn(1000);
+        $('#splashLogo').fadeOut(750);
+        $('#splashLogo').fadeIn(750);
         h = setInterval(function () {
-            $('#splashLogo').fadeOut(1000);
-            $('#splashLogo').fadeIn(1000);
-        }, 1000);
+            $('#splashLogo').fadeOut(750);
+            $('#splashLogo').fadeIn(750);
+        }, 750);
     }
     
 
@@ -41,6 +41,7 @@ $(document).ready(function () {
 
 
 });
+
 
 function closeAllInfoWindows() {
 
@@ -432,7 +433,9 @@ $(document).ready(function () {
             }
 
 
+            loadingTyper();
             getArticle(request);
+
 
             $('.footer-menu-open').click(function () {
 
@@ -949,7 +952,7 @@ $(document).ready(function () {
                     window.location.replace("article.html");
                 }
                 h = false;
-            }, 3000);
+            }, 2000);
         }
 
         function checkUserECB2(e) {
