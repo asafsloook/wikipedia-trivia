@@ -1,7 +1,7 @@
 
 
 function showLoading() {
-    
+
     $("#loading").show();
     $('#page-content-scroll').hide();
     $('.back-to-top-badge').hide();
@@ -17,6 +17,9 @@ function hideLoading() {
         $('#page-content-scroll').fadeIn();
         $('#page-content-scroll').scrollTop(0);
         $("#burgerMenu").show();
+
+        //stop typer thread
+        typer = false;
     }, 500)
 }
 
@@ -24,7 +27,7 @@ function hideLoading() {
 $(document).ready(function () {
 
     if (window.location.href.toString().indexOf('index.html') != -1) {
-
+        
         $('#splashLogo').fadeOut(1000);
         $('#splashLogo').fadeIn(1000);
 
@@ -34,21 +37,10 @@ $(document).ready(function () {
         }, 2000);
     }
 
-    if (window.location.href.toString().indexOf('article.html') != -1) {
-
-        showLoading();
-
-        if (typeof typer === 'undefined' || !typer) {
-            loadingTyper();
-        }
-        
-
-    }
-
     $("a[href$='aroundme.html']").on('click', function () {
         getMyPosition();
     });
-    
+
 });
 
 
@@ -235,16 +227,16 @@ function getArticlePhoto(title) {
 
 
 function loadingTyper() {
+    
+    $("#animationTitle").html("");
 
-    if (window.location.href.toString().indexOf('article.html') == -1) {
-        typer = false;
-        return;
-    }
-
-    txtCounter = 0;
+    
     txts = [' interesting', ' amazing', ' fascinating', ' impressive', ' delightful', ' striking', ' pleasing', ' lovely', ' refreshing', ' intriguing'];
-
+    var x = Math.floor(Math.random() * txts.length);
+    txtCounter = x;
+    
     txt = txts[txtCounter];
+
     iTW = 0;
 
     typer = true;
@@ -255,8 +247,7 @@ function loadingTyper() {
 
 function typeWriter() {
 
-    if (window.location.href.toString().indexOf('article.html') == -1) {
-        typer = false;
+    if (window.location.href.toString().indexOf('article.html') == -1 || !typer) {
         return;
     }
 
@@ -277,8 +268,7 @@ function typeWriter() {
 
 function typeDelete() {
 
-    if (window.location.href.toString().indexOf('article.html') == -1) {
-        typer = false;
+    if (window.location.href.toString().indexOf('article.html') == -1 || !typer) {
         return;
     }
 
@@ -441,28 +431,25 @@ $(document).ready(function () {
         if (window.location.href.toString().indexOf("article.html") != -1) {
 
             showLoading();
-            if (typeof typer === 'undefined' || !typer) {
-                loadingTyper();
-            }
+            loadingTyper();
+
 
             var request = {
                 userId: parseInt(localStorage.Id)
             }
-            
+
             getArticle(request);
 
 
             $('.footer-menu-open').click(function () {
 
                 showLoading();
-                if (typeof typer === 'undefined' || !typer) {
-                    loadingTyper();
-                }
+                loadingTyper();
 
                 var request = {
                     userId: parseInt(localStorage.Id)
                 }
-                
+
                 getArticle(request);
 
             });
@@ -502,6 +489,8 @@ $(document).ready(function () {
                 $("#articleContent").append("<b>Question:</b> " + results.NotificationContent + "<br><br>");
 
                 $("#articleContent").append(results.ArticleContent);
+
+                
                 hideLoading();
             }
 
