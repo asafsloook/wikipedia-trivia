@@ -27,14 +27,14 @@ function hideLoading() {
 $(document).ready(function () {
 
     if (window.location.href.toString().indexOf('index.html') != -1) {
+
         
-
         $('#splashLogo').fadeOut(1000);
         $('#splashLogo').fadeIn(1000);
-        $('#splashLogo').fadeOut(1000);
-        $('#splashLogo').fadeIn(1000);
-        $('#splashLogo').fadeOut(1000);
-
+        splashHandle = setInterval(function () {
+            $('#splashLogo').fadeOut(1000);
+            $('#splashLogo').fadeIn(1000);
+        }, 2000);
 
     }
 
@@ -965,7 +965,8 @@ $(document).ready(function () {
                 else {
                     window.location.replace("article.html");
                 }
-            }, 5000);
+                splashHandle = false;
+            }, 3000);
         }
 
         function checkUserECB2(e) {
