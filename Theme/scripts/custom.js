@@ -34,8 +34,7 @@ $(document).ready(function () {
         $('#splashLogo').fadeOut(1000);
         $('#splashLogo').fadeIn(1000);
         $('#splashLogo').fadeOut(1000);
-        $('#splashLogo').fadeIn(1000);
-        $('#splashLogo').fadeOut(1000);
+
 
     }
 
