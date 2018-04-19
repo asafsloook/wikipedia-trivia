@@ -28,13 +28,15 @@ $(document).ready(function () {
 
     if (window.location.href.toString().indexOf('index.html') != -1) {
         
+
         $('#splashLogo').fadeOut(1000);
         $('#splashLogo').fadeIn(1000);
+        $('#splashLogo').fadeOut(1000);
+        $('#splashLogo').fadeIn(1000);
+        $('#splashLogo').fadeOut(1000);
+        $('#splashLogo').fadeIn(1000);
+        $('#splashLogo').fadeOut(1000);
 
-        h = setInterval(function () {
-            $('#splashLogo').fadeOut(1000);
-            $('#splashLogo').fadeIn(1000);
-        }, 2000);
     }
 
     if (window.location.href.toString().indexOf('article.html') != -1) {
@@ -232,14 +234,14 @@ function getArticlePhoto(title) {
 
 
 function loadingTyper() {
-    
+
     $("#animationTitle").html("");
 
-    
+
     txts = [' interesting', ' amazing', ' fascinating', ' impressive', ' delightful', ' striking', ' pleasing', ' lovely', ' refreshing', ' intriguing'];
     var x = Math.floor(Math.random() * txts.length);
     txtCounter = x;
-    
+
     txt = txts[txtCounter];
 
     iTW = 0;
@@ -495,7 +497,7 @@ $(document).ready(function () {
 
                 $("#articleContent").append(results.ArticleContent);
 
-                
+
                 hideLoading();
             }
 
@@ -625,7 +627,7 @@ $(document).ready(function () {
             $('#addBTN').on('click', function () {
 
                 if ($("#tags").val().trim() == "") {
-                    alert("null");
+                    alert("Please choose a category");
                     return;
                 }
 
@@ -652,7 +654,7 @@ $(document).ready(function () {
 
 
                 if ($("#selects").val().trim() == "") {
-                    alert("null");
+                    alert("Please choose a category");
                     return;
                 }
 
@@ -964,8 +966,7 @@ $(document).ready(function () {
                 else {
                     window.location.replace("article.html");
                 }
-                h = false;
-            }, 3000);
+            }, 5000);
         }
 
         function checkUserECB2(e) {
