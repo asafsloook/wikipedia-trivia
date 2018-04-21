@@ -41,25 +41,20 @@ $(document).ready(function () {
         showLoading();
     }
 
-    $("a[href$='aroundme.html']").on('click', function () {
-        getMyPosition();
-    });
-
 });
 
 
 function closeAllInfoWindows() {
 
-    if (typeof InfoWindows != 'undefined') {
-        return;
-    }
-
-    for (var i = 0; i < InfoWindows.length; i++) {
-        InfoWindows[i].close();
+    if (typeof InfoWindows !== 'undefined') {
+        for (var i = 0; i < InfoWindows.length; i++) {
+            InfoWindows[i].close();
+        }
     }
 }
 
 function onSuccess(position) {
+    
 
     //location based
     localStorage.lastLAT = position.coords.latitude;
@@ -94,17 +89,16 @@ function getMyPosition() {
     navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
 }
 
-function clearMarkers() {
+function clearAll() {
     if (typeof markers !== 'undefined') {
-        for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(null);
-        }
+        while (markers.length) { markers.pop().setMap(null); }
+        markers.length = 0;
     }
 }
 
 function wiki() {
 
-    clearMarkers();
+    clearAll();
 
     //wiki geo call
     $.ajax({
@@ -133,7 +127,9 @@ function wiki() {
                     position: latLng,
                     map: map,
                     title: title_,
-                    id: pageid
+                    id: pageid,
+                    optimized: false,
+                    clickable: true
                 });
 
                 markers.push(marker);
@@ -946,9 +942,7 @@ $(document).ready(function () {
                 getNewWiki();
             });
 
-
             getMyPosition();
-
         }
 
         if (window.location.href.toString().indexOf('articlearound.html') != -1) {
