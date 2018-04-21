@@ -7,11 +7,20 @@ margin:0 auto
 }
 
 #locationBTN {
-    right: calc(50vw - (56px/2));
+    /*right: calc(50vw - (56px/2));*/
+    left: calc(55vw);
     bottom: 2%;
     position: fixed;
     z-index: 999;
 }
+
+#refreshLocationBTN {
+    right: calc(55vw);
+    bottom: 2%;
+    position: fixed;
+    z-index: 999;
+}
+
 .infoWindowPic {
     max-height: 100px;
 }
@@ -249,7 +258,7 @@ margin:0 auto
     margin: 0 auto;
 }
 
-#closeBTN, #refreshBTN, #refreshLocationBTN {
+#closeBTN, #refreshBTN, #refreshLocationBTN1, #refreshLocationBTN2 {
     font-size: 30px;
 }
 

@@ -28,13 +28,11 @@ $(document).ready(function () {
 
     if (window.location.href.toString().indexOf('index.html') != -1) {
 
-        
-        $('#splashLogo').fadeIn(1000);
-        $('#splashLogo').fadeOut(1000);
+
+        $('#splashLogo').fadeOut(700).fadeIn(700);
         splashHandle = setInterval(function () {
-            $('#splashLogo').fadeIn(1000);
-            $('#splashLogo').fadeOut(1000);
-        }, 2000);
+            $('#splashLogo').fadeOut(700).fadeIn(700);
+        }, 1400);
 
     }
 
@@ -966,7 +964,7 @@ $(document).ready(function () {
                     window.location.replace("article.html");
                 }
                 splashHandle = false;
-            }, 3000);
+            }, 3500);
         }
 
         function checkUserECB2(e) {
