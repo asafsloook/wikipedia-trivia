@@ -50,7 +50,7 @@ $(document).ready(function () {
 
 function closeAllInfoWindows() {
 
-    if (InfoWindows == null) {
+    if (typeof InfoWindows != 'undefined') {
         return;
     }
 
@@ -94,7 +94,18 @@ function getMyPosition() {
     navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
 }
 
+function clearMarkers() {
+    if (typeof markers !== 'undefined') {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+    }
+}
+
 function wiki() {
+
+    clearMarkers();
+
     //wiki geo call
     $.ajax({
 
@@ -181,6 +192,17 @@ function wiki() {
         }
     });
 
+}
+
+
+function getNewWiki() {
+
+    var c = map.getCenter();
+
+    localStorage.lastLAT = c.lat();
+    localStorage.lastLNG = c.lng();
+
+    wiki();
 }
 
 
@@ -913,10 +935,17 @@ $(document).ready(function () {
             });
 
 
-            $('#refreshLocationBTN').on('click', function () {
+            $('#myLocationBTN').on('click', function () {
                 closeAllInfoWindows();
                 getMyPosition();
             });
+
+
+            $('#newLocationBTN').on('click', function () {
+                closeAllInfoWindows();
+                getNewWiki();
+            });
+
 
             getMyPosition();
 

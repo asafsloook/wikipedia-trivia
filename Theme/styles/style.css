@@ -6,19 +6,21 @@ margin:0 auto
     
 }
 
-#locationBTN {
+#newLocationBTN {
     /*right: calc(50vw - (56px/2));*/
     left: calc(55vw);
     bottom: 2%;
     position: fixed;
     z-index: 999;
+    max-width: 60px;
 }
 
-#refreshLocationBTN {
+#myLocationBTN {
     right: calc(55vw);
     bottom: 2%;
     position: fixed;
     z-index: 999;
+    max-width: 60px;
 }
 
 .infoWindowPic {
