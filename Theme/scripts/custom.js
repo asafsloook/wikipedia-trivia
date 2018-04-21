@@ -29,11 +29,11 @@ $(document).ready(function () {
     if (window.location.href.toString().indexOf('index.html') != -1) {
 
         
-        $('#splashLogo').fadeOut(1000);
         $('#splashLogo').fadeIn(1000);
+        $('#splashLogo').fadeOut(1000);
         splashHandle = setInterval(function () {
-            $('#splashLogo').fadeOut(1000);
             $('#splashLogo').fadeIn(1000);
+            $('#splashLogo').fadeOut(1000);
         }, 2000);
 
     }
