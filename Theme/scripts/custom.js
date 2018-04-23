@@ -54,7 +54,7 @@ function closeAllInfoWindows() {
 }
 
 function onSuccess(position) {
-    
+
 
     //location based
     localStorage.lastLAT = position.coords.latitude;
@@ -106,7 +106,7 @@ function wiki() {
         url: 'https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord='
         + localStorage.lastLAT.toString().substring(0, 10) + '%7C'
         + localStorage.lastLNG.toString().substring(0, 10)
-        + '&gsradius=5000&gslimit=100&format=json',
+        + '&gsradius=5000&gslimit=500&format=json',
 
         dataType: "jsonp",
         success: function (data) {
@@ -135,18 +135,20 @@ function wiki() {
                 markers.push(marker);
             }
 
-
-            if (markers.length > 99) {
+            if (markers.length > 400) {
                 map.setZoom(16);
             }
-            else if (markers.length > 50) {
+            else if (markers.length > 300) {
                 map.setZoom(15);
             }
-            else if (markers.length > 25) {
+            else if (markers.length > 200) {
                 map.setZoom(14);
             }
-            else {
+            else if (markers.length > 100) {
                 map.setZoom(13);
+            }
+            else {
+                map.setZoom(12);
             }
 
             for (var i = 0; i < markers.length; i++) {
