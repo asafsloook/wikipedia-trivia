@@ -44,91 +44,91 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKr_zZ9DFMiysm4BXKu0Olsww6eBlcup0&libraries=geometry,places"></script>
 
-</head >
+</head>
 
-                <body>
-                    <div id="page-transitions">
+<body>
+    <div id="page-transitions">
 
-                        <div class="page-preloader page-preloader-dark">
-                            <div class="loader loader-frames"><i></i><i></i><i></i><i></i></div>
-                        </div>
+        <div class="page-preloader page-preloader-dark">
+            <div class="loader loader-frames"><i></i><i></i><i></i><i></i></div>
+        </div>
 
-                        <div class="header header-light header-full">
-                            <a id="burgerMenu" href="#" class="header-icon header-icon-1 open-left-sidebar"><i class="fa fa-navicon"></i></a>
-                            <!--<a href="#" class="scale-hover"></a>-->
-                    <img id="logo" src="images/logo.png" />
-                            <!--</a>-->
-                    <!--<a href="#" class="header-icon header-icon-4 open-right-sidebar"><i class="fa fa-envelope-o"></i></a>-->
+        <div class="header header-light header-full">
+            <a id="burgerMenu" href="#" class="header-icon header-icon-1 open-left-sidebar"><i class="fa fa-navicon"></i></a>
+            <!--<a href="#" class="scale-hover"></a>-->
+            <img id="logo" src="images/logo.png" />
+            <!--</a>-->
+            <!--<a href="#" class="header-icon header-icon-4 open-right-sidebar"><i class="fa fa-envelope-o"></i></a>-->
+        </div>
+
+        <div id="page-content" class="page-content header-clear-full">
+            <div id="page-content-scroll">
+
+
+                <div class="content" style="padding:0;margin:0;">
+
+                    <input id="pac-input" class="controls" type="text" placeholder="Search Places">
+
+                    <div id="map"></div>
+
                 </div>
 
-                    <div id="page-content" class="page-content header-clear-full">
-                        <div id="page-content-scroll">
+
+            </div>
+        </div>
+
+        <div class="sidebar-left sidebar-light">
+            <div class="sidebar-scroll">
+                <div class="sidebar-header sidebar-header-background">
+                    <h1>Grasp</h1>
+                    <h2>Knowladge is Power</h2>
+                    <img class="sidebar-logo-image preload-image" data-original="images/preload-logo.png">
+                    <div class="sidebar-header-controls">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-phone"></i></a>
+                        <a href="#"><i class="fa fa-envelope"></i></a>
+                        <a href="#" class="close-sidebar"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="sidebar-divider">Navigation</div>
+                <div class="sidebar-menu">
+                    <a class="menu-item" href="article.html">
+                        <i class="bg-red-dark fa fa-exclamation"></i>Random Article<i class="fa fa-circle"></i>
+                    </a>
+                    <a class="menu-item" href="allphotos.html">
+                        <i class="bg-red-dark fa fa-camera"></i>Photos<i class="fa fa-circle"></i>
+                    </a>
+                    <a class="menu-item" href="pref1.html">
+                        <i class="bg-red-dark fa fa-cog"></i>Preferences<i class="fa fa-circle"></i>
+                    </a>
+                    <a class="menu-item" href="aroundme.html">
+                        <i class="bg-red-dark fa fa-map"></i>Around Me<i class="fa fa-circle"></i>
+                    </a>
+                    <a class="close-sidebar menu-item" href="#">
+                        <i class="bg-red-dark fa fa-times"></i>Close<i class="fa fa-circle"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
 
 
-                            <div class="content" style="padding:0;margin:0;">
+        <div class="footer-menu-controls light-footer-menu">
+            <a id="newLocationBTN" href="#" class="footer-menu-open"><i id="refreshLocationBTN1" class="material-icons bg-blue-dark">refresh</i></a>
+            <!--<a href="#" class="footer-menu-close remove-menu"><i class="fa fa-times bg-red-dark"></i><em>Close</em></a>-->
+            <a id="myLocationBTN" href="#" class="footer-menu-open"><i id="refreshLocationBTN2" class="material-icons bg-blue-dark">location_on</i></a>
 
-                                <input id="pac-input" class="controls" type="text" placeholder="Search Places">
+        </div>
 
-                                    <div id="map"></div>
+        <div class="footer-menu-controls light-footer-menu">
+            <!--<a href="allphotos.html" class="footer-menu-open"><i id="closeBTN" class="material-icons bg-blue-dark">close</i></a>-->
+            <a href="#" class="footer-menu-close remove-menu"><i class="fa fa-times bg-red-dark"></i><em>Close</em></a>
+        </div>
+        <div class="footer-menu-tap-close remove-menu"></div>
+        <div class="footer-menu-background light-footer-background remove-menu"></div>
 
-                        </div>
+        <div class="sidebar-tap-close"></div>
+        <a href="#" class="back-to-top-badge"><i class="fa fa-caret-up"></i>Back to Top</a>
 
-
-                            </div>
-                        </div>
-
-                        <div class="sidebar-left sidebar-light">
-                            <div class="sidebar-scroll">
-                                <div class="sidebar-header sidebar-header-background">
-                                    <h1>Materialise</h1>
-                                    <h2>Material at it's finest</h2>
-                                    <img class="sidebar-logo-image preload-image" data-original="images/preload-logo.png">
-                                        <div class="sidebar-header-controls">
-                                            <a href="#"><i class="fa fa-facebook"></i></a>
-                                            <a href="#"><i class="fa fa-twitter"></i></a>
-                                            <a href="#"><i class="fa fa-phone"></i></a>
-                                            <a href="#"><i class="fa fa-envelope"></i></a>
-                                            <a href="#" class="close-sidebar"><i class="fa fa-times"></i></a>
-                                        </div>
-                        </div>
-                                    <div class="sidebar-divider">Navigation</div>
-                                    <div class="sidebar-menu">
-                                        <a class="menu-item" href="article.html">
-                                            <i class="bg-red-dark fa fa-star-o"></i>Random Article<i class="fa fa-circle"></i>
-                                        </a>
-                                        <a class="menu-item" href="allphotos.html">
-                                            <i class="bg-red-dark fa fa-star-o"></i>Photos<i class="fa fa-circle"></i>
-                                        </a>
-                                        <a class="menu-item" href="pref1.html">
-                                            <i class="bg-red-dark fa fa-star-o"></i>Preferences<i class="fa fa-circle"></i>
-                                        </a>
-                                        <a class="menu-item" href="aroundme.html">
-                                            <i class="bg-red-dark fa fa-star-o"></i>Around Me<i class="fa fa-circle"></i>
-                                        </a>
-                                        <a class="close-sidebar menu-item" href="#">
-                                            <i class="bg-red-dark fa fa-times"></i>Close<i class="fa fa-circle"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="footer-menu-controls light-footer-menu">
-                                <a id="newLocationBTN" href="#" class="footer-menu-open"><i id="refreshLocationBTN1" class="material-icons bg-blue-dark">refresh</i></a>
-                                <!--<a href="#" class="footer-menu-close remove-menu"><i class="fa fa-times bg-red-dark"></i><em>Close</em></a>-->
-                    <a id="myLocationBTN" href="#" class="footer-menu-open"><i id="refreshLocationBTN2" class="material-icons bg-blue-dark">location_on</i></a>
-
-                            </div>
-
-                            <div class="footer-menu-controls light-footer-menu">
-                                <!--<a href="allphotos.html" class="footer-menu-open"><i id="closeBTN" class="material-icons bg-blue-dark">close</i></a>-->
-                    <a href="#" class="footer-menu-close remove-menu"><i class="fa fa-times bg-red-dark"></i><em>Close</em></a>
-                            </div>
-                            <div class="footer-menu-tap-close remove-menu"></div>
-                            <div class="footer-menu-background light-footer-background remove-menu"></div>
-
-                            <div class="sidebar-tap-close"></div>
-                            <a href="#" class="back-to-top-badge"><i class="fa fa-caret-up"></i>Back to Top</a>
-
-                        </div>
+    </div>
 </body>

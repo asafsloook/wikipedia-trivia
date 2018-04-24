@@ -1,3 +1,13 @@
+/*menu*/
+
+
+.sidebar-menu a i:first-child {
+    background-color: #2980b9 !important;
+}
+
+
+/* maps*/
+
 #pac-input {
     background-color: #fff !important;
     font-family: Roboto !important;
