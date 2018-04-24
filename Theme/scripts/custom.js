@@ -184,6 +184,12 @@ function wiki() {
 
                     this.infowindow.open(map, this);
                 });
+                
+            }
+            if (typeof fromSearchBox !== 'undefined' && fromSearchBox) {
+                fromSearchBox = null;
+                new google.maps.event.trigger(markers[0], 'click');
+
             }
         },
         error: function (data) {
@@ -212,8 +218,17 @@ function getArticleById(pageid) {
         dataType: "jsonp",
         success: function (data) {
             var x = data.query.pages[Object.keys(data.query.pages)[0]].extract;
-            $("#aroundContent").html(x);
 
+            filtersIDS = ['References', 'Gallery', 'See_also', 'Sources', 'Notes','External_links'];
+
+            for (var i = 0; i < filtersIDS.length; i++) {
+
+                if (x.indexOf('<h2><span id="' + filtersIDS[i]+'">') != -1) {
+                    x = x.substring(0, x.indexOf('<h2><span id="' + filtersIDS[i] +'">'));
+                }
+            }
+            $("#aroundContent").html(x);
+            
             getArticlePhoto(localStorage.lastPageTitle);
 
         }
@@ -998,6 +1013,9 @@ $(document).ready(function () {
                     }
                 });
                 map.fitBounds(bounds);
+
+
+                fromSearchBox = true;
                 getNewWiki();
             });
         }
