@@ -15,6 +15,12 @@ using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 using System.Text;
 
+using java.io;
+using java.util;
+using edu.stanford.nlp.ling;
+using edu.stanford.nlp.tagger.maxent;
+using Console = System.Console;
+
 /// <summary>
 /// Summary description for Article
 /// </summary>
@@ -58,7 +64,7 @@ public class Article
 
     }
     
-    
+
     /// <summary>
     /// Main feature, random article from desired root category. 
     /// Important: recursing and may be slow sometimes. (10-20secs)
@@ -66,7 +72,6 @@ public class Article
     /// 
     public Article RandomPageFromCategory(string categoryTitle, string rootCategoryTitle, string userID)
     {
-
         ////log test
         //StringBuilder sb = new StringBuilder();
 
@@ -311,18 +316,74 @@ public class Article
             }
         }
 
+
+
+        while (content.StartsWith("\n"))
+        {
+            content = content.Replace("\n", "");
+        }
+
+
         content = content.Replace("&amp;", "&");
 
         string qContent = content;
+
+        //
+
+        Regex rxParenthesis = new Regex(@"(?<=\()(?:[^()]+|\([^)]+\))+(?=\))");
+
+        var parenthesis = rxParenthesis.Matches(qContent);
+
+        string parenthesisStr = "";
+
+        try
+        {
+            for (int i = 0; i < parenthesis.Count; i++)
+            {
+                parenthesisStr = parenthesis[i].Value;
+                qContent = qContent.Remove(qContent.IndexOf(parenthesisStr), parenthesisStr.Length);
+            }
+
+        }
+        catch (Exception)
+        {
+
+        }
+
+
+
+        parenthesis = rxParenthesis.Matches(content);
+        parenthesisStr = "";
+
+        try
+        {
+            for (int i = 0; i < parenthesis.Count; i++)
+            {
+                parenthesisStr = parenthesis[i].Value;
+                content = content.Remove(content.IndexOf(parenthesisStr), parenthesisStr.Length);
+            }
+
+        }
+        catch (Exception)
+        {
+
+        }
 
         //if (!qContent.StartsWith("The") || !qContent.StartsWith(title))
         //{
         //    ph.Text += "NOT A QUESTION";
         //}
 
-        var startStr = firstOccurence(qContent, new List<string> { " concerns ", " gained ", " occurs ", " as it is ", " were ", " crashed ", " is ", " involved ", " refer(s) ", " establishes ", " gives ", " states ", " premiered ", " began ", " represent ", " are ", " was ", " started ", " appears ", " became ", " contains ", " encompasses ", " attracted ", " accounts ", " presents ", " involves ", " shows ", " describes ", " consists ", " refer ", " refers ", " has ", " have ", " had ", " provides ", " exist ", " exists ", " includes ", " include ", " included " });
+        //var startStr = firstOccurence(qContent, new List<string> { " concerns ", " gained ", " occurs ", " as it is ", " were ", " crashed ", " is ", " involved ", " refer(s) ", " establishes ", " gives ", " states ", " premiered ", " began ", " represent ", " are ", " was ", " started ", " appears ", " became ", " contains ", " encompasses ", " attracted ", " accounts ", " presents ", " involves ", " shows ", " describes ", " consists ", " refer ", " refers ", " has ", " have ", " had ", " provides ", " exist ", " exists ", " includes ", " include ", " included " });
+        
 
-        int startIndex = qContent.IndexOf(startStr);
+
+        var startStr = getFirstVerb(qContent);
+
+
+        
+
+        int startIndex = qContent.IndexOf(" "+startStr+" ");
 
         if (startStr == " were " || startStr == " as it is ")
         {
@@ -444,48 +505,7 @@ public class Article
         }
 
 
-        //
-        Regex rxParenthesis = new Regex(@"(?<=\()(?:[^()]+|\([^)]+\))+(?=\))");
-
-        var parenthesis = rxParenthesis.Matches(tempContent);
-
-        string parenthesisStr = "";
-
-        try
-        {
-            for (int i = 0; i < parenthesis.Count; i++)
-            {
-                parenthesisStr = parenthesis[i].Value;
-                tempContent = tempContent.Remove(tempContent.IndexOf(parenthesisStr), parenthesisStr.Length);
-            }
-
-        }
-        catch (Exception)
-        {
-
-        }
-
-
-
-        parenthesis = rxParenthesis.Matches(content);
-        parenthesisStr = "";
-
-        try
-        {
-            for (int i = 0; i < parenthesis.Count; i++)
-            {
-                parenthesisStr = parenthesis[i].Value;
-                content = content.Remove(content.IndexOf(parenthesisStr), parenthesisStr.Length);
-            }
-
-        }
-        catch (Exception)
-        {
-
-        }
-
-
-
+        
 
         while (tempContent.IndexOf("(") != -1)
         {
@@ -535,6 +555,40 @@ public class Article
 
 
     }
+
+
+
+    public string getFirstVerb(string sentence)
+    {
+
+        var model = "wsj-0-18-bidirectional-nodistsim.tagger";
+
+        // Loading POS Tagger
+        var tagger = new MaxentTagger(model);
+
+        // Text for tagging
+        var text = sentence;
+
+        var sentences = MaxentTagger.tokenizeText(new java.io.StringReader(text)).toArray();
+        foreach (ArrayList sentence1 in sentences)
+        {
+            var taggedSentence = tagger.tagSentence(sentence1);
+
+            var arr = taggedSentence.toArray();
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                var temp = arr[i].ToString().Split('/');
+                if (temp[1].StartsWith("V"))
+                {
+                    return temp[0];
+                }
+            }
+
+        }
+        return "";
+    }
+
 
     private List<string> FirstSentenceByRegex(string tempContent)
     {
@@ -1371,7 +1425,7 @@ public class Article
 
         JObject root = JObject.Parse(ResponseText);
 
-        Random rnd = new Random();
+        System.Random rnd = new System.Random();
         int randomNum = rnd.Next(0, 99);
 
         var article = root["query"]["search"].ElementAt(randomNum);

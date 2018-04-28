@@ -333,7 +333,31 @@ function typeDelete() {
     return;
 }
 
+function findAns() {
 
+    //get claims, like P279 -> Q198763
+    //https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&titles=Tanga%20(clothing)
+
+
+
+    //search for same P279 -> Q198763
+    //var endpointUrl = 'https://query.wikidata.org/sparql',
+    //    sparqlQuery = "SELECT ?A WHERE {\n" +
+    //        "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
+    //        "  ?A wdt:P279 wd:Q198763.\n" +
+    //        "}\n" +
+    //        "LIMIT 100",
+    //    settings = {
+    //        headers: { Accept: 'application/sparql-results+json' },
+    //        data: { query: sparqlQuery }
+    //    };
+
+    //$.ajax(endpointUrl, settings).then(function (data) {
+    //    $('body').append(($('<pre>').text(JSON.stringify(data))));
+    //    console.log(data);
+    //});
+    
+}
 
 $(document).ready(function () {
 
@@ -530,6 +554,7 @@ $(document).ready(function () {
 
                 $("#articleContent").append(results.ArticleContent);
 
+                findAns();
 
                 hideLoading();
             }
