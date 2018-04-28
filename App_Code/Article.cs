@@ -63,7 +63,7 @@ public class Article
         //RandomPageFromCategory(c.Name, c.Name);
 
     }
-    
+
 
     /// <summary>
     /// Main feature, random article from desired root category. 
@@ -89,7 +89,7 @@ public class Article
             ResponseURI = response.ResponseUri.ToString();
         }
         string articleTitle = ResponseURI.Replace("https://en.wikipedia.org/wiki/", "");
-        
+
 
         string ResponseText;
         HttpWebRequest myRequest2 =
@@ -105,7 +105,7 @@ public class Article
         JObject root = JObject.Parse(ResponseText);
 
         var dig = root["query"]["pages"].First.First;
-        
+
 
         try
         {
@@ -134,7 +134,7 @@ public class Article
             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
 
-        
+
         //check for issues with article   
         string ResponseText5;
         HttpWebRequest myRequest5 =
@@ -214,7 +214,7 @@ public class Article
 
         Category c1 = new Category();
         c1.Name = rootCategoryTitle;
-        
+
         Category = c1;
         Title = title.Replace("_", " ");
         ArticleContent = content;
@@ -234,14 +234,14 @@ public class Article
         DBConnection db = new DBConnection();
         return db.getUserCategoriesByImei(userId);
     }
-    
+
 
     public string getPhotoForArticle(string title)
     {
 
         string ResponseText;
         HttpWebRequest myRequest =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&format=json&generator=prefixsearch&gpssearch="+title+"&gpslimit=1&prop=pageimages%7Cpageterms&piprop=thumbnail&pithumbsize=250&pilimit=10&redirects=&wbptterms=description"); //
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&format=json&generator=prefixsearch&gpssearch=" + title + "&gpslimit=1&prop=pageimages%7Cpageterms&piprop=thumbnail&pithumbsize=250&pilimit=10&redirects=&wbptterms=description"); //
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -254,9 +254,9 @@ public class Article
         try
         {
 
-        JObject root = JObject.Parse(ResponseText);
+            JObject root = JObject.Parse(ResponseText);
 
-        image = root["query"]["pages"].First.First["thumbnail"]["source"].ToString();
+            image = root["query"]["pages"].First.First["thumbnail"]["source"].ToString();
         }
         catch (Exception)
         {
@@ -326,6 +326,18 @@ public class Article
 
         content = content.Replace("&amp;", "&");
 
+
+        if (content.Contains(title))
+        {
+            content = content.Substring(content.IndexOf(title) + title.Length);
+        }
+        else if (content.Contains(title.ToLower()))
+        {
+            content = content.Substring(content.IndexOf(title.ToLower()) + title.Length);
+        }
+        //
+
+
         string qContent = content;
 
         //
@@ -375,15 +387,15 @@ public class Article
         //}
 
         //var startStr = firstOccurence(qContent, new List<string> { " concerns ", " gained ", " occurs ", " as it is ", " were ", " crashed ", " is ", " involved ", " refer(s) ", " establishes ", " gives ", " states ", " premiered ", " began ", " represent ", " are ", " was ", " started ", " appears ", " became ", " contains ", " encompasses ", " attracted ", " accounts ", " presents ", " involves ", " shows ", " describes ", " consists ", " refer ", " refers ", " has ", " have ", " had ", " provides ", " exist ", " exists ", " includes ", " include ", " included " });
-        
+
 
 
         var startStr = getFirstVerb(qContent);
 
 
-        
 
-        int startIndex = qContent.IndexOf(" "+startStr+" ");
+
+        int startIndex = qContent.IndexOf(" " + startStr + " ");
 
         if (startStr == " were " || startStr == " as it is ")
         {
@@ -505,7 +517,7 @@ public class Article
         }
 
 
-        
+
 
         while (tempContent.IndexOf("(") != -1)
         {
@@ -1360,7 +1372,7 @@ public class Article
         catch (Exception)
         {
             return null;
-          }
+        }
     }
 
 
@@ -1480,7 +1492,7 @@ public class Article
     //}
     //ph.Text += DESCquestion;
     #endregion
-        
+
     #region isPerson, isAnimal, isEvent tests
     //if (isPerson(title))
     //{
