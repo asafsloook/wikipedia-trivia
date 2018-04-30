@@ -19,7 +19,6 @@ using java.io;
 using java.util;
 using edu.stanford.nlp.ling;
 using edu.stanford.nlp.tagger.maxent;
-using Console = System.Console;
 
 /// <summary>
 /// Summary description for Article
@@ -93,7 +92,7 @@ public class Article
 
         string ResponseText;
         HttpWebRequest myRequest2 =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle); //
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + "GANEFO");
         using (HttpWebResponse response = (HttpWebResponse)myRequest2.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -175,9 +174,14 @@ public class Article
 
         if (test)
         {
-            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
+            //return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
 
+
+        if (content.Contains("may refer to:"))
+        {
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
+        }
 
 
         var views = GetViews(title);
@@ -268,6 +272,8 @@ public class Article
 
     private string renderNotification(string content, string title, string rootCategoryTitle)
     {
+        title = title.Replace("_", " ");
+
         var isQuestion = "";
 
         if (content.Contains("<p><span></span></p>"))
@@ -279,42 +285,35 @@ public class Article
 
         //content = content.Replace(".<", ". <"); //(<([^>]+)>)
 
-
-        content = content.Substring(0, content.IndexOf("</p>"));
-
-
-
-        //if (qContent.Length < 100)
-        //{
-        //    qContent = content.Substring(content.IndexOf("</p>"));
-        //}
-
+        
+        content = Regex.Replace(content, @"<[b>]*>[^>]+<[\/b>]*>", String.Empty);
+        
 
         content = Regex.Replace(content, @"<[^>]*>", String.Empty);
 
         //content = Regex.Replace(content, @"\n", " ");
 
 
-        if (content.StartsWith("There") || content.StartsWith("Among"))
-        {
-            isQuestion = "sentence";
-        }
+        //if (content.StartsWith("There ") || content.StartsWith("Among "))
+        //{
+        //    isQuestion = "sentence";
+        //}
 
-        if (content.StartsWith("The"))
-        {
-            if (content.ToLower().StartsWith("the " + title.ToLower().Replace("_", " ")))
-            {
+        //if (content.StartsWith("The "))
+        //{
+        //    if (content.ToLower().StartsWith("the " + title.ToLower().Replace("_", " ")))
+        //    {
 
-            }
-            else if (content.ToLower().StartsWith(title.ToLower().Replace("_", " ")))
-            {
+        //    }
+        //    else if (content.ToLower().StartsWith(title.ToLower().Replace("_", " ")))
+        //    {
 
-            }
-            else
-            {
-                isQuestion = "sentence";
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        isQuestion = "sentence";
+        //    }
+        //}
 
 
 
@@ -327,15 +326,33 @@ public class Article
         content = content.Replace("&amp;", "&");
 
 
-        if (content.Contains(title))
-        {
-            content = content.Substring(content.IndexOf(title) + title.Length);
-        }
-        else if (content.Contains(title.ToLower()))
-        {
-            content = content.Substring(content.IndexOf(title.ToLower()) + title.Length);
-        }
-        //
+        ////remove all content before the title mention (including)
+        //if (content.Contains(title))
+        //{
+        //    content = content.Substring(content.IndexOf(title) + title.Length);
+        //}
+        //else if (content.Contains(title.ToLower()))
+        //{
+        //    content = content.Substring(content.IndexOf(title.ToLower()) + title.Length);
+        //}
+        //else
+        //{
+        //    var titleSplit = title.Split(' ');
+        //    foreach (string word in titleSplit)
+        //    {
+        //        if (content.Contains(word))
+        //        {
+        //            content = content.Substring(content.IndexOf(word) + word.Length);
+        //            break;
+        //        }
+        //        else if (content.Contains(word.ToLower()))
+        //        {
+        //            content = content.Substring(content.IndexOf(word.ToLower()) + word.Length);
+        //            break;
+        //        }
+        //    }
+        //}
+        ////
 
 
         string qContent = content;
@@ -572,8 +589,9 @@ public class Article
 
     public string getFirstVerb(string sentence)
     {
+        var dir = HttpContext.Current.Server.MapPath("~/");
 
-        var model = "wsj-0-18-bidirectional-nodistsim.tagger";
+        var model = dir + "wsj-0-18-bidirectional-nodistsim.tagger";
 
         // Loading POS Tagger
         var tagger = new MaxentTagger(model);
@@ -593,6 +611,16 @@ public class Article
                 var temp = arr[i].ToString().Split('/');
                 if (temp[1].StartsWith("V"))
                 {
+
+                    var titleSplit = title.Split(' ');
+                    foreach (string word in titleSplit)
+                    {
+                        if (word == temp[0])
+                        {
+                            break;
+                        }
+                    }
+
                     return temp[0];
                 }
             }
