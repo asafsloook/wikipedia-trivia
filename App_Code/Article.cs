@@ -92,7 +92,7 @@ public class Article
 
         string ResponseText;
         HttpWebRequest myRequest2 =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + "GANEFO");
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle);
         using (HttpWebResponse response = (HttpWebResponse)myRequest2.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -174,7 +174,7 @@ public class Article
 
         if (test)
         {
-            //return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
 
 
@@ -286,11 +286,6 @@ public class Article
         //content = content.Replace(".<", ". <"); //(<([^>]+)>)
 
         
-        content = Regex.Replace(content, @"<[b>]*>[^>]+<[\/b>]*>", String.Empty);
-        
-
-        content = Regex.Replace(content, @"<[^>]*>", String.Empty);
-
         //content = Regex.Replace(content, @"\n", " ");
 
 
@@ -355,48 +350,20 @@ public class Article
         ////
 
 
-        string qContent = content;
+        
 
         //
 
-        Regex rxParenthesis = new Regex(@"(?<=\()(?:[^()]+|\([^)]+\))+(?=\))");
+        content = removeParenthesis(content);
 
-        var parenthesis = rxParenthesis.Matches(qContent);
-
-        string parenthesisStr = "";
-
-        try
-        {
-            for (int i = 0; i < parenthesis.Count; i++)
-            {
-                parenthesisStr = parenthesis[i].Value;
-                qContent = qContent.Remove(qContent.IndexOf(parenthesisStr), parenthesisStr.Length);
-            }
-
-        }
-        catch (Exception)
-        {
-
-        }
+        string qContent = content;
 
 
+        content = Regex.Replace(content, @"<[^>]*>", String.Empty);
 
-        parenthesis = rxParenthesis.Matches(content);
-        parenthesisStr = "";
-
-        try
-        {
-            for (int i = 0; i < parenthesis.Count; i++)
-            {
-                parenthesisStr = parenthesis[i].Value;
-                content = content.Remove(content.IndexOf(parenthesisStr), parenthesisStr.Length);
-            }
-
-        }
-        catch (Exception)
-        {
-
-        }
+        
+        qContent = Regex.Replace(qContent, @"<[b>]*>[^>]+<[\/b>]*>", String.Empty);
+        qContent = Regex.Replace(qContent, @"<[^>]*>", String.Empty);
 
         //if (!qContent.StartsWith("The") || !qContent.StartsWith(title))
         //{
@@ -536,27 +503,14 @@ public class Article
 
 
 
-        while (tempContent.IndexOf("(") != -1)
-        {
-            tempContent = tempContent.Remove(tempContent.IndexOf("(") - 1, (tempContent.IndexOf(")")) - (tempContent.IndexOf("(") - 2));
-        }
-
-
-        while (content.IndexOf("(") != -1)
-        {
-            content = content.Remove(content.IndexOf("(") - 1, (content.IndexOf(")")) - (content.IndexOf("(") - 2));
-        }
+       
 
 
         if (isQuestion != "sentence")
         {
             isQuestion = qWord + tempContent + born + "?";
 
-            if (isQuestion.Length > 150)
-            {
-
-            }
-            else
+            if (isQuestion.Length <= 150)
             {
                 return isQuestion;
             }
@@ -585,7 +539,40 @@ public class Article
 
     }
 
+    private string removeParenthesis(string content)
+    {
+        Regex rxParenthesis = new Regex(@"(?<=\()(?:[^()]+|\([^)]+\))+(?=\))");
 
+        var parenthesis = rxParenthesis.Matches(content);
+
+        string parenthesisStr = "";
+
+        try
+        {
+            for (int i = 0; i < parenthesis.Count; i++)
+            {
+                parenthesisStr = parenthesis[i].Value;
+
+                if (parenthesisStr.Length > 2)
+                {
+                    content = content.Remove(content.IndexOf(parenthesisStr), parenthesisStr.Length);
+                }
+
+            }
+
+        }
+        catch (Exception)
+        {
+
+        }
+
+        while (content.IndexOf("(") != -1)
+        {
+            content = content.Remove(content.IndexOf("(") - 1, (content.IndexOf(")")) - (content.IndexOf("(") - 2));
+        }
+
+        return content;
+    }
 
     public string getFirstVerb(string sentence)
     {
