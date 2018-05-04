@@ -184,7 +184,7 @@ function wiki() {
 
                     this.infowindow.open(map, this);
                 });
-                
+
             }
             if (typeof fromSearchBox !== 'undefined' && fromSearchBox) {
                 fromSearchBox = null;
@@ -219,16 +219,16 @@ function getArticleById(pageid) {
         success: function (data) {
             var x = data.query.pages[Object.keys(data.query.pages)[0]].extract;
 
-            filtersIDS = ['References', 'Gallery', 'See_also', 'Sources', 'Notes','External_links'];
+            filtersIDS = ['References', 'Gallery', 'See_also', 'Sources', 'Notes', 'External_links'];
 
             for (var i = 0; i < filtersIDS.length; i++) {
 
-                if (x.indexOf('<h2><span id="' + filtersIDS[i]+'">') != -1) {
-                    x = x.substring(0, x.indexOf('<h2><span id="' + filtersIDS[i] +'">'));
+                if (x.indexOf('<h2><span id="' + filtersIDS[i] + '">') != -1) {
+                    x = x.substring(0, x.indexOf('<h2><span id="' + filtersIDS[i] + '">'));
                 }
             }
             $("#aroundContent").html(x);
-            
+
             getArticlePhoto(localStorage.lastPageTitle);
 
         }
@@ -332,31 +332,69 @@ function typeDelete() {
     }
     return;
 }
+findAns();
+function findAns(title) {
 
-function findAns() {
+    //get claims, like P31 -> Q214070
 
-    //get claims, like P279 -> Q198763
-    //https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&titles=Tanga%20(clothing)
+    $.ajax({
+
+        url: 'https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&titles=' + title,
+        dataType: "jsonp",
+        success: function (data) {
+
+            try {
+
+                //p279
+                var x = data.entities[Object.keys(data.entities)[0]].claims.P279[0].mainsnak.datavalue.value.id;
 
 
+            }
+            catch (e) {
+                try {
+                    //P31 - instance of
+                    var x = data.entities[Object.keys(data.entities)[0]].claims.P31[0].mainsnak.datavalue.value.id;
 
-    //search for same P279 -> Q198763
-    //var endpointUrl = 'https://query.wikidata.org/sparql',
-    //    sparqlQuery = "SELECT ?A WHERE {\n" +
-    //        "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
-    //        "  ?A wdt:P279 wd:Q198763.\n" +
-    //        "}\n" +
-    //        "LIMIT 100",
-    //    settings = {
-    //        headers: { Accept: 'application/sparql-results+json' },
-    //        data: { query: sparqlQuery }
-    //    };
+                    //if Q5 (human) then P39(position held) else go to P106(occupation)
+                    if (x == "Q5") {
 
-    //$.ajax(endpointUrl, settings).then(function (data) {
-    //    $('body').append(($('<pre>').text(JSON.stringify(data))));
-    //    console.log(data);
-    //});
-    
+                    }
+                    else {
+
+                    }
+
+                } catch (e) {
+
+                }
+            }
+
+            var query = [];
+            query.P = "P31";
+            query.Q = "Q123";
+
+            return query;
+        }
+    });
+
+}
+
+function findAnsCon(query){
+    //search for same P31 -> Q214070
+    var endpointUrl = 'https://query.wikidata.org/sparql',
+        sparqlQuery = "SELECT ?A WHERE {\n" +
+            "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
+            "  ?A wdt:" + query.P + " wd:" + query.Q + ".\n" +
+            "}\n" +
+            "LIMIT 100",
+        settings = {
+            headers: { Accept: 'application/sparql-results+json' },
+            data: { query: sparqlQuery }
+        };
+
+    $.ajax(endpointUrl, settings).then(function (data) {
+        var a = JSON.stringify(data);
+        console.log(a);
+    });
 }
 
 $(document).ready(function () {
@@ -415,6 +453,7 @@ $(document).ready(function () {
             localStorage.uuid = "7ef84f559ce02690";
             userPref = [];
             userPref.Id = 193;
+            localStorage.Id = 193;
             onDeviceReady();
         }
 
@@ -553,8 +592,6 @@ $(document).ready(function () {
                 $("#articleContent").append("<b>Question:</b> " + results.NotificationContent + "<br><br>");
 
                 $("#articleContent").append(results.ArticleContent);
-
-                findAns();
 
                 hideLoading();
             }
@@ -994,7 +1031,7 @@ $(document).ready(function () {
             else {
                 getNewWiki();
             }
-            
+
         }
 
         if (window.location.href.toString().indexOf('articlearound.html') != -1) {
@@ -1006,7 +1043,7 @@ $(document).ready(function () {
         }
 
         function initAutocomplete() {
-            
+
 
             // Create the search box and link it to the UI element.
             var input = document.getElementById('pac-input');
@@ -1017,7 +1054,7 @@ $(document).ready(function () {
             map.addListener('bounds_changed', function () {
                 searchBox.setBounds(map.getBounds());
             });
-            
+
             // Listen for the event fired when the user selects a prediction and jump to it
             searchBox.addListener('places_changed', function () {
                 var places = searchBox.getPlaces();
@@ -1025,11 +1062,11 @@ $(document).ready(function () {
                 if (places.length == 0) {
                     return;
                 }
-                
+
                 // For each place, get the icon, name and location.
                 var bounds = new google.maps.LatLngBounds();
                 places.forEach(function (place) {
-                    
+
                     if (place.geometry.viewport) {
                         // Only geocodes have viewport.
                         bounds.union(place.geometry.viewport);
