@@ -332,7 +332,7 @@ function typeDelete() {
     }
     return;
 }
-findAns();
+
 function findAns(title) {
 
     //get claims, like P31 -> Q214070
@@ -342,43 +342,73 @@ function findAns(title) {
         url: 'https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&titles=' + title,
         dataType: "jsonp",
         success: function (data) {
-
+            var wikidataID = "";
             try {
+                wikidataID = data.entities[Object.keys(data.entities)[0]].id;
+                var allClaims = data.entities[Object.keys(data.entities)[0]].claims;
 
-                //p279
-                var x = data.entities[Object.keys(data.entities)[0]].claims.P279[0].mainsnak.datavalue.value.id;
+                //P279
+                var x = allClaims.P279[0].mainsnak.datavalue.value.id;
 
+                var query = [];
+                query.P = "P279";
+                query.Q = x;
 
+                findAnsCon(query, title, wikidataID);
             }
             catch (e) {
                 try {
                     //P31 - instance of
-                    var x = data.entities[Object.keys(data.entities)[0]].claims.P31[0].mainsnak.datavalue.value.id;
+                    var x = allClaims.P31[0].mainsnak.datavalue.value.id;
 
-                    //if Q5 (human) then P39(position held) else go to P106(occupation)
+                    //if Q5 (human) try P39(position held) else go to P106(occupation)
                     if (x == "Q5") {
+                        try {
 
+                            //P39
+                            var x = allClaims.P39[0].mainsnak.datavalue.value.id;
+
+                            var query = [];
+                            query.P = "P39";
+                            query.Q = x;
+
+                            findAnsCon(query, title, wikidataID);
+
+                        } catch (e) {
+                            try {
+
+                                //P106
+                                var x = allClaims.P106[0].mainsnak.datavalue.value.id;
+
+                                var query = [];
+                                query.P = "P106";
+                                query.Q = x;
+
+                                findAnsCon(query, title, wikidataID);
+                            } catch (e) {
+
+                                alert("no p39 and p106 in person, get other p :)");
+                            }
+                        }
                     }
                     else {
+                        var query = [];
+                        query.P = "P31";
+                        query.Q = x;
 
+                        findAnsCon(query, title, wikidataID);
                     }
 
                 } catch (e) {
 
                 }
             }
-
-            var query = [];
-            query.P = "P31";
-            query.Q = "Q123";
-
-            return query;
         }
     });
 
 }
 
-function findAnsCon(query){
+function findAnsCon(query, title, wikidataID) {
     //search for same P31 -> Q214070
     var endpointUrl = 'https://query.wikidata.org/sparql',
         sparqlQuery = "SELECT ?A WHERE {\n" +
@@ -392,8 +422,60 @@ function findAnsCon(query){
         };
 
     $.ajax(endpointUrl, settings).then(function (data) {
-        var a = JSON.stringify(data);
-        console.log(a);
+        var answers = [];
+        var results = data.results.bindings;
+
+        answers.push(wikidataID);
+
+        while (answers.length != 4) {
+            
+            var item = results[Math.floor(Math.random() * results.length)].A.value.replace("http://www.wikidata.org/entity/", "");
+
+            if (answers.indexOf(item) == -1) {
+                answers.push(item);
+            }
+            
+        }
+
+        translate(answers);
+    });
+}
+
+function translate(answers) {
+
+    var url_ = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=labels&ids=";
+
+    for (var i = 0; i < 4; i++) {
+        url_ += answers[i];
+
+        if (i != 3) {
+            url_ += "|";
+        }
+    }
+
+    $.ajax({
+
+        url: url_,
+        dataType: "jsonp",
+        success: function (data) {
+
+            var x = data.entities;
+
+            stringAnswers = [];
+
+            console.log("-------------");
+            for (var i = 0; i < 4; i++) {
+
+                var item = x[answers[i]].labels.en.value;
+
+                if (stringAnswers.indexOf(item) == -1) {
+                    stringAnswers.push(item);
+                }
+                
+                console.log(item);
+            }
+            console.log("-------------");
+        }
     });
 }
 
@@ -594,6 +676,8 @@ $(document).ready(function () {
                 $("#articleContent").append(results.ArticleContent);
 
                 hideLoading();
+
+                findAns(results.Title);
             }
 
             function errorArticlesCB(e) {
