@@ -1,5 +1,31 @@
-/*menu*/
+#answers label {
+    text-align: center;
+    border: 1px black solid;
+    width: 80%;
+    margin: 5% auto;
+    padding: 2%;
+}
 
+#answers {
+    text-align: center;
+    margin-top: 10%;
+}
+
+#question {
+    text-align: center;
+    padding: 10%;
+    margin-top: 60px;
+    padding-top:15%;
+}
+
+#questionDiv {
+    background-color: white;
+    height: 100%;
+    z-index: 999;
+    display: none;
+}
+
+/*menu*/
 
 .sidebar-menu a i:first-child {
     background-color: #2980b9 !important;

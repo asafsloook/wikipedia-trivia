@@ -24,6 +24,16 @@ function hideLoading() {
 }
 
 
+function hideLoadingQuest() {
+        $("#loading").hide();
+        $('#page-content-scroll').show();
+        $('#page-content-scroll').scrollTop(0);
+
+        //stop typer thread
+        typer = false;
+}
+
+
 $(document).ready(function () {
 
     if (window.location.href.toString().indexOf('index.html') != -1) {
@@ -403,7 +413,8 @@ function findAns(title) {
 
                 }
             }
-        }
+        },
+        error: hideLoading()
     });
 
 }
@@ -427,14 +438,14 @@ function findAnsCon(query, title, wikidataID) {
 
         answers.push(wikidataID);
 
-        while (answers.length != 4) {
-            
+        while (answers.length != 4 || results.length != answers.length) {
+
             var item = results[Math.floor(Math.random() * results.length)].A.value.replace("http://www.wikidata.org/entity/", "");
 
             if (answers.indexOf(item) == -1) {
                 answers.push(item);
             }
-            
+
         }
 
         translate(answers);
@@ -445,7 +456,7 @@ function translate(answers) {
 
     var url_ = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=labels&ids=";
 
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < answers.length; i++) {
         url_ += answers[i];
 
         if (i != 3) {
@@ -464,20 +475,72 @@ function translate(answers) {
             stringAnswers = [];
 
             console.log("-------------");
-            for (var i = 0; i < 4; i++) {
+            for (var i = 0; i < answers.length; i++) {
 
                 var item = x[answers[i]].labels.en.value;
 
                 if (stringAnswers.indexOf(item) == -1) {
                     stringAnswers.push(item);
                 }
-                
+
                 console.log(item);
             }
             console.log("-------------");
+
+            if (typeof Question !== 'undefined') {
+                showQuestion();
+            }
+            else {
+                hideLoading();
+            }
         }
     });
 }
+
+function showQuestion() {
+    //stringAnswers //Question
+    $('#question').append('<h5>' + Question + '<h5>');
+    Question = undefined;
+
+    //scrambble answers
+    stringAnswers = shuffle(stringAnswers);
+
+    for (var i = 0; i < stringAnswers.length; i++) {
+        $('#answers').append('<label>' + stringAnswers[i] + '</label>');
+    }
+
+    $('#answers label').on('click', function () {
+        console.log(this);
+    });
+
+    $('#questionDiv').show();
+    hideLoadingQuest();
+}
+
+
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+}
+
+
+
+
 
 $(document).ready(function () {
 
@@ -671,12 +734,15 @@ $(document).ready(function () {
                 $("#articleContent").empty();
                 $("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
 
+                //check if notification is question
+                if (results.NotificationContent.indexOf('?') == results.NotificationContent.length - 1) {
+                    Question = results.NotificationContent;
+                }
+
                 $("#articleContent").append("<b>Question:</b> " + results.NotificationContent + "<br><br>");
 
                 $("#articleContent").append(results.ArticleContent);
-
-                hideLoading();
-
+                
                 findAns(results.Title);
             }
 
