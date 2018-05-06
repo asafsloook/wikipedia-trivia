@@ -95,7 +95,7 @@ public class Article
 
         string ResponseText;
         HttpWebRequest myRequest2 =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + "Charles Fourier");
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle);
         using (HttpWebResponse response = (HttpWebResponse)myRequest2.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
