@@ -25,12 +25,14 @@ function hideLoading() {
 
 
 function hideLoadingQuest() {
-        $("#loading").hide();
-        $('#page-content-scroll').show();
-        $('#page-content-scroll').scrollTop(0);
+    $("#loading").hide();
+    $("#refreshBTN").hide();
+    $("#burgerMenu").hide();
+    $('#page-content-scroll').show();
+    $('#page-content-scroll').scrollTop(0);
 
-        //stop typer thread
-        typer = false;
+    //stop typer thread
+    typer = false;
 }
 
 
@@ -438,7 +440,7 @@ function findAnsCon(query, title, wikidataID) {
 
         answers.push(wikidataID);
 
-        while (answers.length != 4 || results.length != answers.length) {
+        while (answers.length != results.length + 1 && answers.length != 4) {
 
             var item = results[Math.floor(Math.random() * results.length)].A.value.replace("http://www.wikidata.org/entity/", "");
 
@@ -510,7 +512,16 @@ function showQuestion() {
     }
 
     $('#answers label').on('click', function () {
-        console.log(this);
+
+        var choose = $(this).html();
+        var correct = $("#title").html();
+
+        if (choose == correct) {
+            $(this).css("background-color", "green");
+        }
+        else {
+            $(this).css("background-color","red");
+        }
     });
 
     $('#questionDiv').show();
@@ -732,17 +743,17 @@ $(document).ready(function () {
 
                 //results.ArticleContent
                 $("#articleContent").empty();
-                $("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
+                //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
 
                 //check if notification is question
                 if (results.NotificationContent.indexOf('?') == results.NotificationContent.length - 1) {
                     Question = results.NotificationContent;
                 }
 
-                $("#articleContent").append("<b>Question:</b> " + results.NotificationContent + "<br><br>");
+                //$("#articleContent").append("<b>Question:</b> " + results.NotificationContent + "<br><br>");
 
                 $("#articleContent").append(results.ArticleContent);
-                
+
                 findAns(results.Title);
             }
 
