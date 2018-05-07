@@ -74,6 +74,7 @@ public class Article
     /// 
     public Article RandomPageFromCategory(string categoryTitle, string rootCategoryTitle, string userID)
     {
+
         ////log test
         //StringBuilder sb = new StringBuilder();
 
@@ -238,6 +239,7 @@ public class Article
         PhotoUrl = getPhotoForArticle(title);
 
         return this;
+            
 
     }
 

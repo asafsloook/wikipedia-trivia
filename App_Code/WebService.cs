@@ -15,6 +15,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 using System.Web.Script.Services;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Summary description for WebService
@@ -56,21 +57,53 @@ public class WebService : System.Web.Services.WebService
 
         Article a1 = new Article();
         var categoriesList = a1.getCatByImei(userID);
-        
+
         Random rnd = new Random();
-        
+
         int randomNum = rnd.Next(0, categoriesList.Count());
         var a = categoriesList[randomNum].ToString();
-        
-        a1 = a1.RandomPageFromCategory(a,a, userID);
+
+        //while (a1.ArticleId == null)
+        //{
+
+        //    try
+        //    {
+        //        bool Completed = ExecuteWithTimeLimit(TimeSpan.FromMilliseconds(10000), () =>
+        //        {
+        //
+        a1 = a1.RandomPageFromCategory(a, a, userID);
+        // 
+        //    });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        continue;
+        //    }
+        //}
+
 
         Reading r = new Reading();
         r.insert(userID, a1.ArticleId, DateTime.Now.ToString(), a.ToString());
-        
+
         JavaScriptSerializer js = new JavaScriptSerializer();
 
         string jsonString = js.Serialize(a1);
         return jsonString;
+    }
+
+
+    public static bool ExecuteWithTimeLimit(TimeSpan timeSpan, Action codeBlock)
+    {
+        try
+        {
+            Task task = Task.Factory.StartNew(() => codeBlock());
+            task.Wait(timeSpan);
+            return task.IsCompleted;
+        }
+        catch (AggregateException ae)
+        {
+            throw ae.InnerExceptions[0];
+        }
     }
 
 
@@ -88,7 +121,7 @@ public class WebService : System.Web.Services.WebService
         string jsonString = js.Serialize(a);
         return jsonString;
     }
-    
+
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
@@ -113,7 +146,7 @@ public class WebService : System.Web.Services.WebService
 
         User u1 = new User();
         var a = u1.checkUser(IMEI);
-        
+
         JavaScriptSerializer js = new JavaScriptSerializer();
 
         string jsonString = js.Serialize(a);
@@ -128,7 +161,7 @@ public class WebService : System.Web.Services.WebService
         var a = arr;
 
         Category c = new Category();
-        c.updateCategories(arr,IMEI);
+        c.updateCategories(arr, IMEI);
 
         //JavaScriptSerializer js = new JavaScriptSerializer();
 
@@ -138,19 +171,19 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public void UpdateUserPrefs(string articleBOOL,string articleQUAN, string aroundBOOL, string photoBOOL, string photoTIME, int userID)
+    public void UpdateUserPrefs(string articleBOOL, string articleQUAN, string aroundBOOL, string photoBOOL, string photoTIME, int userID)
     {
         User u = new User();
         u.ArticlePush = Convert.ToBoolean(articleBOOL);
         u.ArticlesPerDay = Convert.ToInt32(articleQUAN);
         u.LocationPush = Convert.ToBoolean(aroundBOOL);
         u.PhotoPush = Convert.ToBoolean(photoBOOL);
-        u.PhotoPushTime = Convert.ToDateTime(photoTIME+":00");
+        u.PhotoPushTime = Convert.ToDateTime(photoTIME + ":00");
         u.Id = userID;
         u.updatePrefs();
     }
-    
-    
+
+
 
     /////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////
@@ -239,7 +272,7 @@ public class WebService : System.Web.Services.WebService
         }
         catch (Exception)
         {
-             RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
             return;
         }
 

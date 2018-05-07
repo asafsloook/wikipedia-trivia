@@ -25,11 +25,9 @@ function hideLoading() {
 
 
 function hideLoadingQuest() {
-    $("#loading").hide();
-    $("#refreshBTN").hide();
-    $("#burgerMenu").hide();
-    $('#page-content-scroll').show();
-    $('#page-content-scroll').scrollTop(0);
+    
+    $('#questionDiv').show();
+    $("#loading").fadeOut();
 
     //stop typer thread
     typer = false;
@@ -415,8 +413,7 @@ function findAns(title) {
 
                 }
             }
-        },
-        error: hideLoading()
+        }
     });
 
 }
@@ -435,19 +432,19 @@ function findAnsCon(query, title, wikidataID) {
         };
 
     $.ajax(endpointUrl, settings).then(function (data) {
-        var answers = [];
+        answers = [];
         var results = data.results.bindings;
 
         answers.push(wikidataID);
+        
+        for (var i = 0; i < results.length; i++) {
 
-        while (answers.length != results.length + 1 && answers.length != 4) {
-
-            var item = results[Math.floor(Math.random() * results.length)].A.value.replace("http://www.wikidata.org/entity/", "");
+            var item = results[i].A.value.replace("http://www.wikidata.org/entity/", "");
 
             if (answers.indexOf(item) == -1) {
+                
                 answers.push(item);
             }
-
         }
 
         translate(answers);
@@ -459,9 +456,10 @@ function translate(answers) {
     var url_ = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=labels&ids=";
 
     for (var i = 0; i < answers.length; i++) {
+        
         url_ += answers[i];
 
-        if (i != 3) {
+        if (i != answers.length-1) {
             url_ += "|";
         }
     }
@@ -476,18 +474,29 @@ function translate(answers) {
 
             stringAnswers = [];
 
-            console.log("-------------");
-            for (var i = 0; i < answers.length; i++) {
+            //add the right answer
+            stringAnswers.push(x[answers[0]].labels.en.value);
 
-                var item = x[answers[i]].labels.en.value;
 
-                if (stringAnswers.indexOf(item) == -1) {
-                    stringAnswers.push(item);
+            while (stringAnswers.length != 4) {
+
+                var newAns = "";
+
+                try {
+                    newAns = x[answers[Math.floor(Math.random() * Object.keys(x).length)]].labels.en.value;
+
+                } catch (e) {
+                    continue;
+                }
+                
+                if (stringAnswers.indexOf(newAns) == -1) {
+                    stringAnswers.push(newAns);
                 }
 
-                console.log(item);
+                if (stringAnswers.length == 4) {
+                    break;
+                }
             }
-            console.log("-------------");
 
             if (typeof Question !== 'undefined') {
                 showQuestion();
@@ -500,9 +509,14 @@ function translate(answers) {
 }
 
 function showQuestion() {
+    $('#answers').empty();
+    $('#question').empty();
+
     //stringAnswers //Question
     $('#question').append('<h5>' + Question + '<h5>');
     Question = undefined;
+
+    correct = stringAnswers[0];
 
     //scrambble answers
     stringAnswers = shuffle(stringAnswers);
@@ -513,22 +527,18 @@ function showQuestion() {
 
     $('#answers label').on('click', function () {
 
-        var choose = $(this).html();
-        var correct = $("#title").html();
-
-        if (choose == correct) {
+        var choose = $(this).html().toLowerCase();
+        
+        if (correct.toLowerCase().indexOf(choose) != -1) {
             $(this).css("background-color", "green");
         }
         else {
             $(this).css("background-color","red");
         }
     });
-
-    $('#questionDiv').show();
+    
     hideLoadingQuest();
 }
-
-
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -745,16 +755,17 @@ $(document).ready(function () {
                 $("#articleContent").empty();
                 //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
 
+                $("#articleContent").append(results.ArticleContent);
+
                 //check if notification is question
                 if (results.NotificationContent.indexOf('?') == results.NotificationContent.length - 1) {
                     Question = results.NotificationContent;
+                    findAns(results.Title);
                 }
-
-                //$("#articleContent").append("<b>Question:</b> " + results.NotificationContent + "<br><br>");
-
-                $("#articleContent").append(results.ArticleContent);
-
-                findAns(results.Title);
+                else {
+                    hideLoading();
+                }
+                
             }
 
             function errorArticlesCB(e) {
