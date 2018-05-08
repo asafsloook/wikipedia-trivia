@@ -561,14 +561,19 @@ function showQuestion() {
         $('#answers').append('<label>' + ansToUpper + '</label>');
     }
 
+    clicks = 0;
+
     $('#answers label').on('click', function () {
+
+        if (clicks > 0) {
+            return;
+        }
 
         var choose = $(this).html().toLowerCase();
         var correctt = correct.toLowerCase();
 
         if (correctt.indexOf(choose) != -1) {
             $(this).css("background-color", "#4CAF50");
-
         }
         else {
             $(this).css("background-color", "#f44336");
@@ -579,6 +584,8 @@ function showQuestion() {
             $('#questionDiv').fadeOut();
             showArticle();
         }, 1000);
+
+        clicks++;
     });
 
     hideLoadingQuest();
