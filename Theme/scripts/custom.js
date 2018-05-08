@@ -406,7 +406,20 @@ function findAns(title) {
                                 findAnsCon(query, title, wikidataID);
                             } catch (e) {
 
-                                alert("no p39 and p106 in person, get other p :)");
+                                try {
+                                    //P27
+                                    var x = allClaims.P27[0].mainsnak.datavalue.value.id;
+
+                                    var query = [];
+                                    query.P = "P27";
+                                    query.Q = x;
+
+                                    findAnsCon(query, title, wikidataID);
+
+                                } catch (e) {
+
+                                    hideLoading();
+                                }
                             }
                         }
                     }
@@ -513,7 +526,14 @@ function translate(answers) {
             }
 
             if (typeof Question !== 'undefined') {
+
+                if (stringAnswers.length == 1) {
+                    hideLoading();
+                }
+                else {
                 showQuestion();
+                }
+
             }
             else {
                 hideLoading();

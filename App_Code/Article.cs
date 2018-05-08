@@ -211,7 +211,7 @@ public class Article
             content += "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>";
         }
 
-        
+
 
         var check = content;
         check = Regex.Replace(check, @"<[^>]*>", String.Empty);
@@ -239,7 +239,7 @@ public class Article
         PhotoUrl = getPhotoForArticle(title);
 
         return this;
-            
+
 
     }
 
@@ -304,7 +304,7 @@ public class Article
         content = content.Replace("  ", " ");
         content = content.Replace(" . ", ". ");
 
-        
+
 
 
         while (content.Contains("\n"))
@@ -315,8 +315,8 @@ public class Article
 
         content = content.Replace("&amp;", "&");
 
-       
-        
+
+
 
         //
 
@@ -324,15 +324,15 @@ public class Article
 
         string qContent = content;
 
-        
+
 
         qContent = Regex.Replace(qContent, @"<[^>]*>", String.Empty);
-        
+
         var qRegex = FirstSentenceByRegex(qContent);
 
         qContent = qRegex[0] + qRegex[1];
 
-       // qContent = qContent.TrimEnd();
+        // qContent = qContent.TrimEnd();
 
 
         var a = qContent.Split(' ');
@@ -354,21 +354,21 @@ public class Article
         {
             return "Error";
         }
-        
+
 
         qContent = Regex.Replace(qContent, @"<[^>]*>", String.Empty);
 
 
 
-        var startStr = getFirstVerb(qContent,title);
-        
+        var startStr = getFirstVerb(qContent, title);
+
         int startIndex = qContent.IndexOf(" " + startStr + " ");
 
         if (startStr == " were " || startStr == " as it is ")
         {
             isQuestion = "sentence";
         }
-        
+
 
         try
         {
@@ -381,7 +381,7 @@ public class Article
         }
 
 
-        
+
 
         var endStr = firstOccurence(qContent, new List<string> { " which has, ", ", though ", " in order to ", ", the most ", ", e.g. ", ", whether ", ", consistent with ", ", meaning ", ", originally ", ", in other words ", ", either ", ", including ", ", especially ", ", typically ", ", such as ", ", particularly ", " and in which ", ", which ", " which, ", ", in which", ", and in particular:" }); // " whose "   " such as "   " in which "   , ", often "  ", usually ", 
 
@@ -457,7 +457,7 @@ public class Article
 
 
 
-       
+
 
 
         if (isQuestion != "sentence")
@@ -466,7 +466,7 @@ public class Article
             {
                 qContent = qContent.Substring(0, qContent.LastIndexOf(qRegex[1]));
             }
-            
+
 
             isQuestion = qWord + qContent + born + "?";
 
@@ -515,7 +515,7 @@ public class Article
         {
             for (int i = 0; i < parenthesis.Count; i++)
             {
-                parenthesisStr = parenthesis[i].Value;
+                parenthesisStr = "(" + parenthesis[i].Value + ")";
 
                 if (parenthesisStr.Length > 2)
                 {
@@ -528,11 +528,6 @@ public class Article
         catch (Exception)
         {
 
-        }
-
-        while (content.IndexOf("(") != -1)
-        {
-            content = content.Remove(content.IndexOf("(") - 1, (content.IndexOf(")")) - (content.IndexOf("(") - 2));
         }
 
         return content;
@@ -560,7 +555,7 @@ public class Article
             for (int i = 0; i < arr.Length; i++)
             {
                 var temp = arr[i].ToString().Split('/');
-                if (temp[1].StartsWith("V") || temp[1]=="MD")
+                if (temp[1].StartsWith("V") || temp[1] == "MD")
                 {
 
                     if (temp[0] == "known")
@@ -579,7 +574,7 @@ public class Article
     public List<string> splitToSentences(string content)
     {
         var dir = HttpContext.Current.Server.MapPath("~/");
-        
+
         // Loading english PCFG parser from file
         var lp = LexicalizedParser.loadModel(dir + "englishPCFG.ser.gz");
 
@@ -600,18 +595,18 @@ public class Article
 
     private List<string> FirstSentenceByRegex(string qContent)
     {
-        List<string> endSentenceMarkStr = new List<string>() { ".", ".\"", ";", ":" };
+        List<string> endSentenceMarkStr = new List<string>() { ".", ";", ":" };
 
         List<int> endSentenceMarkLen = new List<int>();
 
         foreach (var item in endSentenceMarkStr)
         {
-            
+
             //if (qContent.IndexOf(item) != -1)
             //{
             if (item == ".")
             {
-                Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[.])\\s+\\W*[A-Z,\"])");   //"((^.*?[a-z,0-9,A-Z,\")]{2,}[.])\\s+\\W*[A-Z,\"])"
+                Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[0-9,a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[.])\\s+\\W*[A-Z,\"])");   //"((^.*?[a-z,0-9,A-Z,\")]{2,}[.])\\s+\\W*[A-Z,\"])"
 
                 var sentences1 = rx1.Matches(qContent);
 
@@ -643,9 +638,43 @@ public class Article
                 endSentenceMarkLen[0] = (firstSentence1.Length);
 
             }
-            else if (item == ".\"")
+            //else if (item == ".\"")
+            //{
+            //    Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[0-9,a-z]{2,}|[0-9]{2,}|[A-Z]{2,})[.\"])\\s+\\W*[A-Z,\"])"); //"((^.*?[a-z,0-9,A-Z,)]{2,}[.\"]{2,})\\s+\\W*[A-Z,\"])"
+
+            //    var sentences1 = rx1.Matches(qContent);
+
+            //    string firstSentence1;
+
+            //    try
+            //    {
+            //        firstSentence1 = sentences1[0].Value;
+            //    }
+            //    catch (Exception)
+            //    {
+            //        firstSentence1 = qContent;
+            //    }
+            //    endSentenceMarkLen.Add(firstSentence1.Length);
+
+
+            //    rx1 = new Regex("((^.*?[0-9)]{1,}[.])\\s+\\W*[A-Z,\"])");
+
+            //    sentences1 = rx1.Matches(firstSentence1);
+
+            //    try
+            //    {
+            //        firstSentence1 = sentences1[0].Value;
+            //    }
+            //    catch (Exception)
+            //    {
+            //        //firstSentence1 = qContent;
+            //    }
+            //    endSentenceMarkLen[1] = (firstSentence1.Length);
+
+            //}
+            else if (item == ";")
             {
-                Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[a-z]{2,}|[0-9]{2,}|[A-Z]{2,})[.\"])\\s+\\W*[A-Z,\"])"); //"((^.*?[a-z,0-9,A-Z,)]{2,}[.\"]{2,})\\s+\\W*[A-Z,\"])"
+                Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[0-9,a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[;])\\s+\\W*[A-Z,a-z,\"])"); //"((^.*?[a-z,0-9,A-Z,\",)]{2,}[;])\\s+\\W*[A-Z,a-z,\"])"
 
                 var sentences1 = rx1.Matches(qContent);
 
@@ -675,40 +704,6 @@ public class Article
                     //firstSentence1 = qContent;
                 }
                 endSentenceMarkLen[1] = (firstSentence1.Length);
-
-            }
-            else if (item == ";")
-            {
-                Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[;])\\s+\\W*[A-Z,a-z,\"])"); //"((^.*?[a-z,0-9,A-Z,\",)]{2,}[;])\\s+\\W*[A-Z,a-z,\"])"
-
-                var sentences1 = rx1.Matches(qContent);
-
-                string firstSentence1;
-
-                try
-                {
-                    firstSentence1 = sentences1[0].Value;
-                }
-                catch (Exception)
-                {
-                    firstSentence1 = qContent;
-                }
-                endSentenceMarkLen.Add(firstSentence1.Length);
-
-
-                rx1 = new Regex("((^.*?[0-9)]{1,}[.])\\s+\\W*[A-Z,\"])");
-
-                sentences1 = rx1.Matches(firstSentence1);
-
-                try
-                {
-                    firstSentence1 = sentences1[0].Value;
-                }
-                catch (Exception)
-                {
-                    //firstSentence1 = qContent;
-                }
-                endSentenceMarkLen[2] = (firstSentence1.Length);
             }
             else if (item == ":")
             {
@@ -741,7 +736,7 @@ public class Article
                 {
                     //firstSentence1 = qContent;
                 }
-                endSentenceMarkLen[3] = (firstSentence1.Length);
+                endSentenceMarkLen[2] = (firstSentence1.Length);
             }
             //}
         }
