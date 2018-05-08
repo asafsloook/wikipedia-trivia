@@ -173,13 +173,13 @@ public class Article
 
 
 
-        DBConnection db = new DBConnection();
-        bool test = db.isUserRead(id, userID);
+        //DBConnection db = new DBConnection();
+        //bool test = db.isUserRead(id, userID);
 
-        if (test)
-        {
-           // return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
-        }
+        //if (test)
+        //{
+        //   // return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
+        //}
 
 
         if (content.Contains("may refer to"))
@@ -611,7 +611,7 @@ public class Article
             //{
             if (item == ".")
             {
-                Regex rx1 = new Regex("((^.*?([a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[.])\\s+\\W*[A-Z,\"])");   //"((^.*?[a-z,0-9,A-Z,\")]{2,}[.])\\s+\\W*[A-Z,\"])"
+                Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[.])\\s+\\W*[A-Z,\"])");   //"((^.*?[a-z,0-9,A-Z,\")]{2,}[.])\\s+\\W*[A-Z,\"])"
 
                 var sentences1 = rx1.Matches(qContent);
 
@@ -645,7 +645,7 @@ public class Article
             }
             else if (item == ".\"")
             {
-                Regex rx1 = new Regex("((^.*?([a-z]{2,}|[0-9]{2,}|[A-Z]{2,})[.\"])\\s+\\W*[A-Z,\"])"); //"((^.*?[a-z,0-9,A-Z,)]{2,}[.\"]{2,})\\s+\\W*[A-Z,\"])"
+                Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[a-z]{2,}|[0-9]{2,}|[A-Z]{2,})[.\"])\\s+\\W*[A-Z,\"])"); //"((^.*?[a-z,0-9,A-Z,)]{2,}[.\"]{2,})\\s+\\W*[A-Z,\"])"
 
                 var sentences1 = rx1.Matches(qContent);
 
@@ -679,7 +679,7 @@ public class Article
             }
             else if (item == ";")
             {
-                Regex rx1 = new Regex("((^.*?([a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[;])\\s+\\W*[A-Z,a-z,\"])"); //"((^.*?[a-z,0-9,A-Z,\",)]{2,}[;])\\s+\\W*[A-Z,a-z,\"])"
+                Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[;])\\s+\\W*[A-Z,a-z,\"])"); //"((^.*?[a-z,0-9,A-Z,\",)]{2,}[;])\\s+\\W*[A-Z,a-z,\"])"
 
                 var sentences1 = rx1.Matches(qContent);
 

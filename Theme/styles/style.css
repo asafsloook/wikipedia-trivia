@@ -1,9 +1,11 @@
 #answers label {
     text-align: center;
-    border: 1px black solid;
+    background: #e7e7e7;
+    border-radius: 20px;
     width: 80%;
-    margin: 5% auto;
+    margin: 7% auto;
     padding: 2%;
+    font-size: 15px;
 }
 
 #answers {

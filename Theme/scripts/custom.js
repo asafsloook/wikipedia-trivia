@@ -24,8 +24,17 @@ function hideLoading() {
 }
 
 
+function showArticle() {
+    $("#refreshBTN").fadeIn();
+    $('.back-to-top-badge').show();
+    $('#page-content-scroll').fadeIn();
+    $('#page-content-scroll').scrollTop(0);
+    $("#burgerMenu").show();
+}
+
+
 function hideLoadingQuest() {
-    
+
     $('#questionDiv').show();
     $("#loading").fadeOut();
 
@@ -410,7 +419,7 @@ function findAns(title) {
                     }
 
                 } catch (e) {
-
+                    hideLoading();
                 }
             }
         }
@@ -421,6 +430,7 @@ function findAns(title) {
 function findAnsCon(query, title, wikidataID) {
     //search for same P31 -> Q214070
     var endpointUrl = 'https://query.wikidata.org/sparql',
+
         sparqlQuery = "SELECT ?A WHERE {\n" +
             "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
             "  ?A wdt:" + query.P + " wd:" + query.Q + ".\n" +
@@ -436,13 +446,13 @@ function findAnsCon(query, title, wikidataID) {
         var results = data.results.bindings;
 
         answers.push(wikidataID);
-        
+
         for (var i = 0; i < results.length; i++) {
 
             var item = results[i].A.value.replace("http://www.wikidata.org/entity/", "");
 
             if (answers.indexOf(item) == -1) {
-                
+
                 answers.push(item);
             }
         }
@@ -456,10 +466,10 @@ function translate(answers) {
     var url_ = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=labels&ids=";
 
     for (var i = 0; i < answers.length; i++) {
-        
+
         url_ += answers[i];
 
-        if (i != answers.length-1) {
+        if (i != answers.length - 1) {
             url_ += "|";
         }
     }
@@ -478,17 +488,21 @@ function translate(answers) {
             stringAnswers.push(x[answers[0]].labels.en.value);
 
 
-            while (stringAnswers.length != 4) {
+            while (stringAnswers.length != 4 && stringAnswers.length != Object.keys(x).length) {
 
                 var newAns = "";
+                var rnd =  0;
 
                 try {
-                    newAns = x[answers[Math.floor(Math.random() * Object.keys(x).length)]].labels.en.value;
+                    rnd = Math.floor(Math.random() * Object.keys(x).length);
+                    newAns = x[answers[rnd]].labels.en.value;
 
                 } catch (e) {
+                    delete x[answers[rnd]];
+                    delete answers[rnd];
                     continue;
                 }
-                
+
                 if (stringAnswers.indexOf(newAns) == -1) {
                     stringAnswers.push(newAns);
                 }
@@ -522,21 +536,31 @@ function showQuestion() {
     stringAnswers = shuffle(stringAnswers);
 
     for (var i = 0; i < stringAnswers.length; i++) {
-        $('#answers').append('<label>' + stringAnswers[i] + '</label>');
+
+        var ansToUpper = capitalizeFirstLetter(stringAnswers[i]);
+        $('#answers').append('<label>' + ansToUpper + '</label>');
     }
 
     $('#answers label').on('click', function () {
 
         var choose = $(this).html().toLowerCase();
-        
-        if (correct.toLowerCase().indexOf(choose) != -1) {
-            $(this).css("background-color", "green");
+        var correctt = correct.toLowerCase();
+
+        if (correctt.indexOf(choose) != -1) {
+            $(this).css("background-color", "#4CAF50");
+
         }
         else {
-            $(this).css("background-color","red");
+            $(this).css("background-color", "#f44336");
         }
+
+
+        setTimeout(function () {
+            $('#questionDiv').fadeOut();
+            showArticle();
+        }, 1000);
     });
-    
+
     hideLoadingQuest();
 }
 
@@ -559,7 +583,13 @@ function shuffle(array) {
     return array;
 }
 
-
+function capitalizeFirstLetter(string) {
+    try {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    } catch (e) {
+        return string;
+    }
+}
 
 
 
@@ -765,7 +795,7 @@ $(document).ready(function () {
                 else {
                     hideLoading();
                 }
-                
+
             }
 
             function errorArticlesCB(e) {
