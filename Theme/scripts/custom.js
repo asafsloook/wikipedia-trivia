@@ -424,6 +424,16 @@ function findAns(title) {
                         }
                     }
                     else {
+
+                        try {
+                            //P360
+                            var x = allClaims.P360[0].mainsnak.datavalue.value.id;
+                            hideLoading();
+                            return;
+
+                        } catch (e) {
+                        }
+
                         var query = [];
                         query.P = "P31";
                         query.Q = x;

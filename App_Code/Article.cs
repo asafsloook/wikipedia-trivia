@@ -315,18 +315,19 @@ public class Article
 
         content = content.Replace("&amp;", "&");
 
-
-
-
-        //
+        
 
         content = removeParenthesis(content);
+
+        
 
         string qContent = content;
 
 
 
         qContent = Regex.Replace(qContent, @"<[^>]*>", String.Empty);
+
+        qContent = qContent.Replace(" . ", ". ");
 
         var qRegex = FirstSentenceByRegex(qContent);
 
@@ -340,8 +341,10 @@ public class Article
 
 
         qContent = content;
-
+        
         qContent = Regex.Replace(qContent, @"(?!</?b>)<.*?>", String.Empty);
+
+        qContent = qContent.Replace(" . ", ". ");
 
         qContent = qContent.Substring(0, qContent.IndexOf(b) + b.Length); //maybe length -1
 
@@ -707,7 +710,7 @@ public class Article
             }
             else if (item == ":")
             {
-                Regex rx1 = new Regex("((^.*?([a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[:])\\s+\\W*[A-Z,\"])"); //"((^.*?[a-z,0-9,A-Z,\",)]{2,}[:])\\s+\\W*[A-Z,a-z,\"])"
+                Regex rx1 = new Regex("((^.*?([a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[:])\\s+\\W*)"); //"((^.*?[a-z,0-9,A-Z,\",)]{2,}[:])\\s+\\W*[A-Z,a-z,\"])"
 
                 var sentences1 = rx1.Matches(qContent);
 
