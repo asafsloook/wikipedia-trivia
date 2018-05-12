@@ -1,0 +1,136 @@
+Start 12:17:54
+End 12:17:59
+article found after 8 calls to wiki 
+
+Start 12:21:22
+End 12:21:32
+article found after 17 calls to wiki 
+
+Start 12:21:43
+End 12:21:50
+article found after 20 calls to wiki 
+
+Start 12:21:53
+End 12:21:57
+article found after 11 calls to wiki 
+
+Start 12:22:01
+End 12:22:05
+article found after 10 calls to wiki 
+
+Start 12:22:10
+End 12:22:14
+article found after 10 calls to wiki 
+
+Start 12:22:20
+End 12:22:22
+article found after 4 calls to wiki 
+
+Start 12:23:01
+End 12:23:07
+article found after 18 calls to wiki 
+
+Start 12:23:12
+End 12:23:15
+article found after 8 calls to wiki 
+
+Start 12:23:19
+End 12:23:21
+article found after 6 calls to wiki 
+
+Start 12:23:28
+End 12:23:30
+article found after 6 calls to wiki 
+
+Start 12:23:34
+End 12:23:40
+article found after 19 calls to wiki 
+
+Start 12:23:45
+End 12:23:48
+article found after 8 calls to wiki 
+
+Start 12:24:17
+End 12:24:19
+article found after 6 calls to wiki 
+
+Start 12:24:22
+End 12:24:23
+article found after 4 calls to wiki 
+
+Start 12:27:43
+End 12:27:53
+article found after 25 calls to wiki 
+
+Start 12:27:59
+End 12:28:03
+article found after 13 calls to wiki 
+
+Start 12:28:23
+End 12:28:26
+article found after 4 calls to wiki 
+
+Start 12:28:37
+End 12:28:41
+article found after 11 calls to wiki 
+
+Start 12:28:43
+End 12:28:48
+article found after 10 calls to wiki 
+
+Start 12:28:53
+End 12:29:00
+article found after 21 calls to wiki 
+
+Start 12:29:06
+End 12:29:07
+article found after 6 calls to wiki 
+
+Start 12:29:34
+End 12:29:37
+article found after 4 calls to wiki 
+
+Start 12:29:57
+End 12:30:00
+article found after 6 calls to wiki 
+
+Start 12:38:51
+End 12:39:07
+article found after 70 calls to wiki 
+
+Start 12:39:12
+End 12:39:29
+article found after 72 calls to wiki 
+
+Start 12:39:40
+End 12:39:57
+article found after 70 calls to wiki 
+
+Start 12:41:29
+End 12:41:45
+article found after 70 calls to wiki 
+
+Start 12:42:12
+End 12:42:18
+article found after 26 calls to wiki 
+
+Start 12:42:59
+End 12:43:02
+article found after 6 calls to wiki 
+
+Start 12:43:14
+End 12:43:17
+article found after 4 calls to wiki 
+
+Start 12:43:22
+End 12:43:24
+article found after 6 calls to wiki 
+
+Start 12:43:39
+End 12:43:41
+article found after 4 calls to wiki 
+
+Start 12:43:54
+End 12:43:58
+article found after 13 calls to wiki 
+

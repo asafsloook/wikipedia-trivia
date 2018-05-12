@@ -55,6 +55,12 @@ public class Article
 
     string url;
     public string Url { get; set; }
+    
+    //log test
+    StringBuilder sb = new StringBuilder();
+    Timer timer = new Timer();
+    int callCounter;
+    DateTime timeStart;
 
     public void setCategory()
     {
@@ -74,15 +80,27 @@ public class Article
     /// 
     public Article RandomPageFromCategory(string categoryTitle, string rootCategoryTitle, string userID)
     {
+        
+        if (callCounter == 0)
+        {
+            sb.Append("Start " + DateTime.Now.ToLongTimeString() +  "\r\n");
+            timeStart = DateTime.Now;
+        }
+        else
+        {
+            var now = DateTime.Now;
 
-        ////log test
-        //StringBuilder sb = new StringBuilder();
+            var def = now - timeStart;
 
-        //sb.Append("log something");
-
-        //// flush every 20 seconds as you do it
-        //File.AppendAllText(filePath + "log.txt", sb.ToString());
-        //sb.Clear();
+            if (def.Seconds > 15)
+            {
+                sb.Append("End " + DateTime.Now.ToLongTimeString() + "\r\n");
+                sb.Append("article found after " + callCounter + " calls to wiki \r\n\r\n");
+                System.IO.File.AppendAllText(HttpContext.Current.Server.MapPath("~/") + "log.txt", sb.ToString());
+                sb.Clear();
+                throw new Exception("Timeout");
+            }
+        }
 
         string ResponseURI;
         HttpWebRequest myRequest =
@@ -92,7 +110,7 @@ public class Article
             ResponseURI = response.ResponseUri.ToString();
         }
         string articleTitle = ResponseURI.Replace("https://en.wikipedia.org/wiki/", "");
-
+        callCounter++;
 
         string ResponseText;
         HttpWebRequest myRequest2 =
@@ -101,9 +119,10 @@ public class Article
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
             {
-                ResponseText = reader.ReadToEnd();
+                ResponseText = reader.ReadToEnd();   
             }
         }
+        callCounter++;
 
         JObject root = JObject.Parse(ResponseText);
 
@@ -149,6 +168,7 @@ public class Article
                 ResponseText5 = reader5.ReadToEnd();
             }
         }
+        callCounter++;
 
         JObject root2 = JObject.Parse(ResponseText5);
         JToken dig2 = null;
@@ -173,13 +193,13 @@ public class Article
 
 
 
-        //DBConnection db = new DBConnection();
-        //bool test = db.isUserRead(id, userID);
+        DBConnection db = new DBConnection();
+        bool test = db.isUserRead(id, userID);
 
-        //if (test)
-        //{
-        //   // return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
-        //}
+        if (test)
+        {
+            // return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
+        }
 
 
         if (content.Contains("may refer to"))
@@ -238,6 +258,12 @@ public class Article
 
         PhotoUrl = getPhotoForArticle(title);
 
+        sb.Append("End " + DateTime.Now.ToLongTimeString() + "\r\n");
+        sb.Append("article found after " + callCounter + " calls to wiki \r\n\r\n");
+        System.IO.File.AppendAllText(HttpContext.Current.Server.MapPath("~/") + "log.txt", sb.ToString());
+        sb.Clear();
+
+
         return this;
 
 
@@ -263,6 +289,7 @@ public class Article
                 ResponseText = reader.ReadToEnd();
             }
         }
+        callCounter++;
 
         string image = "";
         try
@@ -274,7 +301,7 @@ public class Article
         }
         catch (Exception)
         {
-            return "https://static.tumblr.com/96a2cb4bb3f1862bdec9cb57c5fd015a/7lj4mpc/ZUxo2472a/tumblr_static_bcf8vu59co0k4kgsoccoo0ck4_640_v2.jpg";
+            return null;
         }
 
         return image;

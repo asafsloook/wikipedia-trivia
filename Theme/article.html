@@ -44,6 +44,7 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKr_zZ9DFMiysm4BXKu0Olsww6eBlcup0&libraries=geometry,places"></script>
 
+    <script type="text/javascript" src="cordova.js"></script>
 </head>
 
 <body>
@@ -95,11 +96,13 @@
                 <div class="content no-material no-top">
 
                     <h3 id="title" class="no-bottom"></h3>
+
+                    <button id="shareBTN" onclick="window.plugins.socialsharing.share('My message')"><i id="share" class="material-icons">share</i></button>
                     <!--<p class="news-article-small-text no-bottom">
-                        Posted by <a href="#">Enabled</a>
-                        about <a href="#">40 minutes ago</a>
-                        in <a href="#">Mobile News</a>
-                    </p>-->
+        Posted by <a href="#">Enabled</a>
+        about <a href="#">40 minutes ago</a>
+        in <a href="#">Mobile News</a>
+    </p>-->
                 </div>
 
                 <!--<div class="single-item">
@@ -118,18 +121,7 @@
 
 
                 <div>
-                    <img id="ArticleImg" class="no-bottom" src="" alt="img">
-                </div>
-
-                <div class="news-article-share full-bottom">
-                    <!--working only inapp-browser-->
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=your_link_here"><i class="facebook-bg fa fa-facebook"></i></a>
-                    <a href="https://twitter.com/home?status=your_text_here"><i class="twitter-bg fa fa-twitter"></i></a>
-                    <a href="https://plus.google.com/share?url=your_link_here"><i class="google-bg fa fa-google-plus"></i></a>
-                    <!--working in-app-->
-                    <a href="whatsapp://send?text=The text to share!"><i class="whatsapp-bg fa fa-whatsapp"></i></a>
-                    <a href="mailto:?&subject=Your_subject&body=Your_text_here"><i class="mail-bg fa fa-envelope-o"></i></a>
-                    <div class="clear"></div>
+                    <img id="ArticleImg" class="no-bottom" alt="img">
                 </div>
 
                 <div class="content">

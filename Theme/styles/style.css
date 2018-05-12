@@ -1,3 +1,5 @@
+
+
 #answers label {
     text-align: center;
     background: #e7e7e7;
@@ -303,9 +305,16 @@ margin:0 auto
 
 /*article, allphotos, photo styles*/
 
+#shareBTN {
+    float: right;
+    background: none;
+    width:10%;
+}
 
 #title, #aroundTitle {
     padding-bottom: 20px;
+    float: left;
+    width: 90%;
 }
 
 #logo {
@@ -313,7 +322,7 @@ margin:0 auto
     margin: 0 auto;
 }
 
-#closeBTN, #refreshBTN, #refreshLocationBTN1, #refreshLocationBTN2 {
+#closeBTN, #refreshBTN, #refreshLocationBTN1, #refreshLocationBTN2, #share {
     font-size: 30px;
 }
 

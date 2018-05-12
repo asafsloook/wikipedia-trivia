@@ -57,6 +57,7 @@ $(document).ready(function () {
 
     if (window.location.href.toString().indexOf('article.html') != -1) {
 
+        
         showLoading();
     }
 
@@ -514,7 +515,7 @@ function translate(answers) {
             while (stringAnswers.length != 4 && stringAnswers.length != Object.keys(x).length) {
 
                 var newAns = "";
-                var rnd =  0;
+                var rnd = 0;
 
                 try {
                     rnd = Math.floor(Math.random() * Object.keys(x).length);
@@ -541,7 +542,7 @@ function translate(answers) {
                     hideLoading();
                 }
                 else {
-                showQuestion();
+                    showQuestion();
                 }
 
             }
@@ -705,6 +706,7 @@ $(document).ready(function () {
                 checkUser2(request);
 
                 navigator.geolocation.getCurrentPosition();
+                
             }
 
         }
@@ -813,7 +815,14 @@ $(document).ready(function () {
                 var results = $.parseJSON(results.d);
                 var a = "";
 
-                $("#ArticleImg").attr("src", results.PhotoUrl);
+                if (results.PhotoUrl == null) {
+                    $("#ArticleImg").hide();
+                }
+                else {
+                    $("#ArticleImg").attr("src", results.PhotoUrl);
+                    $("#ArticleImg").show();
+                }
+                
 
                 $("#title").empty();
                 $("#title").html(results.Title);
@@ -837,7 +846,8 @@ $(document).ready(function () {
 
             function errorArticlesCB(e) {
                 alert("I caught the exception : failed in GetArticles \n The exception message is : " + e.responseText);
-
+                $("#ArticleImg").hide();
+                hideLoading();
             }
 
         }
@@ -1352,6 +1362,8 @@ $(document).ready(function () {
 
                 }
                 else {
+                    //go home (user stats/profile)
+
                     window.location.replace("article.html");
                 }
                 splashHandle = false;
