@@ -558,7 +558,7 @@ function showQuestion() {
     $('#question').empty();
 
     //stringAnswers //Question
-    $('#question').append('<h5>' + Question + '<h5>');
+    $('#question').append('<h4>' + Question + '<h4>');
     Question = undefined;
 
     correct = stringAnswers[0];
@@ -1206,7 +1206,7 @@ $(document).ready(function () {
 
                 //printCategories(results);
 
-                window.location.replace('article.html');
+                window.location.replace('profile.html');
             }
 
             function errorUpdateUserPrefsCB(e) {
@@ -1365,9 +1365,8 @@ $(document).ready(function () {
 
                 }
                 else {
-                    //go home (user stats/profile)
-
-                    window.location.replace("article.html");
+                    
+                    window.location.replace("profile.html");
                 }
                 splashHandle = false;
             }, 3500);
