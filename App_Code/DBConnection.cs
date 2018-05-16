@@ -22,10 +22,19 @@ public class DBConnection
         //
     }
 
-    internal void insertReading(string userID, string articleId, string date, string categoryname)
+    internal void insertReading(string userID, string articleId, DateTime date, string categoryname)
     {
         SqlConnection con;
-        SqlCommand cmd;
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.Text;
+        cmd.Parameters.AddWithValue("@User", userID);
+
+        cmd.Parameters.AddWithValue("@Article", articleId);
+
+        cmd.Parameters.AddWithValue("@Date", date.ToString());
+
+        
+
 
         try
         {
@@ -38,10 +47,13 @@ public class DBConnection
         }
 
         int categoryID = getCategoryId(categoryname);
+        cmd.Parameters.AddWithValue("@Category", categoryID);
 
-        string cStr = " insert into ReadingP (userId, ArticleId,ReadingTime,CategoryId) values( " + userID + " , '" + articleId + "' , '" + date + "' , " + categoryID +" ) ";
+        string cStr = " insert into ReadingP (userId, ArticleId,ReadingTime,CategoryId) values(@User,@Article,@Date,@Category) ";
 
-        cmd = new SqlCommand(cStr, con);             // create the command
+        //cmd = new SqlCommand(cStr, con);             // create the command
+        cmd.CommandText = cStr;
+        cmd.Connection = con;
 
         try
         {
@@ -65,6 +77,51 @@ public class DBConnection
         }
     }
 
+    internal int updateScore(User user)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("GraspDBConnectionString"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        string cStr = "update UsersP "
+            + " set "
+            + " Score += " + user.Score
+            + " where userId = " + user.Id;
+
+        //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
+
+        cmd = new SqlCommand(cStr, con);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            return 0;
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
 
     public bool isUserRead(string articleId, string userId)
     {

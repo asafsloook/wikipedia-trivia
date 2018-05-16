@@ -585,6 +585,29 @@ function showQuestion() {
 
         if (correctt.indexOf(choose) != -1) {
             $(this).css("background-color", "#4CAF50");
+
+            //update score for user
+            var ans = stringAnswers.length;
+            var score = 0;
+
+            if (ans == 4) {
+                score = 10;
+            }
+            else if (ans == 3) {
+                score = 7;
+            }
+            else {
+                //2
+                score = 5;
+            }
+
+            var uid = parseInt(localStorage.Id);
+            var request = {
+                Score: score,
+                UserId: uid
+            }
+
+            saveScore(request);
         }
         else {
             $(this).css("background-color", "#f44336");
@@ -600,6 +623,30 @@ function showQuestion() {
     });
 
     hideLoadingQuest();
+}
+
+function saveScore(request) {
+
+    var dataString = JSON.stringify(request);
+
+    $.ajax({ // ajax call starts
+        url: urlDomain + 'WebService.asmx/saveScore',   // server side web service method
+        data: dataString,                          // the parameters sent to the server
+        type: 'POST',                              // can be also GET
+        dataType: 'json',                          // expecting JSON datatype from the server
+        contentType: 'application/json; charset = utf-8', // sent to the server
+        success: saveScoreSCB,                // data.d id the Variable data contains the data we get from serverside
+        error: saveScoreECB
+    }); // end of ajax call
+
+}
+
+function saveScoreSCB(data) {
+
+}
+
+function saveScoreECB(error) {
+    alert("Error in saveScore: " + error);
 }
 
 function shuffle(array) {

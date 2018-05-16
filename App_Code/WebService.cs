@@ -32,21 +32,7 @@ public class WebService : System.Web.Services.WebService
 
         //Uncomment the following line if using designed components 
         //InitializeComponent(); 
-
-        //DBConnection db = new DBConnection();
-        //db.readTable("CategoriesP");
-
-        User eli = new User();  // new User('32453453', 'asdfdbg393939', 1, 0, '10:30', 1, 5)
-        eli.Imei = "eli";
-        eli.PushKey = "asdfdbg393939";
-        eli.LocationPush = true;
-        eli.PhotoPush = true;
-        eli.PhotoPushTime = Convert.ToDateTime("10:30");
-        eli.ArticlePush = true;
-        eli.ArticlesPerDay = 9;
-
-
-        //db.insert(eli);
+        
     }
 
     [WebMethod]
@@ -62,28 +48,12 @@ public class WebService : System.Web.Services.WebService
 
         int randomNum = rnd.Next(0, categoriesList.Count());
         var a = categoriesList[randomNum].ToString();
-
-        //while (a1.ArticleId == null)
-        //{
-
-        //    try
-        //    {
-        //        bool Completed = ExecuteWithTimeLimit(TimeSpan.FromMilliseconds(10000), () =>
-        //        {
-        //
+        
         a1 = a1.RandomPageFromCategory(a, a, userID);
-        // 
-        //    });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        continue;
-        //    }
-        //}
-
+      
 
         Reading r = new Reading();
-        r.insert(userID, a1.ArticleId, DateTime.Now.ToString(), a.ToString());
+        r.insert(userID, a1.ArticleId, DateTime.Now, a.ToString());
 
         JavaScriptSerializer js = new JavaScriptSerializer();
 
@@ -183,6 +153,18 @@ public class WebService : System.Web.Services.WebService
         u.updatePrefs();
     }
 
+
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public void saveScore(int Score, int UserId)
+    {
+        User u = new User();
+        u.Score = Score;
+        u.Id = UserId;
+
+        u.updateScore();
+    }
 
 
     /////////////////////////////////////////////////////////

@@ -39,6 +39,9 @@ public class User
     int articlesPerDay;
     public int ArticlesPerDay { get; set; }
 
+    int score;
+    public int Score { get; set; }
+
     List<Category> categories;
     public List<Category> Categories { get; set; }
 
@@ -52,5 +55,11 @@ public class User
     {
         DBConnection db = new DBConnection();
         return db.updateUserPref(this);
+    }
+
+    internal int updateScore()
+    {
+        DBConnection db = new DBConnection();
+        return db.updateScore(this);
     }
 }

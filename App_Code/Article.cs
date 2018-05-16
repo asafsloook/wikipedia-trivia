@@ -114,7 +114,7 @@ public class Article
 
         string ResponseText;
         HttpWebRequest myRequest2 =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle);
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + "Superfecta");
         using (HttpWebResponse response = (HttpWebResponse)myRequest2.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -198,7 +198,7 @@ public class Article
 
         if (test)
         {
-            // return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
+             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
 
 
