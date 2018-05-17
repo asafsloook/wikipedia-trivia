@@ -1,54 +1,22 @@
-time: 16.4283333 seconds 
-article not found
+article found after 20 calls to wiki (8 seconds)
 
-time: 19.7790484 seconds 
-article not found
+article found after 9 calls to wiki (2 seconds)
 
-time: 26.3527736 seconds 
-article not found
+article found after 8 calls to wiki (4 seconds)
 
-time: 16.7466371 seconds 
-article not found
+article found after 4 calls to wiki (1 seconds)
 
-time 00:00:04.2214023 seconds 
-article found after 8 calls to wiki 
+article found after 7 calls to wiki (2 seconds)
 
-time: 16.6585202 seconds 
-article not found
+article found after 8 calls to wiki (2 seconds)
 
-time: 16.4500344 seconds 
-article not found
+article found after 4 calls to wiki (1 seconds)
 
-time 00:00:03.4026564 seconds 
-article found after 9 calls to wiki 
+article found after 24 calls to wiki (9 seconds)
 
-time: 16.7777862 seconds 
-article not found
+article found after 4 calls to wiki (1 seconds)
 
-time 00:00:03.8883380 seconds 
-article found after 12 calls to wiki 
+article found after 10 calls to wiki (3 seconds)
 
-time: 16.1337114 seconds 
-article not found
-
-time 00:00:01.6748716 seconds 
-article found after 4 calls to wiki 
-
-time: 16.0143364 seconds 
-article not found
-
-time: 16.6657356 seconds 
-article not found
-
-time: 16.0931585 seconds 
-article not found
-
-time: 16.5929925 seconds 
-article not found
-
-time 00:00:04.5618240 seconds 
-article found after 9 calls to wiki 
-
-time 00:00:05.4777379 seconds 
-article found after 16 calls to wiki 
+article found after 24 calls to wiki (7 seconds)
 
