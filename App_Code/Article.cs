@@ -83,7 +83,6 @@ public class Article
         
         if (callCounter == 0)
         {
-            sb.Append("Start " + DateTime.Now.ToLongTimeString() +  "\r\n");
             timeStart = DateTime.Now;
         }
         else
@@ -94,11 +93,13 @@ public class Article
 
             if (def.Seconds > 15)
             {
-                sb.Append("End " + DateTime.Now.ToLongTimeString() + "\r\n");
-                sb.Append("article found after " + callCounter + " calls to wiki \r\n\r\n");
+                sb.Append("time: " + def.TotalSeconds + " seconds \r\n");
+                sb.Append("article not found\r\n\r\n");
                 System.IO.File.AppendAllText(HttpContext.Current.Server.MapPath("~/") + "log.txt", sb.ToString());
                 sb.Clear();
-                throw new Exception("Timeout");
+
+                callCounter = 0;
+                return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
             }
         }
 
@@ -114,7 +115,7 @@ public class Article
 
         string ResponseText;
         HttpWebRequest myRequest2 =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + "Superfecta");
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle);
         using (HttpWebResponse response = (HttpWebResponse)myRequest2.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -258,7 +259,11 @@ public class Article
 
         PhotoUrl = getPhotoForArticle(title);
 
-        sb.Append("End " + DateTime.Now.ToLongTimeString() + "\r\n");
+
+        var now2 = DateTime.Now;
+        var def2 = now2 - timeStart;
+
+        sb.Append("time " + def2 + " seconds \r\n");
         sb.Append("article found after " + callCounter + " calls to wiki \r\n\r\n");
         System.IO.File.AppendAllText(HttpContext.Current.Server.MapPath("~/") + "log.txt", sb.ToString());
         sb.Clear();
