@@ -1,3 +1,60 @@
+/// 
+
+
+function articleFromLS() {
+    
+    h = setInterval(function () {
+        if (typeof articles !== 'undefined') {
+            //showArticle
+            showArticle();
+            h = false;
+        }
+        else {
+            //wait
+        }
+
+    }, 1000)
+    
+}
+
+function showArticle() {
+    setTimeout(function () {
+        
+
+        var a = "";
+
+        $("#shareBTN").show();
+
+        if (results.PhotoUrl == null) {
+            $("#ArticleImg").hide();
+        }
+        else {
+            $("#ArticleImg").attr("src", results.PhotoUrl);
+            $("#ArticleImg").show();
+        }
+
+
+        $("#title").empty();
+        $("#title").html(results.Title);
+
+        //results.ArticleContent
+        $("#articleContent").empty();
+        //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
+
+        $("#articleContent").append(results.ArticleContent);
+
+        //check if notification is question
+        if (results.NotificationContent.indexOf('?') == results.NotificationContent.length - 1) {
+            Question = results.NotificationContent;
+            findAns(results.Title);
+        }
+        else {
+            hideLoading();
+        }
+
+    }, 1000);
+}
+
 
 
 function showLoading() {
@@ -56,9 +113,17 @@ $(document).ready(function () {
     }
 
     if (window.location.href.toString().indexOf('article.html') != -1) {
-
-        
+            
         showLoading();
+    }
+
+    if (typeof (Worker) !== "undefined") {
+        if (typeof (w) == "undefined") {
+            w = new Worker("scripts/articles.js");
+            w.onmessage = function (event) {
+                console.log(event.data);
+            };
+        }
     }
 
 });
@@ -753,7 +818,7 @@ $(document).ready(function () {
                 checkUser2(request);
 
                 navigator.geolocation.getCurrentPosition();
-                
+
             }
 
         }
@@ -818,87 +883,19 @@ $(document).ready(function () {
             showLoading();
             loadingTyper();
 
-
-            var request = {
-                userId: parseInt(localStorage.Id)
-            }
-
-            getArticle(request);
-
+            articleFromLS();
 
             $('.footer-menu-open').click(function () {
 
                 showLoading();
                 loadingTyper();
 
-                var request = {
-                    userId: parseInt(localStorage.Id)
-                }
-
-                getArticle(request);
+                articleFromLS();
 
             });
 
 
-            function getArticle(request) {
 
-                var dataString = JSON.stringify(request);
-
-                $.ajax({ // ajax call starts
-                    url: urlDomain + 'WebService.asmx/GetArticle',   // server side web service method
-                    data: dataString,                          // the parameters sent to the server
-                    type: 'POST',                              // can be also GET
-                    dataType: 'json',                          // expecting JSON datatype from the server
-                    contentType: 'application/json; charset = utf-8', // sent to the server
-                    success: successArticlesCB,                // data.d id the Variable data contains the data we get from serverside
-                    error: errorArticlesCB
-                }); // end of ajax call
-
-            }
-
-
-            function successArticlesCB(results) {
-
-                var results = $.parseJSON(results.d);
-                var a = "";
-
-                $("#shareBTN").show();
-
-                if (results.PhotoUrl == null) {
-                    $("#ArticleImg").hide();
-                }
-                else {
-                    $("#ArticleImg").attr("src", results.PhotoUrl);
-                    $("#ArticleImg").show();
-                }
-                
-
-                $("#title").empty();
-                $("#title").html(results.Title);
-
-                //results.ArticleContent
-                $("#articleContent").empty();
-                //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
-
-                $("#articleContent").append(results.ArticleContent);
-
-                //check if notification is question
-                if (results.NotificationContent.indexOf('?') == results.NotificationContent.length - 1) {
-                    Question = results.NotificationContent;
-                    findAns(results.Title);
-                }
-                else {
-                    hideLoading();
-                }
-
-            }
-
-            function errorArticlesCB(e) {
-                alert("I caught the exception : failed in GetArticles \n The exception message is : " + e.responseText);
-                $("#ArticleImg").hide();
-                $("#shareBTN").hide();
-                hideLoading();
-            }
 
         }
 
@@ -1397,7 +1394,7 @@ $(document).ready(function () {
         }
 
         function checkUserSCB2(results) {
-
+            
             var results = $.parseJSON(results.d);
 
             userPref = results;
@@ -1412,7 +1409,7 @@ $(document).ready(function () {
 
                 }
                 else {
-                    
+
                     window.location.replace("profile.html");
                 }
                 splashHandle = false;
