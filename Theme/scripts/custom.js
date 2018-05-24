@@ -1,58 +1,123 @@
-/// 
+
+function goSearch() {
+
+    searcher();
+
+    setInterval(searcher, 2500);
+}
+
+function searcher() {
+    if (localStorage.articles != null) {
+        articles = $.parseJSON(localStorage.articles);
+    }
+
+    if (articles.length < 10) {
+        var request = {
+            userId: 193
+        }
+        getArticle(request);
+    }
+    else {
+        return;
+    }
+}
+
+function getArticle(request) {
+
+    var dataString = JSON.stringify(request);
+
+    $.ajax({ // ajax call starts
+        url: urlDomain + 'WebService.asmx/GetArticle',   // server side web service method
+        data: dataString,                          // the parameters sent to the server
+        type: 'POST',                              // can be also GET
+        dataType: 'json',                          // expecting JSON datatype from the server
+        contentType: 'application/json; charset = utf-8', // sent to the server
+        success: successArticlesCB,                // data.d id the Variable data contains the data we get from serverside
+        error: errorArticlesCB
+    }); // end of ajax call
+
+}
+
+
+function successArticlesCB(data) {
+
+    var newArticle = $.parseJSON(data.d);
+
+    if (localStorage.articles != null) {
+        articles = $.parseJSON(localStorage.articles);
+    }
+    else {
+
+    }
+
+    articles.push(newArticle);
+
+    localStorage.articles = JSON.stringify(articles);
+}
+
+function errorArticlesCB(e) {
+
+    console.log('Error in getArticle: ' + e);
+
+}
 
 
 function articleFromLS() {
-    
-    h = setInterval(function () {
-        if (typeof articles !== 'undefined') {
-            //showArticle
-            showArticle();
-            h = false;
-        }
-        else {
-            //wait
-        }
 
-    }, 1000)
-    
+    if (typeof articles !== 'undefined' && articles.length > 0) {
+        //showArticle
+        showArticleOrQuest();
+    }
+    else {
+        //wait
+        setTimeout(articleFromLS, 1000);
+    }
+
 }
 
-function showArticle() {
+function showArticleOrQuest() {
     setTimeout(function () {
-        
+
+        var temp = [];
+        temp = $.parseJSON(localStorage.articles)
+        var article = temp[0];
 
         var a = "";
 
         $("#shareBTN").show();
 
-        if (results.PhotoUrl == null) {
+        if (article.PhotoUrl == null) {
             $("#ArticleImg").hide();
         }
         else {
-            $("#ArticleImg").attr("src", results.PhotoUrl);
+            $("#ArticleImg").attr("src", article.PhotoUrl);
             $("#ArticleImg").show();
         }
 
 
         $("#title").empty();
-        $("#title").html(results.Title);
+        $("#title").html(article.Title);
 
         //results.ArticleContent
         $("#articleContent").empty();
         //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
 
-        $("#articleContent").append(results.ArticleContent);
+        $("#articleContent").append(article.ArticleContent);
+
+        var oldArticles = $.parseJSON(localStorage.articles);
+        oldArticles.shift();
+        localStorage.articles = JSON.stringify(oldArticles);
 
         //check if notification is question
-        if (results.NotificationContent.indexOf('?') == results.NotificationContent.length - 1) {
-            Question = results.NotificationContent;
-            findAns(results.Title);
+        if (article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
+            Question = article.NotificationContent;
+            findAns(article.Title);
         }
         else {
             hideLoading();
         }
 
-    }, 1000);
+    }, 2500);
 }
 
 
@@ -113,20 +178,13 @@ $(document).ready(function () {
     }
 
     if (window.location.href.toString().indexOf('article.html') != -1) {
-            
+
         showLoading();
     }
 
-    if (typeof (Worker) !== "undefined") {
-        if (typeof (w) == "undefined") {
-            w = new Worker("scripts/articles.js");
-            w.onmessage = function (event) {
-                console.log(event.data);
-            };
-        }
-    }
 
 });
+
 
 
 function closeAllInfoWindows() {
@@ -880,6 +938,10 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf("article.html") != -1) {
 
+            articles = [];
+            goSearch();
+
+
             showLoading();
             loadingTyper();
 
@@ -1394,7 +1456,7 @@ $(document).ready(function () {
         }
 
         function checkUserSCB2(results) {
-            
+
             var results = $.parseJSON(results.d);
 
             userPref = results;
