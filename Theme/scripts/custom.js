@@ -11,9 +11,11 @@ function searcher() {
         articles = $.parseJSON(localStorage.articles);
     }
 
+    var uid = parseInt(localStorage.Id);
+
     if (articles.length < 10) {
         var request = {
-            userId: 193
+            userId: uid
         }
         getArticle(request);
     }
