@@ -42,6 +42,9 @@ public class User
     int score;
     public int Score { get; set; }
 
+    int readingSum;
+    public int ReadingSum { get; set; }
+
     List<Category> categories;
     public List<Category> Categories { get; set; }
 
@@ -61,5 +64,17 @@ public class User
     {
         DBConnection db = new DBConnection();
         return db.updateScore(this);
+    }
+
+    internal User getProfile(int id)
+    {
+        DBConnection db = new DBConnection();
+        return db.getProfile(id);
+    }
+
+    internal object getRanking(int id)
+    {
+        DBConnection db = new DBConnection();
+        return db.getRanking(id);
     }
 }

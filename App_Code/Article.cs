@@ -198,7 +198,7 @@ public class Article
 
         if (test)
         {
-             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
+             //return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
 
 
@@ -639,7 +639,7 @@ public class Article
             //{
             if (item == ".")
             {
-                Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[0-9,a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[.])\\s+\\W*[A-Z,\"])");   //"((^.*?[a-z,0-9,A-Z,\")]{2,}[.])\\s+\\W*[A-Z,\"])"
+                Regex rx1 = new Regex("((^.*?([0-9]{1,}|[A-Z]{2,}|[0-9,a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[.])\\s+\\W*[A-Z,\"])");   //"((^.*?[a-z,0-9,A-Z,\")]{2,}[.])\\s+\\W*[A-Z,\"])"
 
                 var sentences1 = rx1.Matches(qContent);
 

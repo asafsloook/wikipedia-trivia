@@ -1,23 +1,19 @@
 ﻿
 
---select COUNT(readId)
---from ReadingP
---where userId = 193
+select COUNT(readId)
+from ReadingP
+where userId = 193
+
+select Score
+from UsersP
+where userId = 193
+
+select count(CategoryName), CategoryName  from ReadCateogriesView  where userId=193  group by CategoryName  order by count(CategoryName) desc
 
 
---select count(CategoryName), CategoryName 
---from ReadCateogriesView 
---where userId=193 
---group by CategoryName 
---order by count(CategoryName) desc
 
-
---select Score
---from UsersP
---where userId = 193
-
---select ArticleId, ReadingTime
---from ReadingP
---where userId = 193
---order by ReadingTime desc
+select ArticleId, ReadingTime
+from ReadingP
+where userId = 193
+order by ReadingTime desc
 

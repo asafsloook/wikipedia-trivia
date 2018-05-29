@@ -62,6 +62,37 @@ public class WebService : System.Web.Services.WebService
     }
 
 
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string getProfile(string userId)
+    {
+        var userID = userId;
+
+        User u = new User();
+        var a = u.getProfile(int.Parse(userId));
+        
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+        string jsonString = js.Serialize(a);
+        return jsonString;
+    }
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string getRanking(string userId)
+    {
+        var userID = userId;
+
+        User u = new User();
+        var a = u.getRanking(int.Parse(userId));
+
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+        string jsonString = js.Serialize(a);
+        return jsonString;
+    }
+
+
     public static bool ExecuteWithTimeLimit(TimeSpan timeSpan, Action codeBlock)
     {
         try

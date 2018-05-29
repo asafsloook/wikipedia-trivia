@@ -856,10 +856,10 @@ $(document).ready(function () {
         }
         else {
             urlDomain = '../';
-            localStorage.uuid = "7ef84f559ce02690";
+            localStorage.uuid = "67a8bacd24573639";
             userPref = [];
-            userPref.Id = 193;
-            localStorage.Id = 193;
+            userPref.Id = 192;
+            localStorage.Id = 192;
             onDeviceReady();
         }
 
@@ -1086,12 +1086,17 @@ $(document).ready(function () {
                     return;
                 }
 
-                if (checkIfExist($("#tags").val().replace(/\W/g, ''))) {
+                var choose = $("#tags").val().replace(/\W/g, '');
+
+                if (checkIfExist(choose)) {
                     alert("exist");
                     return;
                 }
 
-                var str = '<div id="' + $("#tags").val().replace(/\W/g, '') + '">' + $("#tags").val()
+                var url = 'https://en.wikipedia.org/wiki/Special:RandomInCategory/' + choose;
+                //check if category has data
+
+                var str = '<div id="' + choose + '">' + $("#tags").val()
                     + '<a href="#" class="itemDelete"><i class="material-icons">delete</i></a>'
                     + '</div>'
 
@@ -1308,11 +1313,8 @@ $(document).ready(function () {
             }
 
             function successUpdateUserPrefCB(results) {
-                //var results = $.parseJSON(results.d);
 
-                //cat = results;
-
-                //printCategories(results);
+                localStorage.removeItem('articles');
 
                 window.location.replace('profile.html');
             }
@@ -1477,7 +1479,7 @@ $(document).ready(function () {
                     window.location.replace("profile.html");
                 }
                 splashHandle = false;
-            }, 3500);
+            }, 2000);
         }
 
         function checkUserECB2(e) {
@@ -1485,7 +1487,165 @@ $(document).ready(function () {
 
         }
 
+        if (window.location.href.toString().indexOf('profile.html') != -1) {
 
+            getStats();
+
+        }
+
+        function getStats() {
+            var uid = parseInt(localStorage.Id);
+
+            var request = {
+                userId: uid
+            }
+            getProfile(request);
+        }
+
+        function getProfile(request) {
+
+            var dataString = JSON.stringify(request);
+
+            $.ajax({ // ajax call starts
+                url: urlDomain + 'WebService.asmx/getProfile',   // server side web service method
+                data: dataString,                          // the parameters sent to the server
+                type: 'POST',                              // can be also GET
+                dataType: 'json',                          // expecting JSON datatype from the server
+                contentType: 'application/json; charset = utf-8', // sent to the server
+                success: successGetProfileCB,                // data.d id the Variable data contains the data we get from serverside
+                error: errorGetProfileCB
+            }); // end of ajax call
+
+        }
+
+
+        function successGetProfileCB(data) {
+            profile = $.parseJSON(data.d);
+
+            var score = profile.Score;
+            var readingSum = profile.ReadingSum;
+
+            $('#scorePH').html("Score: " + score + '<div class="decoration decoration-margins" style="margin-top: 3%;"></div>');
+            $('#readingsPH').html("Articles read: " + readingSum + '<div class="decoration decoration-margins" style="margin-top: 3%;"></div>');
+
+
+            var categories = profile.Categories;
+
+            categories.sort(function (a, b) {
+                return b.CategoryId - a.CategoryId;
+            })
+
+            var labelsArr = [];
+            var dataArr = [];
+
+            var len = categories.length;
+            if (len > 5) {
+                len = 6;
+            }
+
+            for (var i = 0; i < len; i++) {
+                labelsArr.push(categories[i].Name);
+                dataArr.push(categories[i].CategoryId);
+            }
+
+            var ctx = document.getElementById("myChart").getContext('2d');
+
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labelsArr,
+                    datasets: [{
+                        label: '# of Votes',
+                        data: dataArr,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86,1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    tooltips: {
+                        enabled: true
+                    }
+                }
+            });
+        }
+
+        function errorGetProfileCB(e) {
+            alert("error in getProfile: " + e.responseText);
+        }
+
+        if (window.location.href.toString().indexOf('ranking.html') != -1) {
+
+            getRanks();
+
+        }
+
+        function getRanks() {
+            var uid = parseInt(localStorage.Id);
+
+            var request = {
+                userId: uid
+            }
+            getRanking(request);
+        }
+
+        function getRanking(request) {
+
+            var dataString = JSON.stringify(request);
+
+            $.ajax({ // ajax call starts
+                url: urlDomain + 'WebService.asmx/getRanking',   // server side web service method
+                data: dataString,                          // the parameters sent to the server
+                type: 'POST',                              // can be also GET
+                dataType: 'json',                          // expecting JSON datatype from the server
+                contentType: 'application/json; charset = utf-8', // sent to the server
+                success: successGetRankingCB,                // data.d id the Variable data contains the data we get from serverside
+                error: errorGetRankingCB
+            }); // end of ajax call
+
+        }
+
+        function successGetRankingCB(data) {
+            var ranks = $.parseJSON(data.d);
+            var uid = parseInt(localStorage.Id);
+            var str = "";
+            var name = 0;
+            for (var i = 0; i < ranks.length; i++) {
+                if (ranks[i].Id == uid) {
+                    name = "Me";
+                }
+                else {
+                    name = "Guest" + ranks[i].Id;
+                }
+
+                if (name == "Me") {
+                    str += '<tr><td style="background-color: #bcd6ff;">' + (i + 1) + '</td>  <td style="background-color: #bcd6ff;">' + name + '</td>  <td style="background-color: #bcd6ff;">' + ranks[i].Score + "</td></tr>"
+                }
+                else {
+                    str += "<tr><td>" + (i + 1) + "</td>  <td>" + name + "</td>  <td>" + ranks[i].Score + "</td></tr>"
+                }
+            }
+
+            $("#ranking").append(str);
+        }
+
+        function errorGetRankingCB(e) {
+            alert("Error in errorGetRankingCB: " + e.responseText)
+        }
         //Activate Menu
         //$('.footer-menu-open').click(function(){
         //    $('.footer-menu-open').addClass('remove-menu');

@@ -1,6 +1,16 @@
-p{
-    font-size:16px !important;
-    
+
+#scorePH, #readingsPH {
+    text-align: center;
+}
+
+div.content {
+    margin-top: 0 !important;
+}
+
+#myChart {
+    margin-bottom: 5%;
+}p {
+    font-size: 16px !important;
 }
 
 #answers label {
@@ -20,9 +30,9 @@ p{
 
 #question {
     text-align: center;
-    padding: 0 10%;
+    padding: 10%;
     margin-top: 60px;
-    padding-top:15%;
+    padding-bottom: 0;
 }
 
 #questionDiv {
@@ -30,6 +40,7 @@ p{
     height: 100%;
     z-index: 999;
     display: none;
+    overflow: scroll;
 }
 
 /*menu*/

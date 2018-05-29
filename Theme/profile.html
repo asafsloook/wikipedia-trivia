@@ -45,7 +45,9 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzxNzo8N6KHRkVreIVvJeqnLVE2vDjJ8c&libraries=geometry,places"></script>
 
     <script type="text/javascript" src="cordova.js"></script>
-</head>
+
+    <script src="scripts/Chart.min.js"></script>
+ </head>
 
 <body>
     <div id="page-transitions">
@@ -78,10 +80,10 @@
                     <button id="shareBTN" onclick="window.plugins.socialsharing.share('My message')"><i id="share" class="material-icons">share</i></button>
 
                     <!--<p class="news-article-small-text no-bottom">
-        Posted by <a href="#">Enabled</a>
-        about <a href="#">40 minutes ago</a>
-        in <a href="#">Mobile News</a>
-    </p>-->
+            Posted by <a href="#">Enabled</a>
+            about <a href="#">40 minutes ago</a>
+            in <a href="#">Mobile News</a>
+        </p>-->
                 </div>
 
                 <!--<div class="single-item">
@@ -98,13 +100,13 @@
         </div>
     </div>-->
                 <div class="content">
+                    <h4 id="scorePH"></h4>
+                    <h4 id="readingsPH"></h4>
 
+                    <canvas id="myChart" width="400" height="400"></canvas>
                     <!-- number represent RANK -->
-
                     <!-- pie (%) with categories  https://canvasjs.com/docs/charts/integration/jquery/chart-types/jquery-pie-chart/       -->
-
                     <!-- history: past articles, (questions?!) -->
-
                     <!--<h4>Some awesome title goes here</h4>-->
                     <!--<p id="articleContent" class="full-bottom">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla gravida rhoncus feugiat.
@@ -179,8 +181,14 @@
                 </div>
                 <div class="sidebar-divider">Navigation</div>
                 <div class="sidebar-menu">
+                    <a class="menu-item" href="profile.html">
+                        <i class="bg-red-dark fa fa-user"></i>My Profile<i class="fa fa-circle"></i>
+                    </a>
                     <a class="menu-item" href="article.html">
                         <i class="bg-red-dark fa fa-exclamation"></i>Random Article<i class="fa fa-circle"></i>
+                    </a>
+                    <a class="menu-item" href="ranking.html">
+                        <i class="bg-red-dark fa fa-trophy"></i>Ranking<i class="fa fa-circle"></i>
                     </a>
                     <a class="menu-item" href="allphotos.html">
                         <i class="bg-red-dark fa fa-camera"></i>Photos<i class="fa fa-circle"></i>
