@@ -51,13 +51,44 @@ public class WebService : System.Web.Services.WebService
         
         a1 = a1.RandomPageFromCategory(a, a, userID);
       
-
-        Reading r = new Reading();
-        r.insert(userID, a1.ArticleId, DateTime.Now, a.ToString());
+        //method
+        //Reading r = new Reading();
+        //r.insert(userID, a1.ArticleId, DateTime.Now, a.ToString());
 
         JavaScriptSerializer js = new JavaScriptSerializer();
 
         string jsonString = js.Serialize(a1);
+        return jsonString;
+    }
+
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string getProfile(string userId)
+    {
+        var userID = userId;
+
+        User u = new User();
+        var a = u.getProfile(int.Parse(userId));
+        
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+        string jsonString = js.Serialize(a);
+        return jsonString;
+    }
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string getRanking(string userId)
+    {
+        var userID = userId;
+
+        User u = new User();
+        var a = u.getRanking(int.Parse(userId));
+
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+        string jsonString = js.Serialize(a);
         return jsonString;
     }
 
@@ -100,6 +131,7 @@ public class WebService : System.Web.Services.WebService
         Category c = new Category();
         List<string> categoriesList = c.getMainCategories();
         categoriesList.Remove("Reference works");
+        categoriesList.Remove("User:JDontology/OntologyOfWikipedia");
 
         JavaScriptSerializer js = new JavaScriptSerializer();
 

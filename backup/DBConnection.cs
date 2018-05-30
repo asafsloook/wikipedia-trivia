@@ -33,7 +33,7 @@ public class DBConnection
 
         cmd.Parameters.AddWithValue("@Date", date.ToString());
 
-        
+
 
 
         try
@@ -75,6 +75,118 @@ public class DBConnection
                 con.Close();
             }
         }
+    }
+
+    internal object getRanking(int id)
+    {
+        SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
+
+        String selectStr = "select userId,Score from UsersP order by score desc"; // create the select that will be used by the adapter to select data from the DB
+
+        SqlDataAdapter da = new SqlDataAdapter(selectStr, con); // create the data adapter
+
+        DataSet ds = new DataSet("DS"); // create a DataSet and give it a name (not mandatory) as defualt it will be the same name as the DB
+
+        da.Fill(ds);       // Fill the datatable (in the dataset), using the Select command
+
+        dt = ds.Tables[0]; // point to the cars table , which is the only table in this case
+
+        List<User> l = new List<User>();
+        foreach (DataRow dr in dt.Rows)
+        {
+            User u = new User();
+            int user = int.Parse(dr["userId"].ToString());
+            int score = int.Parse(dr["Score"].ToString());
+            u.Id = user;
+            u.Score = score;
+            //if (score > 0) 
+            l.Add(u);
+            if (l.Count > 9) break;
+        }
+
+        bool exists = false;
+        foreach (User user in l)
+        {
+            if (id == user.Id)
+            {
+                exists = true;
+                break;
+            }
+        }
+
+        if (!exists)
+        {
+            foreach (DataRow dr in dt.Rows)
+            {
+                User u = new User();
+                int user = int.Parse(dr["userId"].ToString());
+                int score = int.Parse(dr["Score"].ToString());
+                u.Id = user;
+                u.Score = score;
+                if (id == user)
+                {
+                    l.Add(u);
+                }
+
+            }
+        }
+        return l;
+    }
+
+    internal User getProfile(int id)
+    {
+        SqlConnection con = new SqlConnection();
+        User u = new User();
+
+        try
+        {
+            con = connect("GraspDBConnectionString"); // create the connection
+
+            String selectStr = "select COUNT(readId) from ReadingP where UserID = " + id;
+            SqlCommand cmd = new SqlCommand(selectStr, con);
+            object readings;
+            readings = cmd.ExecuteScalar();
+
+
+            selectStr = "select Score from UsersP where UserID = " + id;
+            cmd = new SqlCommand(selectStr, con);
+            object score;
+            score = cmd.ExecuteScalar();
+
+            selectStr = "select count(CategoryName), CategoryName  from ReadCateogriesView  where userId=" + id + "  group by CategoryName  order by count(CategoryName) desc"; // create the select that will be used by the adapter to select data from the DB
+            SqlDataAdapter da = new SqlDataAdapter(selectStr, con); // create the data adapter
+            DataSet ds = new DataSet("DS"); // create a DataSet and give it a name (not mandatory) as defualt it will be the same name as the DB
+            da.Fill(ds);       // Fill the datatable (in the dataset), using the Select command
+            dt = ds.Tables[0]; // point to the cars table , which is the only table in this case
+
+            List<Category> lc = new List<Category>();
+            foreach (DataRow item in dt.Rows)
+            {
+                Category temp = new Category();
+                temp.CategoryId = int.Parse(item[0].ToString());
+                temp.Name = item[1].ToString();
+                lc.Add(temp);
+            }
+
+            u.ReadingSum = int.Parse(readings.ToString());
+            u.Score = int.Parse(score.ToString());
+            u.Categories = lc;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+        return u;
     }
 
     internal int updateScore(User user)

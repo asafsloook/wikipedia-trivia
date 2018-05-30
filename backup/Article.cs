@@ -93,7 +93,7 @@ public class Article
 
             if (def.Seconds > 15)
             {
-                sb.Append("article not found after "+def.Seconds+" seconds, retry \r\n\r\n");
+                sb.Append("article not found after "+def.Seconds+" seconds, retry, Root Category: "+rootCategoryTitle+  "\r\n\r\n");
                 System.IO.File.AppendAllText(HttpContext.Current.Server.MapPath("~/") + "log.txt", sb.ToString());
                 sb.Clear();
 
@@ -108,6 +108,12 @@ public class Article
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             ResponseURI = response.ResponseUri.ToString();
+            if (ResponseURI ==  "https://en.wikipedia.org/wiki/Special:RandomInCategory/" + categoryTitle)
+            {
+                Article a = new Article();
+                a.ArticleContent = categoryTitle;
+                return a;
+            }
         }
         string articleTitle = ResponseURI.Replace("https://en.wikipedia.org/wiki/", "");
         callCounter++;
@@ -262,7 +268,7 @@ public class Article
         var now2 = DateTime.Now;
         var def2 = now2 - timeStart;
 
-        sb.Append("article found after " + callCounter + " calls to wiki ("+def2.Seconds +" seconds)\r\n\r\n");
+        sb.Append("article found after " + callCounter + " calls to wiki ("+def2.Seconds +" seconds), Root Category: "+rootCategoryTitle+  "\r\n\r\n");
         System.IO.File.AppendAllText(HttpContext.Current.Server.MapPath("~/") + "log.txt", sb.ToString());
         sb.Clear();
 
@@ -639,7 +645,7 @@ public class Article
             //{
             if (item == ".")
             {
-                Regex rx1 = new Regex("((^.*?([A-Z,0-9]{1,}|[0-9,a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[.])\\s+\\W*[A-Z,\"])");   //"((^.*?[a-z,0-9,A-Z,\")]{2,}[.])\\s+\\W*[A-Z,\"])"
+                Regex rx1 = new Regex("((^.*?([0-9]{1,}|[A-Z]{2,}|[0-9,a-z,\"]{2,}|[0-9,\"]{2,}|[A-Z,\"]{2,})[.])\\s+\\W*[A-Z,\"])");   //"((^.*?[a-z,0-9,A-Z,\")]{2,}[.])\\s+\\W*[A-Z,\"])"
 
                 var sentences1 = rx1.Matches(qContent);
 
