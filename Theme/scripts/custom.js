@@ -42,14 +42,19 @@ function getArticle(request) {
 
 
 function successArticlesCB(data) {
-
+    
     var newArticle = $.parseJSON(data.d);
+
+    if (newArticle.ArticleId == null) {
+
+        var badCategory = newArticle.ArticleContent;
+
+        alert("Please remove this category from your preferences: " + badCategory);
+        return;
+    }
 
     if (localStorage.articles != null) {
         articles = $.parseJSON(localStorage.articles);
-    }
-    else {
-
     }
 
     articles.push(newArticle);
@@ -59,7 +64,7 @@ function successArticlesCB(data) {
 
 function errorArticlesCB(e) {
 
-    console.log('Error in getArticle: ' + e);
+    console.log('Error in getArticle: ' + e.responseText);
 
 }
 
@@ -118,6 +123,8 @@ function showArticleOrQuest() {
         else {
             hideLoading();
         }
+
+        //ajax to server, user read this article
 
     }, 2500);
 }
@@ -1104,7 +1111,19 @@ $(document).ready(function () {
                 $("#tags").val("");
 
                 checkPrefList();
+                
             });
+            
+
+            function httpGetAsync(theUrl,callback) {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                        callback(xmlHttp.responseText);
+                }
+                xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+                xmlHttp.send(null);
+            }
 
             $('#addBTN2').on('click', function () {
                 if ($("#selects").val() == "Suggested categories...") {

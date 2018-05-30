@@ -108,6 +108,12 @@ public class Article
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             ResponseURI = response.ResponseUri.ToString();
+            if (ResponseURI ==  "https://en.wikipedia.org/wiki/Special:RandomInCategory/" + categoryTitle)
+            {
+                Article a = new Article();
+                a.ArticleContent = categoryTitle;
+                return a;
+            }
         }
         string articleTitle = ResponseURI.Replace("https://en.wikipedia.org/wiki/", "");
         callCounter++;
