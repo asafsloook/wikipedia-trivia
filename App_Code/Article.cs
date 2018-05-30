@@ -93,7 +93,7 @@ public class Article
 
             if (def.Seconds > 15)
             {
-                sb.Append("article not found after "+def.Seconds+" seconds, retry \r\n\r\n");
+                sb.Append("article not found after "+def.Seconds+" seconds, retry, Root Category: "+rootCategoryTitle+  "\r\n\r\n");
                 System.IO.File.AppendAllText(HttpContext.Current.Server.MapPath("~/") + "log.txt", sb.ToString());
                 sb.Clear();
 
@@ -198,7 +198,7 @@ public class Article
 
         if (test)
         {
-             //return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
+             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
 
 
@@ -262,7 +262,7 @@ public class Article
         var now2 = DateTime.Now;
         var def2 = now2 - timeStart;
 
-        sb.Append("article found after " + callCounter + " calls to wiki ("+def2.Seconds +" seconds)\r\n\r\n");
+        sb.Append("article found after " + callCounter + " calls to wiki ("+def2.Seconds +" seconds), Root Category: "+rootCategoryTitle+  "\r\n\r\n");
         System.IO.File.AppendAllText(HttpContext.Current.Server.MapPath("~/") + "log.txt", sb.ToString());
         sb.Clear();
 
