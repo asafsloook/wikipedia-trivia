@@ -126,7 +126,7 @@ function showArticleOrQuest() {
 
         //ajax to server, user read this article
 
-    }, 2500);
+    }, 2000);
 }
 
 
@@ -621,11 +621,16 @@ function translate(answers) {
 
     var url_ = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=labels&ids=";
 
-    for (var i = 0; i < answers.length; i++) {
+    var stop = 50;
+    if (answers.length < 50) {
+        stop = answers.length;
+    }
+
+    for (var i = 0; i < stop; i++) {
 
         url_ += answers[i];
 
-        if (i != answers.length - 1) {
+        if (i != stop - 1) {
             url_ += "|";
         }
     }
