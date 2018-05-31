@@ -259,14 +259,14 @@ function wiki() {
         url: 'https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord='
         + localStorage.lastLAT.toString().substring(0, 10) + '%7C'
         + localStorage.lastLNG.toString().substring(0, 10)
-        + '&gsradius=5000&gslimit=500&format=json',
+        + '&gsradius=5000&gslimit=100&format=json',
 
         dataType: "jsonp",
         success: function (data) {
             var x = data;
             markers = [];
             InfoWindows = [];
-
+            
             for (var i = 0; i < data.query.geosearch.length; i++) {
 
                 var lat = data.query.geosearch[i].lat;
@@ -288,20 +288,20 @@ function wiki() {
                 markers.push(marker);
             }
 
-            if (markers.length > 400) {
-                map.setZoom(16);
-            }
-            else if (markers.length > 300) {
+            if (markers.length > 75) {
                 map.setZoom(15);
             }
-            else if (markers.length > 200) {
+            else if (markers.length > 60) {
                 map.setZoom(14);
             }
-            else if (markers.length > 100) {
+            else if (markers.length > 50) {
                 map.setZoom(13);
             }
-            else {
+            else if (markers.length > 20) {
                 map.setZoom(12);
+            }
+            else {
+                map.setZoom(11);
             }
 
             for (var i = 0; i < markers.length; i++) {
@@ -591,7 +591,7 @@ function findAnsCon(query, title, wikidataID) {
             "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
             "  ?A wdt:" + query.P + " wd:" + query.Q + ".\n" +
             "}\n" +
-            "LIMIT 100",
+            "LIMIT 50",
         settings = {
             headers: { Accept: 'application/sparql-results+json' },
             data: { query: sparqlQuery }
@@ -620,17 +620,12 @@ function findAnsCon(query, title, wikidataID) {
 function translate(answers) {
 
     var url_ = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=labels&ids=";
-
-    var stop = 50;
-    if (answers.length < 50) {
-        stop = answers.length;
-    }
-
-    for (var i = 0; i < stop; i++) {
+    
+    for (var i = 0; i < answers.length; i++) {
 
         url_ += answers[i];
 
-        if (i != stop - 1) {
+        if (i != answers.length - 1) {
             url_ += "|";
         }
     }
@@ -1029,7 +1024,7 @@ $(document).ready(function () {
                 userPref = results;
 
                 if (userPref.Categories == null || userPref.Categories.length == 0) {
-                    $('#forwardBTN').hide;
+                    $('#forwardBTN1').hide;
                 }
 
                 printUserCategories();
@@ -1208,7 +1203,7 @@ $(document).ready(function () {
 
             });
 
-            $('#forwardBTN').on('click', function () {
+            $('#forwardBTN1').on('click', function () {
 
                 var catArr = [];
 
@@ -1256,10 +1251,10 @@ $(document).ready(function () {
 
             function checkPrefList() {
                 if ($("#pi").children().length == 0) {
-                    $('#forwardBTN').hide();
+                    $('#forwardBTN1').hide();
                 }
                 else {
-                    $('#forwardBTN').show();
+                    $('#forwardBTN1').show();
                 }
             }
         }
@@ -1294,7 +1289,7 @@ $(document).ready(function () {
                 changeSwitches();
             });
 
-            $('#forwardBTN').on('click', function () {
+            $('#forwardBTN2').on('click', function () {
 
                 var articleBOOL1 = $('#myonoffswitch-1').is(':checked');
                 var articleQUAN1 = $('#artPerDay').val();

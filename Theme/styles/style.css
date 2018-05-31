@@ -196,7 +196,7 @@ margin:0 auto
 
 /*pref2 styles*/
 
-#forwardBTN i {
+#forwardBTN1 i, #forwardBTN2 i {
     background-color: darkgreen;
     font-size: 30px;
 }
@@ -304,10 +304,6 @@ margin:0 auto
     padding-bottom: 5%;
 }
 
-#forwardBTN i {
-    background-color: darkgreen;
-    font-size: 30px;
-}
 
 .itemDelete {
     float: left;

@@ -1002,3 +1002,31 @@ article not found after 16 seconds, retry, Root Category: Events
 
 article found after 8 calls to wiki (2 seconds), Root Category: Events
 
+article found after 6 calls to wiki (3 seconds), Root Category: Events
+
+article found after 20 calls to wiki (6 seconds), Root Category: Arts
+
+article found after 10 calls to wiki (4 seconds), Root Category: Nature
+
+article found after 19 calls to wiki (6 seconds), Root Category: Arts
+
+article found after 8 calls to wiki (2 seconds), Root Category: Nature
+
+article found after 4 calls to wiki (1 seconds), Root Category: Arts
+
+article found after 29 calls to wiki (9 seconds), Root Category: Arts
+
+article found after 50 calls to wiki (14 seconds), Root Category: Nature
+
+article found after 14 calls to wiki (4 seconds), Root Category: Events
+
+article found after 17 calls to wiki (5 seconds), Root Category: Arts
+
+article found after 19 calls to wiki (5 seconds), Root Category: Events
+
+article found after 28 calls to wiki (8 seconds), Root Category: Arts
+
+article found after 8 calls to wiki (3 seconds), Root Category: Events
+
+article found after 31 calls to wiki (8 seconds), Root Category: Events
+
