@@ -154,12 +154,12 @@ function readArticle(request) {
 
 }
 
-function successReadArticleCB() {
-
+function successReadArticleCB(data) {
+    var x = data;
 }
 
-function errorReadArticleCB() {
-
+function errorReadArticleCB(e) {
+    alert("error in readArticle: " + e.responseText);
 }
 
 function showLoading() {
