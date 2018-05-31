@@ -1062,3 +1062,139 @@ article found after 39 calls to wiki (11 seconds), Root Category: Events
 
 article found after 6 calls to wiki (2 seconds), Root Category: Nature
 
+article found after 17 calls to wiki (8 seconds), Root Category: Philosophy
+
+article found after 26 calls to wiki (8 seconds), Root Category: Philosophy
+
+article found after 25 calls to wiki (7 seconds), Root Category: Philosophy
+
+article not found after 16 seconds, retry, Root Category: Events
+
+article found after 8 calls to wiki (2 seconds), Root Category: Events
+
+article found after 43 calls to wiki (14 seconds), Root Category: Philosophy
+
+article not found after 34 seconds, retry, Root Category: Events
+
+article not found after 17 seconds, retry, Root Category: Nature
+
+article found after 8 calls to wiki (5 seconds), Root Category: Nature
+
+article found after 8 calls to wiki (5 seconds), Root Category: Nature
+
+article found after 44 calls to wiki (14 seconds), Root Category: Events
+
+article not found after 16 seconds, retry, Root Category: Events
+
+article not found after 42 seconds, retry, Root Category: Philosophy
+
+article not found after 38 seconds, retry, Root Category: Events
+
+article not found after 38 seconds, retry, Root Category: Arts
+
+article found after 50 calls to wiki (55 seconds), Root Category: Nature
+
+article found after 10 calls to wiki (3 seconds), Root Category: Philosophy
+
+article found after 12 calls to wiki (3 seconds), Root Category: Arts
+
+article found after 43 calls to wiki (12 seconds), Root Category: Events
+
+article not found after 19 seconds, retry, Root Category: Arts
+
+article found after 21 calls to wiki (6 seconds), Root Category: Philosophy
+
+article found after 23 calls to wiki (7 seconds), Root Category: Nature
+
+article found after 26 calls to wiki (7 seconds), Root Category: Arts
+
+article not found after 16 seconds, retry, Root Category: Events
+
+article found after 34 calls to wiki (10 seconds), Root Category: Events
+
+article not found after 31 seconds, retry, Root Category: Arts
+
+article found after 10 calls to wiki (5 seconds), Root Category: Arts
+
+article found after 12 calls to wiki (4 seconds), Root Category: Arts
+
+article found after 24 calls to wiki (9 seconds), Root Category: Arts
+
+article not found after 18 seconds, retry, Root Category: Events
+
+article found after 17 calls to wiki (9 seconds), Root Category: Philosophy
+
+article found after 6 calls to wiki (2 seconds), Root Category: Nature
+
+article found after 41 calls to wiki (17 seconds), Root Category: Arts
+
+article found after 19 calls to wiki (9 seconds), Root Category: Nature
+
+article found after 16 calls to wiki (8 seconds), Root Category: Nature
+
+article found after 16 calls to wiki (5 seconds), Root Category: Events
+
+article found after 6 calls to wiki (2 seconds), Root Category: Philosophy
+
+article found after 25 calls to wiki (7 seconds), Root Category: Arts
+
+article not found after 16 seconds, retry, Root Category: Events
+
+article found after 47 calls to wiki (14 seconds), Root Category: Nature
+
+article found after 43 calls to wiki (12 seconds), Root Category: Events
+
+article found after 6 calls to wiki (25 seconds), Root Category: Mathematics
+
+article not found after 26 seconds, retry, Root Category: Mathematics
+
+article not found after 30 seconds, retry, Root Category: Philosophy
+
+article not found after 40 seconds, retry, Root Category: Events
+
+article not found after 25 seconds, retry, Root Category: Nature
+
+article not found after 32 seconds, retry, Root Category: Mathematics
+
+article found after 4 calls to wiki (15 seconds), Root Category: Mathematics
+
+article found after 6 calls to wiki (11 seconds), Root Category: Philosophy
+
+article not found after 16 seconds, retry, Root Category: Mathematics
+
+article found after 6 calls to wiki (3 seconds), Root Category: Mathematics
+
+article not found after 17 seconds, retry, Root Category: Philosophy
+
+article found after 9 calls to wiki (4 seconds), Root Category: Nature
+
+article found after 6 calls to wiki (3 seconds), Root Category: Mathematics
+
+article found after 14 calls to wiki (5 seconds), Root Category: Philosophy
+
+article found after 29 calls to wiki (11 seconds), Root Category: Mathematics
+
+article found after 28 calls to wiki (9 seconds), Root Category: Philosophy
+
+article found after 27 calls to wiki (8 seconds), Root Category: Philosophy
+
+article found after 38 calls to wiki (13 seconds), Root Category: Arts
+
+article not found after 44 seconds, retry, Root Category: Mathematics
+
+article found after 6 calls to wiki (5 seconds), Root Category: Philosophy
+
+article found after 10 calls to wiki (12 seconds), Root Category: Mathematics
+
+article found after 6 calls to wiki (13 seconds), Root Category: Nature
+
+article not found after 25 seconds, retry, Root Category: Events
+
+article found after 23 calls to wiki (6 seconds), Root Category: Events
+
+article found after 6 calls to wiki (3 seconds), Root Category: Philosophy
+
+article found after 8 calls to wiki (3 seconds), Root Category: Events
+
+article found after 22 calls to wiki (7 seconds), Root Category: Events
+

@@ -27,7 +27,7 @@ public class Reading
 
     public DateTime ReadingTime { get; set; }
 
-    internal void insert(string userID, string articleId, DateTime date, string categoryname)
+    internal void insert(int userID, string articleId, DateTime date, string categoryname)
     {
         DBConnection db = new DBConnection();
         db.insertReading(userID, articleId, date, categoryname);

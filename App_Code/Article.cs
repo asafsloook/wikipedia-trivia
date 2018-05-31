@@ -250,7 +250,7 @@ public class Article
         ArticleId = id;
 
         Category c1 = new Category();
-        c1.Name = categoryTitle;
+        c1.Name = rootCategoryTitle;
 
         Category = c1;
         Title = title.Replace("_", " ");

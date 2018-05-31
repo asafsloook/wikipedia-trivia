@@ -89,6 +89,10 @@ function showArticleOrQuest() {
         temp = $.parseJSON(localStorage.articles)
         var article = temp[0];
 
+        var oldArticles = $.parseJSON(localStorage.articles);
+        oldArticles.shift();
+        localStorage.articles = JSON.stringify(oldArticles);
+
         var a = "";
 
         $("#shareBTN").show();
@@ -110,10 +114,7 @@ function showArticleOrQuest() {
         //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
 
         $("#articleContent").append(article.ArticleContent);
-
-        var oldArticles = $.parseJSON(localStorage.articles);
-        oldArticles.shift();
-        localStorage.articles = JSON.stringify(oldArticles);
+        
 
         //check if notification is question
         if (article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
@@ -125,11 +126,41 @@ function showArticleOrQuest() {
         }
 
         //ajax to server, user read this article
+        var uid = parseInt(localStorage.Id);
+        var request = {
+            userId: uid,
+            rootCategory: article.Category.Name,
+            articleId: article.ArticleId
+
+        }
+        readArticle(request);
 
     }, 2000);
 }
 
+function readArticle(request) {
 
+    var dataString = JSON.stringify(request);
+
+    $.ajax({ // ajax call starts
+        url: urlDomain + 'WebService.asmx/readArticle',   // server side web service method
+        data: dataString,                          // the parameters sent to the server
+        type: 'POST',                              // can be also GET
+        dataType: 'json',                          // expecting JSON datatype from the server
+        contentType: 'application/json; charset = utf-8', // sent to the server
+        success: successReadArticleCB,                // data.d id the Variable data contains the data we get from serverside
+        error: errorReadArticleCB
+    }); // end of ajax call
+
+}
+
+function successReadArticleCB() {
+
+}
+
+function errorReadArticleCB() {
+
+}
 
 function showLoading() {
 

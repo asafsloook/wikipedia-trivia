@@ -22,7 +22,7 @@ public class DBConnection
         //
     }
 
-    internal void insertReading(string userID, string articleId, DateTime date, string categoryname)
+    internal void insertReading(int userID, string articleId, DateTime date, string categoryname)
     {
         SqlConnection con;
         SqlCommand cmd = new SqlCommand();

@@ -64,6 +64,21 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string readArticle(int userId,string rootCategory, string articleId)
+    {
+        
+        Reading r = new Reading();
+        r.insert(userId, articleId, DateTime.Now, rootCategory.ToString());
+
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+        string jsonString = js.Serialize("");
+        return jsonString;
+    }
+
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public string getProfile(string userId)
     {
         var userID = userId;
