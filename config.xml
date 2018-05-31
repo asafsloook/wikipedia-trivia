@@ -35,4 +35,8 @@
     <preference name="android-minSdkVersion" value="19" />
   </platform>
 
+  <gap:plugin name="cordova-plugin-customurlscheme" source="npm">
+    <param name="URL_SCHEME" value="grasp" />
+  </gap:plugin>
+  
 </widget>

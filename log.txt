@@ -1262,3 +1262,21 @@ article found after 28 calls to wiki (9 seconds), Root Category: Arts
 
 article found after 55 calls to wiki (14 seconds), Root Category: Arts
 
+article found after 6 calls to wiki (3 seconds), Root Category: Nature
+
+article found after 11 calls to wiki (4 seconds), Root Category: Nature
+
+article found after 14 calls to wiki (4 seconds), Root Category: Events
+
+article found after 18 calls to wiki (5 seconds), Root Category: Philosophy
+
+article found after 12 calls to wiki (3 seconds), Root Category: Philosophy
+
+article found after 21 calls to wiki (6 seconds), Root Category: Nature
+
+article found after 17 calls to wiki (5 seconds), Root Category: Nature
+
+article not found after 16 seconds, retry, Root Category: Events
+
+article found after 35 calls to wiki (10 seconds), Root Category: Events
+

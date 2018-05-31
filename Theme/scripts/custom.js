@@ -435,9 +435,15 @@ function getArticlePhoto(title) {
 
 
             if (window.location.href.toString().indexOf('articlearound.html') != -1) {
-                $("#aroundPhoto").attr("src", x);
-                $("#aroundTitle").html(localStorage.lastPageTitle);
 
+                if (x == null) {
+                    $("#aroundPhoto").hide();
+                }
+                else {
+                    $("#aroundPhoto").attr("src", x);
+                }
+                $("#aroundTitle").html(localStorage.lastPageTitle);
+                
             }
             else if (window.location.href.toString().indexOf('aroundme.html') != -1) {
                 var selector = "#" + localStorage.lastPageid + "pic";
