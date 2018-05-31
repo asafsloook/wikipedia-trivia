@@ -591,7 +591,7 @@ function findAnsCon(query, title, wikidataID) {
             "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
             "  ?A wdt:" + query.P + " wd:" + query.Q + ".\n" +
             "}\n" +
-            "LIMIT 50",
+            "LIMIT 49",
         settings = {
             headers: { Accept: 'application/sparql-results+json' },
             data: { query: sparqlQuery }
