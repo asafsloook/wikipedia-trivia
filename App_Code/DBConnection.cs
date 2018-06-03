@@ -595,8 +595,8 @@ public class DBConnection
         }
 
         //Default preferences for a new user
-        string cStr = "insert into UsersP (IMEI,pushKey,LocationPush,PhotoPush,PhotoPushTime,RandomArticlePush,RandomArticleQuantity) ";
-        cStr += "values('" + IMEI + "','www',1,1,'12:00',1,5)";
+        string cStr = "insert into UsersP (IMEI,pushKey,LocationPush,PhotoPush,PhotoPushTime,RandomArticlePush,RandomArticleQuantity,Score) ";
+        cStr += "values('" + IMEI + "','www',1,1,'12:00',1,5,0)";
 
         //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
 

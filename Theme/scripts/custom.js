@@ -42,7 +42,7 @@ function getArticle(request) {
 
 
 function successArticlesCB(data) {
-    
+
     var newArticle = $.parseJSON(data.d);
 
     if (newArticle.ArticleId == null) {
@@ -114,7 +114,7 @@ function showArticleOrQuest() {
         //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
 
         $("#articleContent").append(article.ArticleContent);
-        
+
 
         //check if notification is question
         if (article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
@@ -297,7 +297,7 @@ function wiki() {
             var x = data;
             markers = [];
             InfoWindows = [];
-            
+
             for (var i = 0; i < data.query.geosearch.length; i++) {
 
                 var lat = data.query.geosearch[i].lat;
@@ -436,14 +436,15 @@ function getArticlePhoto(title) {
 
             if (window.location.href.toString().indexOf('articlearound.html') != -1) {
 
-                if (x == null) {
-                    $("#aroundPhoto").hide();
-                }
-                else {
+                $("#aroundPhoto").hide();
+
+                if (x != null) {
                     $("#aroundPhoto").attr("src", x);
+                    $("#aroundPhoto").show();
                 }
+
                 $("#aroundTitle").html(localStorage.lastPageTitle);
-                
+
             }
             else if (window.location.href.toString().indexOf('aroundme.html') != -1) {
                 var selector = "#" + localStorage.lastPageid + "pic";
@@ -654,10 +655,18 @@ function findAnsCon(query, title, wikidataID) {
     });
 }
 
+function search(nameKey, myArray) {
+    for (var i = 0; i < myArray.length; i++) {
+        if (myArray[i].name === nameKey) {
+            return myArray[i];
+        }
+    }
+}
+
 function translate(answers) {
 
     var url_ = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=labels&ids=";
-    
+
     for (var i = 0; i < answers.length; i++) {
 
         url_ += answers[i];
@@ -900,10 +909,16 @@ $(document).ready(function () {
         }
         else {
             urlDomain = '../';
-            localStorage.uuid = "67a8bacd24573639";
             userPref = [];
-            userPref.Id = 192;
-            localStorage.Id = 192;
+
+            localStorage.uuid = "test";
+            userPref.Id = 197;
+            localStorage.Id = 197;
+
+            //localStorage.uuid = "67a8bacd24573639";
+            //userPref.Id = 192;
+            //localStorage.Id = 192;
+
             onDeviceReady();
         }
 
@@ -1148,11 +1163,11 @@ $(document).ready(function () {
                 $("#tags").val("");
 
                 checkPrefList();
-                
-            });
-            
 
-            function httpGetAsync(theUrl,callback) {
+            });
+
+
+            function httpGetAsync(theUrl, callback) {
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.onreadystatechange = function () {
                     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -1292,6 +1307,132 @@ $(document).ready(function () {
                 }
                 else {
                     $('#forwardBTN1').show();
+                }
+            }
+        }
+
+        if (window.location.href.toString().indexOf('pref1a.html') != -1) {
+
+            userPref = $.parseJSON(localStorage.userPref);
+
+            $.ajax({ // ajax call starts
+                url: urlDomain + 'WebService.asmx/GetCategories',   // server side web service method
+                //data: dataString,                          // the parameters sent to the server
+                type: 'POST',                              // can be also GET
+                dataType: 'json',                          // expecting JSON datatype from the server
+                contentType: 'application/json; charset = utf-8', // sent to the server
+                success: successGetCategoriesCB2,                // data.d id the Variable data contains the data we get from serverside
+                error: errorGetCategoriesCB2
+            }); // end of ajax call
+
+            function successGetCategoriesCB2(results) {
+                var results = $.parseJSON(results.d);
+
+                cat = results;
+
+                var index = cat.indexOf('Reference');    // <-- Not supported in <IE9
+                if (index !== -1) {
+                    cat.splice(index, 1);
+                }
+
+                printCategories2(results);
+            }
+
+            function errorGetCategoriesCB2(e) {
+                alert("I caught the exception : failed in GetCategories \n The exception message is : " + e.responseText);
+            }
+
+            function printCategories2(results) {
+
+                for (var i = 0; i < results.length; i++) {
+
+                    if (results[i] == 'Science and technology') {
+                        results[i] = 'Sci&Tech';
+                    }
+
+                    for (var j = 0; j < userPref.Categories.length; j++) {
+                        if (userPref.Categories[j].Name == results[i]) {
+                            $('#' + results[i] + 'C').eq(0).addClass('categoryActive');
+                        }
+                    }
+
+
+                }
+
+                checkPrefList2();
+            }
+
+            $('.category').on('click', function () {
+
+                if ($(this).hasClass('categoryActive')) {
+                    $(this).removeClass('categoryActive');
+                }
+                else {
+
+                    $(this).addClass('categoryActive');
+                }
+
+            });
+
+            $('#forwardBTN1a').on('click', function () {
+
+                var catArr = [];
+
+                var selector = $("#categoryContainer .categoryActive");
+
+                for (var i = 0; i < selector.length; i++) {
+
+                    var a = selector[i].innerHTML;
+
+                    if (a == 'Sci&Tech') {
+                        a = 'Science and technology';
+                    }
+
+                    var b = a.substring(0, a.indexOf("<"));
+
+                    catArr.push(b);
+                }
+
+                var request = {
+                    arr: catArr,
+                    IMEI: localStorage.uuid
+                }
+
+                updateCategories2(request);
+            });
+
+            function updateCategories2(request) {
+
+
+                var dataString = JSON.stringify(request);
+
+
+                $.ajax({ // ajax call starts
+                    url: urlDomain + 'WebService.asmx/UpdateCategories',   // server side web service method
+                    data: dataString,                          // the parameters sent to the server
+                    type: 'POST',                              // can be also GET
+                    dataType: 'json',                          // expecting JSON datatype from the server
+                    contentType: 'application/json; charset = utf-8', // sent to the server
+                    success: successupdateCategoriesCB2,                // data.d id the Variable data contains the data we get from serverside
+                    error: errorupdateCategoriesCB2
+                }); // end of ajax call
+
+                function successupdateCategoriesCB2(results) {
+
+                    checkPrefList();
+                }
+
+                function errorupdateCategoriesCB2(e) {
+                    alert("I caught the exception : failed in updateCategories \n The exception message is : " + e.responseText);
+                }
+            }
+
+            function checkPrefList2() {
+                if ($("#categoryContainer .categoryActive").length == 0) {
+                    $('#forwardBTN1a').hide();
+                }
+                else {
+                    $('#forwardBTN1a').show();
                 }
             }
         }
