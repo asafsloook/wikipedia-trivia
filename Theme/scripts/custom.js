@@ -1313,6 +1313,10 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf('pref1a.html') != -1) {
 
+            $("#burgerMenu").hide();
+
+            cat = [];
+
             userPref = $.parseJSON(localStorage.userPref);
 
             $.ajax({ // ajax call starts
@@ -1371,6 +1375,8 @@ $(document).ready(function () {
 
                     $(this).addClass('categoryActive');
                 }
+
+                checkPrefList2();
 
             });
 
