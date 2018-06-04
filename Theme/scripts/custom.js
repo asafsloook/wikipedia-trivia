@@ -1016,7 +1016,7 @@ $(document).ready(function () {
                 articleFromLS();
 
             });
-            
+
         }
 
         if (window.location.href.toString().indexOf('photo.html') != -1) {
@@ -1314,49 +1314,62 @@ $(document).ready(function () {
 
             cat = [];
 
-            userPref = $.parseJSON(localStorage.userPref);
+            var request = {
+                IMEI: localStorage.uuid
+            }
 
-            $.ajax({ // ajax call starts
-                url: urlDomain + 'WebService.asmx/GetCategories',   // server side web service method
-                //data: dataString,                          // the parameters sent to the server
-                type: 'POST',                              // can be also GET
-                dataType: 'json',                          // expecting JSON datatype from the server
-                contentType: 'application/json; charset = utf-8', // sent to the server
-                success: successGetCategoriesCB2,                // data.d id the Variable data contains the data we get from serverside
-                error: errorGetCategoriesCB2
-            }); // end of ajax call
+            checkUser3(request);
 
-            function successGetCategoriesCB2(results) {
+
+            function checkUser3(request) {
+
+                var dataString = JSON.stringify(request);
+
+                $.ajax({ // ajax call starts
+                    url: urlDomain + 'WebService.asmx/checkUser',   // server side web service method
+                    data: dataString,                          // the parameters sent to the server
+                    type: 'POST',                              // can be also GET
+                    dataType: 'json',                          // expecting JSON datatype from the server
+                    contentType: 'application/json; charset = utf-8', // sent to the server
+                    success: checkUserSCB3,                // data.d id the Variable data contains the data we get from serverside
+                    error: checkUserECB3
+                }); // end of ajax call
+
+            }
+
+            function checkUserSCB3(results) {
+
                 var results = $.parseJSON(results.d);
 
-                cat = results;
+                userPref = results;
 
-                var index = cat.indexOf('Reference');    // <-- Not supported in <IE9
-                if (index !== -1) {
-                    cat.splice(index, 1);
+                if (userPref.Categories == null || userPref.Categories.length == 0) {
+                    $('#forwardBTN1a').hide;
                 }
 
-                printCategories2(results);
+                printCategories2();
             }
 
-            function errorGetCategoriesCB2(e) {
-                alert("I caught the exception : failed in GetCategories \n The exception message is : " + e.responseText);
+            function checkUserECB3(e) {
+                alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
+
             }
 
-            function printCategories2(results) {
 
-                for (var i = 0; i < results.length; i++) {
+            function printCategories2() {
 
-                    if (results[i] == 'Science and technology') {
-                        results[i] = 'Sci&Tech';
+                //var category = selector.eq(i)[0].id.slice(0, -1);
+
+
+                for (var j = 0; j < userPref.Categories.length; j++) {
+
+                    var select = userPref.Categories[j].Name;
+
+                    if (select == 'Science and technology') {
+                        select = 'ScinTech';
                     }
 
-                    for (var j = 0; j < userPref.Categories.length; j++) {
-                        if (userPref.Categories[j].Name == results[i]) {
-                            $('#' + results[i] + 'C').eq(0).addClass('categoryActive');
-                        }
-                    }
-
+                    $('#' + select + 'C').eq(0).addClass('categoryActive');
 
                 }
 
@@ -1387,11 +1400,11 @@ $(document).ready(function () {
 
                     var a = selector[i].innerHTML;
 
-                    if (a == 'Sci&Tech') {
-                        a = 'Science and technology';
-                    }
-
                     var b = a.substring(0, a.indexOf("<"));
+
+                    if (b == 'Sci &amp; Tech') {
+                        b = 'Science and technology';
+                    }
 
                     catArr.push(b);
                 }
