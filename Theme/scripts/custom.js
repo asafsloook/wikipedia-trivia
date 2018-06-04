@@ -1016,10 +1016,7 @@ $(document).ready(function () {
                 articleFromLS();
 
             });
-
-
-
-
+            
         }
 
         if (window.location.href.toString().indexOf('photo.html') != -1) {
