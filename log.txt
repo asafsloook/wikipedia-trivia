@@ -1306,3 +1306,69 @@ article found after 6 calls to wiki (2 seconds), Root Category: Arts
 
 article found after 4 calls to wiki (1 seconds), Root Category: Arts
 
+article found after 4 calls to wiki (4 seconds), Root Category: Nature
+
+article found after 22 calls to wiki (7 seconds), Root Category: Politics
+
+article found after 10 calls to wiki (3 seconds), Root Category: People
+
+article found after 4 calls to wiki (1 seconds), Root Category: Politics
+
+article found after 16 calls to wiki (5 seconds), Root Category: Philosophy
+
+article found after 4 calls to wiki (1 seconds), Root Category: Arts
+
+article found after 18 calls to wiki (5 seconds), Root Category: Arts
+
+article found after 4 calls to wiki (1 seconds), Root Category: Philosophy
+
+article found after 8 calls to wiki (2 seconds), Root Category: People
+
+article found after 26 calls to wiki (8 seconds), Root Category: Philosophy
+
+article found after 4 calls to wiki (1 seconds), Root Category: Science and technology
+
+article found after 27 calls to wiki (8 seconds), Root Category: Nature
+
+article not found after 16 seconds, retry, Root Category: Arts
+
+article found after 4 calls to wiki (1 seconds), Root Category: Science and technology
+
+article found after 11 calls to wiki (3 seconds), Root Category: Arts
+
+article found after 11 calls to wiki (3 seconds), Root Category: Universe
+
+article found after 6 calls to wiki (2 seconds), Root Category: Universe
+
+article found after 8 calls to wiki (3 seconds), Root Category: People
+
+article found after 19 calls to wiki (6 seconds), Root Category: People
+
+article found after 12 calls to wiki (3 seconds), Root Category: Politics
+
+article found after 8 calls to wiki (3 seconds), Root Category: Universe
+
+article found after 17 calls to wiki (6 seconds), Root Category: Science and technology
+
+article found after 4 calls to wiki (2 seconds), Root Category: Nature
+
+article found after 19 calls to wiki (7 seconds), Root Category: Philosophy
+
+article found after 4 calls to wiki (1 seconds), Root Category: Politics
+
+article found after 19 calls to wiki (6 seconds), Root Category: Science and technology
+
+article found after 16 calls to wiki (5 seconds), Root Category: Universe
+
+article found after 49 calls to wiki (15 seconds), Root Category: People
+
+article found after 9 calls to wiki (3 seconds), Root Category: Science and technology
+
+article found after 6 calls to wiki (1 seconds), Root Category: Politics
+
+article found after 6 calls to wiki (2 seconds), Root Category: Nature
+
+article found after 4 calls to wiki (2 seconds), Root Category: Politics
+
+article found after 23 calls to wiki (7 seconds), Root Category: People
+

@@ -119,6 +119,7 @@ function showArticleOrQuest() {
         //check if notification is question
         if (article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
             Question = article.NotificationContent;
+            Question = Question.replace(" ,", ",");
             findAns(article.Title);
         }
         else {
@@ -759,9 +760,9 @@ function showQuestion() {
         }
 
         var choose = $(this).html().toLowerCase();
-        var correctt = correct.toLowerCase();
+        correct = correct.toLowerCase();
 
-        if (correctt.indexOf(choose) != -1) {
+        if (correct == choose) {
             $(this).css("background-color", "#4CAF50");
 
             //update score for user
@@ -1317,7 +1318,7 @@ $(document).ready(function () {
             var request = {
                 IMEI: localStorage.uuid
             }
-
+            
             checkUser3(request);
 
 
@@ -1432,15 +1433,18 @@ $(document).ready(function () {
                     success: successupdateCategoriesCB2,                // data.d id the Variable data contains the data we get from serverside
                     error: errorupdateCategoriesCB2
                 }); // end of ajax call
+                
+            }
 
-                function successupdateCategoriesCB2(results) {
+            function successupdateCategoriesCB2(results) {
+                setTimeout(function() {
+                    window.location.replace('pref2.html');
+                },100);
+                
+            }
 
-                    checkPrefList();
-                }
-
-                function errorupdateCategoriesCB2(e) {
-                    alert("I caught the exception : failed in updateCategories \n The exception message is : " + e.responseText);
-                }
+            function errorupdateCategoriesCB2(e) {
+                alert("I caught the exception : failed in updateCategories \n The exception message is : " + e.responseText);
             }
 
             function checkPrefList2() {
@@ -1529,7 +1533,9 @@ $(document).ready(function () {
 
                 localStorage.removeItem('articles');
 
+                setTimeout(function () {
                 window.location.replace('profile.html');
+                },100);
             }
 
             function errorUpdateUserPrefsCB(e) {
