@@ -1,3 +1,19 @@
+.profileMenu {
+    background: #3498db !important;
+    padding: 2% !important;
+    border-radius: 15px !important;
+    margin: 6% 11%;
+}
+
+    .profileMenu h4 {
+        text-align: center !important;
+        color: white !important;
+    }
+    
+    td {
+        color: black !important;
+    }
+
 .categoryActive {
     transition: background-color 1000ms;
     background-color: #2980b9;
@@ -43,12 +59,14 @@ p {
 
 #answers label {
     text-align: center;
-    background: #e7e7e7;
+    color: white;
+    background: #3498db;
     border-radius: 20px;
     width: 80%;
     margin: 7% auto;
     padding: 2%;
     font-size: 16px;
+    font-weight: 500;
 }
 
 #answers {
@@ -74,7 +92,7 @@ p {
 /*menu*/
 
 .sidebar-menu a i:first-child {
-    background-color: #2980b9 !important;
+    background-color: #3498db !important;
 }
 
 

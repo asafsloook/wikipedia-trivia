@@ -1707,7 +1707,7 @@ $(document).ready(function () {
         }
 
         if (window.location.href.toString().indexOf('profile.html') != -1) {
-
+            $('.back-to-top-badge').hide();
             getStats();
 
         }
@@ -1777,20 +1777,20 @@ $(document).ready(function () {
                         label: '# of Votes',
                         data: dataArr,
                         backgroundColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86,1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
+                            'rgba(255,138,34, 1)',
+                            'rgba(246,66,66, 1)',
+                            'rgba(186,38,68,1)',
+                            'rgba(73,169,166, 1)',
+                            'rgba(163,232,220, 1)',
+                            'rgba(87,96,111, 1)'
                         ],
                         borderColor: [
-                            'rgba(255,99,132,1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
+                            'rgba(255,138,34, 1)',
+                            'rgba(246,66,66, 1)',
+                            'rgba(186,38,68,1)',
+                            'rgba(73,169,166, 1)',
+                            'rgba(163,232,220, 1)',
+                            'rgba(87,96,111, 1)'
                         ],
                         borderWidth: 1
                     }]
