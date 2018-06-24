@@ -220,7 +220,7 @@ $(document).ready(function () {
 
     if (window.location.href.toString().indexOf('article.html') != -1) {
 
-        
+
         showLoading();
     }
 
@@ -769,7 +769,7 @@ function showQuestion() {
 
             //update score for user
             var ans = stringAnswers.length;
-            
+
 
             if (ans == 4) {
                 score = 10;
@@ -781,17 +781,17 @@ function showQuestion() {
                 //2
                 score = 5;
             }
-            
+
             var uid = parseInt(localStorage.Id);
             var request = {
                 Score: score,
                 UserId: uid
             }
-            
+
             saveScore(request);
 
             $(this).effect('shake', {
-                direction:'up',
+                direction: 'up',
                 distance: 10,
                 times: 3
             });
@@ -808,7 +808,7 @@ function showQuestion() {
 
         setTimeout(function () {
             $('#questionDiv').fadeOut();
-            
+
             showArticle();
 
             if (score == 0) {
@@ -828,9 +828,9 @@ function showQuestion() {
 function answerWrong() {
 
     var rnd = Math.floor((Math.random() * 10) + 1);
-    var imgRND = 'w' +rnd;
+    var imgRND = 'w' + rnd;
 
-    $("#dialog").html('<img class="dialogSmiley" src="images/'+imgRND+'.png"><h5 style="text-align:center">Don\'t worry, you\'ll get the next one</h5>');
+    $("#dialog").html('<img class="dialogSmiley" src="images/' + imgRND + '.png"><h5 style="text-align:center">Don\'t worry, you\'ll get the next one</h5>');
 
     $("#dialog").dialog({
         title: "Wrong...",
@@ -852,7 +852,7 @@ function answerRight() {
     var rnd = Math.floor((Math.random() * 10) + 1);
     var imgRND = 'r' + rnd;
 
-    $("#dialog").html('<img class="dialogSmiley" src="images/' + imgRND +'.png"><h5 style="text-align:center">you\'ve earned ' + score + ' points</h5>');
+    $("#dialog").html('<img class="dialogSmiley" src="images/' + imgRND + '.png"><h5 style="text-align:center">you\'ve earned ' + score + ' points</h5>');
 
     $("#dialog").dialog({
         title: 'Correct!',
@@ -1809,8 +1809,8 @@ $(document).ready(function () {
             var score = profile.Score;
             var readingSum = profile.ReadingSum;
 
-            $('#scorePH').html("Total Score: " + score );
-            $('#readingsPH').html("Articles Read: " + readingSum );
+            $('#scorePH').html("Total Score: " + score);
+            $('#readingsPH').html("Articles Read: " + readingSum);
 
 
             var categories = profile.Categories;
@@ -1916,15 +1916,60 @@ $(document).ready(function () {
                     name = "Guest" + ranks[i].Id;
                 }
 
-                if (name == "Me") {
-                    str += '<tr><td style="background-color: #bcd6ff;">' + (i + 1) + '</td>  <td style="background-color: #bcd6ff;">' + name + '</td>  <td style="background-color: #bcd6ff;">' + ranks[i].Score + "</td></tr>"
+
+                var medal = '<img src="images/';
+                var score = ranks[i].Score;
+                
+
+                switch (true) {
+                    case (score < 100):
+                        medal += 'bronze_medal.png" />';
+                        break;
+                    case (score < 500):
+                        medal += 'bronze_medal.png" />';
+                        break;
+                    case (score < 1000):
+                        medal += 'silver_medal.png" />';
+                        break;
+                    case (score < 10000):
+                        medal += 'gold_medal.png" />';
+                        break;
+                }
+
+                if (i < 3) {
+                    var rankColor = 'style="background:';
+                    switch (i+1) {
+                        case 1:
+                            rankColor += 'gold"';
+                            break;
+                        case 2:
+                            rankColor += 'silver"';
+                            break;
+                        case 3:
+                            rankColor += '#db7"';
+                            break;
+                    }
+                    
+                    str = createRow(name, i, medal, ranks,str);
                 }
                 else {
-                    str += "<tr><td>" + (i + 1) + "</td>  <td>" + name + "</td>  <td>" + ranks[i].Score + "</td></tr>"
+                    str = createRow(name, i, medal, ranks, str);
                 }
+
             }
 
             $("#ranking").append(str);
+        }
+
+        function createRow(name, i, medal, ranks,str) {
+            if (name == "Me") {
+
+                str += '<tr><td class="meRank">' + (i + 1) + '.</td>  <td class="meRank">' + name + '</td>  <td class="medal meRank">' + medal + '</td>  <td class="meRank">' + ranks[i].Score + "</td></tr>";
+            }
+            else {
+                str += "<tr><td>" + (i + 1) + ".</td>  <td>" + name + '</td>  <td class="medal">' + medal + '</td>  <td>' + ranks[i].Score + '</td></tr>';
+            }
+            return str;
         }
 
         function errorGetRankingCB(e) {

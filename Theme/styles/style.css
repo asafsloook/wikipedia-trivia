@@ -2,6 +2,52 @@ span, p, h1, h2, h3, h4, h5, h6, a, label {
     font-family: Roboto !important;
 }
 
+.meRank {
+    background: #e0ecff !important;
+}
+
+.sidebar-menu {
+    margin-top: 10px;
+}
+
+.firstRow {
+    background: white;
+}
+
+    .firstRow th {
+        color: black !important;
+        border-bottom: 1px solid gray !important;
+    }
+
+table, th {
+    border: none !important;
+}
+
+td {
+    color: black !important;
+    border: none !important;
+    border-bottom: 1px solid gray !important;
+    font-weight: 500 !important;
+    background-color: white !important;
+}
+
+th {
+    font-weight: 600 !important;
+    background: none !important;
+    height: 30px;
+}
+
+td img {
+    max-width: 25px;
+    margin: auto;
+}
+
+.top3 {
+    width: 50%;
+    margin: auto;
+    border-radius: 6px;
+}
+
 .dialogSmiley {
     width: 100px;
     margin: 0 auto;
@@ -14,8 +60,9 @@ span, p, h1, h2, h3, h4, h5, h6, a, label {
 }
 
 .ui-dialog .ui-dialog-title {
-float:none !important;
+    float: none !important;
 }
+
 .ui-widget.ui-widget-content, .ui-dialog .ui-dialog-content {
     border-radius: 25px;
     height: 200px !important;
@@ -39,10 +86,8 @@ float:none !important;
         text-align: center !important;
         color: white !important;
     }
-    
-    td {
-        color: black !important;
-    }
+
+
 
 .categoryActive {
     transition: background-color 1000ms;
@@ -126,8 +171,8 @@ p {
 }
 
 
-    /* maps*/
-    #pac-input {
+/* maps*/
+#pac-input {
     background-color: #fff !important;
     font-family: Roboto !important;
     font-size: 15px !important;
@@ -400,7 +445,7 @@ p {
     padding-bottom: 20px;
     float: left;
     width: 90%;
-    font-weight:700;
+    font-weight: 700;
 }
 
 #logo {
