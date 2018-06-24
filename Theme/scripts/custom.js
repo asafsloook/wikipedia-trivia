@@ -220,6 +220,7 @@ $(document).ready(function () {
 
     if (window.location.href.toString().indexOf('article.html') != -1) {
 
+        
         showLoading();
     }
 
@@ -761,13 +762,14 @@ function showQuestion() {
 
         var choose = $(this).html().toLowerCase();
         correct = correct.toLowerCase();
+        score = 0;
 
         if (correct == choose) {
             $(this).css("background-color", "#4CAF50");
 
             //update score for user
             var ans = stringAnswers.length;
-            var score = 0;
+            
 
             if (ans == 4) {
                 score = 10;
@@ -779,29 +781,92 @@ function showQuestion() {
                 //2
                 score = 5;
             }
-
+            
             var uid = parseInt(localStorage.Id);
             var request = {
                 Score: score,
                 UserId: uid
             }
-
+            
             saveScore(request);
+
+            $(this).effect('shake', {
+                direction:'up',
+                distance: 10,
+                times: 3
+            });
         }
         else {
+            //wrong answer
             $(this).css("background-color", "#f44336");
+            $(this).effect('shake', {
+                distance: 10,
+                times: 3
+            });
         }
 
 
         setTimeout(function () {
             $('#questionDiv').fadeOut();
+            
             showArticle();
+
+            if (score == 0) {
+                answerWrong();
+            }
+            else {
+                answerRight();
+            }
         }, 1000);
 
         clicks++;
     });
 
     hideLoadingQuest();
+}
+
+function answerWrong() {
+
+    var rnd = Math.floor((Math.random() * 10) + 1);
+    var imgRND = 'w' +rnd;
+
+    $("#dialog").html('<img class="dialogSmiley" src="images/'+imgRND+'.png"><h5 style="text-align:center">Don\'t worry, you\'ll get the next one</h5>');
+
+    $("#dialog").dialog({
+        title: "Wrong...",
+        height: 100,
+        position: { my: "center", at: "center", of: window },
+        modal: true,
+        hide: { effect: "fade", duration: 500 },
+        show: { effect: "fade", duration: 250 },
+        open: function (event, ui) {
+            $(".ui-dialog-title").css('font-size', '20px');
+            setTimeout("$('#dialog').dialog('destroy')", 3000);
+            $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+        }
+    });
+}
+
+function answerRight() {
+
+    var rnd = Math.floor((Math.random() * 10) + 1);
+    var imgRND = 'r' + rnd;
+
+    $("#dialog").html('<img class="dialogSmiley" src="images/' + imgRND +'.png"><h5 style="text-align:center">you\'ve earned ' + score + ' points</h5>');
+
+    $("#dialog").dialog({
+        title: 'Correct!',
+        height: 100,
+        position: { my: "center", at: "center", of: window },
+        modal: true,
+        hide: { effect: "fade", duration: 500 },
+        show: { effect: "fade", duration: 250 },
+        open: function (event, ui) {
+            $(".ui-dialog-title").css('font-size', '20px');
+            setTimeout("$('#dialog').dialog('destroy')", 3000);
+            $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+        }
+    });
 }
 
 function saveScore(request) {
@@ -1318,7 +1383,7 @@ $(document).ready(function () {
             var request = {
                 IMEI: localStorage.uuid
             }
-            
+
             checkUser3(request);
 
 
@@ -1433,14 +1498,14 @@ $(document).ready(function () {
                     success: successupdateCategoriesCB2,                // data.d id the Variable data contains the data we get from serverside
                     error: errorupdateCategoriesCB2
                 }); // end of ajax call
-                
+
             }
 
             function successupdateCategoriesCB2(results) {
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.replace('pref2.html');
-                },100);
-                
+                }, 100);
+
             }
 
             function errorupdateCategoriesCB2(e) {
@@ -1534,8 +1599,8 @@ $(document).ready(function () {
                 localStorage.removeItem('articles');
 
                 setTimeout(function () {
-                window.location.replace('profile.html');
-                },100);
+                    window.location.replace('profile.html');
+                }, 100);
             }
 
             function errorUpdateUserPrefsCB(e) {
@@ -1744,8 +1809,8 @@ $(document).ready(function () {
             var score = profile.Score;
             var readingSum = profile.ReadingSum;
 
-            $('#scorePH').html("Score: " + score + '<div class="decoration decoration-margins" style="margin-top: 3%;"></div>');
-            $('#readingsPH').html("Articles read: " + readingSum + '<div class="decoration decoration-margins" style="margin-top: 3%;"></div>');
+            $('#scorePH').html("Total Score: " + score );
+            $('#readingsPH').html("Articles Read: " + readingSum );
 
 
             var categories = profile.Categories;

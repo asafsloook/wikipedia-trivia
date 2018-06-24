@@ -225,6 +225,12 @@ public class Article
             content = content.Replace("(<span></span>)", "");
         }
 
+
+        if (content.Contains("<p><br></p>"))
+        {
+            content = content.Replace("<p><br></p>", "");
+        }
+
         if (content.Contains("</dl>"))
         {
             content = content.Substring(content.IndexOf("<p>"));

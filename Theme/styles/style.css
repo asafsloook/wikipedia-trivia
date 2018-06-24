@@ -1,3 +1,33 @@
+span, p, h1, h2, h3, h4, h5, h6, a, label {
+    font-family: Roboto !important;
+}
+
+.dialogSmiley {
+    width: 100px;
+    margin: 0 auto;
+}
+
+.ui-draggable .ui-dialog-titlebar {
+    border: none;
+    background: none;
+    text-align: center;
+}
+
+.ui-dialog .ui-dialog-title {
+float:none !important;
+}
+.ui-widget.ui-widget-content, .ui-dialog .ui-dialog-content {
+    border-radius: 25px;
+    height: 200px !important;
+}
+
+.topHeader {
+    text-align: center;
+    margin: 3% 0%;
+    font-size: 30px;
+    font-family: 'Bigshot One', cursive !important;
+}
+
 .profileMenu {
     background: #3498db !important;
     padding: 2% !important;
@@ -96,9 +126,8 @@ p {
 }
 
 
-/* maps*/
-
-#pac-input {
+    /* maps*/
+    #pac-input {
     background-color: #fff !important;
     font-family: Roboto !important;
     font-size: 15px !important;
@@ -371,6 +400,7 @@ p {
     padding-bottom: 20px;
     float: left;
     width: 90%;
+    font-weight:700;
 }
 
 #logo {
