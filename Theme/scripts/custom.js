@@ -766,6 +766,11 @@ function showQuestion() {
 
         if (correct == choose) {
             $(this).css("background-color", "#4CAF50");
+            $(this).effect('shake', {
+                direction: 'up',
+                distance: 5,
+                times: 3
+            });
 
             //update score for user
             var ans = stringAnswers.length;
@@ -790,39 +795,57 @@ function showQuestion() {
 
             saveScore(request);
 
-            $(this).effect('shake', {
-                direction: 'up',
-                distance: 10,
-                times: 3
-            });
         }
         else {
             //wrong answer
+
+            findRightAnswerElement();
+
             $(this).css("background-color", "#f44336");
             $(this).effect('shake', {
-                distance: 10,
+                distance: 5,
                 times: 3
             });
         }
 
 
+        
         setTimeout(function () {
-            $('#questionDiv').fadeOut();
-
-            showArticle();
-
             if (score == 0) {
                 answerWrong();
             }
             else {
                 answerRight();
             }
-        }, 1000);
+        }, 2000);
+
+        setTimeout(function () {
+            $('#questionDiv').fadeOut();
+
+            showArticle();
+
+            
+        }, 4000);
 
         clicks++;
     });
 
     hideLoadingQuest();
+}
+
+function findRightAnswerElement() {
+
+    var answers = $('#answers label');
+
+    for (var i = 0; i < answers.length; i++) {
+
+        var text = $('#answers label').eq(i)[0].innerHTML.toLowerCase();
+
+        if (text == correct) {
+            $('#answers label').eq(i).css("background-color", "#4CAF50");
+        }
+    }
+
 }
 
 function answerWrong() {
@@ -1445,11 +1468,13 @@ $(document).ready(function () {
             $('.category').on('click', function () {
 
                 if ($(this).hasClass('categoryActive')) {
-                    $(this).removeClass('categoryActive');
+
+                    $(this).removeClass('categoryActive').addClass('categoryNotActive');
+
                 }
                 else {
 
-                    $(this).addClass('categoryActive');
+                    $(this).removeClass('categoryNotActive').addClass('categoryActive');
                 }
 
                 checkPrefList2();
@@ -1919,7 +1944,7 @@ $(document).ready(function () {
 
                 var medal = '<img src="images/';
                 var score = ranks[i].Score;
-                
+
 
                 switch (true) {
                     case (score < 100):
@@ -1938,7 +1963,7 @@ $(document).ready(function () {
 
                 if (i < 3) {
                     var rankColor = 'style="background:';
-                    switch (i+1) {
+                    switch (i + 1) {
                         case 1:
                             rankColor += 'gold"';
                             break;
@@ -1949,8 +1974,8 @@ $(document).ready(function () {
                             rankColor += '#db7"';
                             break;
                     }
-                    
-                    str = createRow(name, i, medal, ranks,str);
+
+                    str = createRow(name, i, medal, ranks, str);
                 }
                 else {
                     str = createRow(name, i, medal, ranks, str);
@@ -1961,7 +1986,7 @@ $(document).ready(function () {
             $("#ranking").append(str);
         }
 
-        function createRow(name, i, medal, ranks,str) {
+        function createRow(name, i, medal, ranks, str) {
             if (name == "Me") {
 
                 str += '<tr><td class="meRank">' + (i + 1) + '.</td>  <td class="meRank">' + name + '</td>  <td class="medal meRank">' + medal + '</td>  <td class="meRank">' + ranks[i].Score + "</td></tr>";

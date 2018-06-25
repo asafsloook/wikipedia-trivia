@@ -225,6 +225,10 @@ public class Article
             content = content.Replace("(<span></span>)", "");
         }
 
+        if (content.Contains("<p><span></span></p>"))
+        {
+            content = content.Replace("<p><span></span></p>", "");
+        }
 
         if (content.Contains("<p><br></p>"))
         {
