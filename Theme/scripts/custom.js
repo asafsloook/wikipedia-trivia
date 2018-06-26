@@ -3,7 +3,7 @@ function goSearch() {
 
     searcher();
 
-    setInterval(searcher, 2500);
+    setInterval(searcher, 1000);
 }
 
 function searcher() {
@@ -83,7 +83,7 @@ function articleFromLS() {
 }
 
 function showArticleOrQuest() {
-    setTimeout(function () {
+    //setTimeout(function () {
 
         var temp = [];
         temp = $.parseJSON(localStorage.articles)
@@ -92,6 +92,19 @@ function showArticleOrQuest() {
         var oldArticles = $.parseJSON(localStorage.articles);
         oldArticles.shift();
         localStorage.articles = JSON.stringify(oldArticles);
+
+
+        //check if notification is question
+        if (article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
+            Question = article.NotificationContent;
+            Question = Question.replace(" ,", ",");
+            findAns(article.Title);
+        }
+        else {
+            //hideLoading();
+            articleFromLS();
+        }
+
 
         var a = "";
 
@@ -114,17 +127,7 @@ function showArticleOrQuest() {
         //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
 
         $("#articleContent").append(article.ArticleContent);
-
-
-        //check if notification is question
-        if (article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
-            Question = article.NotificationContent;
-            Question = Question.replace(" ,", ",");
-            findAns(article.Title);
-        }
-        else {
-            hideLoading();
-        }
+        
 
         //ajax to server, user read this article
         var uid = parseInt(localStorage.Id);
@@ -136,7 +139,7 @@ function showArticleOrQuest() {
         }
         readArticle(request);
 
-    }, 2000);
+    //}, 2000);
 }
 
 function readArticle(request) {
@@ -197,6 +200,12 @@ function showArticle() {
 
 
 function hideLoadingQuest() {
+
+    t2 = new Date();
+    var dif = t1.getTime() - t2.getTime();
+    var Seconds_from_T1_to_T2 = dif / 1000;
+    var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);
+    console.log(Seconds_Between_Dates + " seconds");
 
     $('#questionDiv').show();
     $("#loading").fadeOut();
@@ -591,7 +600,8 @@ function findAns(title) {
 
                                 } catch (e) {
 
-                                    hideLoading();
+                                    //hideLoading();
+                                    articleFromLS();
                                 }
                             }
                         }
@@ -599,9 +609,10 @@ function findAns(title) {
                     else {
 
                         try {
-                            //P360
+                            //P360 - list
                             var x = allClaims.P360[0].mainsnak.datavalue.value.id;
-                            hideLoading();
+                            //hideLoading();
+                            articleFromLS();
                             return;
 
                         } catch (e) {
@@ -615,7 +626,8 @@ function findAns(title) {
                     }
 
                 } catch (e) {
-                    hideLoading();
+                   // hideLoading();
+                    articleFromLS();
                 }
             }
         }
@@ -719,7 +731,9 @@ function translate(answers) {
             if (typeof Question !== 'undefined') {
 
                 if (stringAnswers.length == 1) {
-                    hideLoading();
+                    //hideLoading();
+
+                    articleFromLS();
                 }
                 else {
                     showQuestion();
@@ -727,7 +741,9 @@ function translate(answers) {
 
             }
             else {
-                hideLoading();
+                //hideLoading();
+
+                articleFromLS();
             }
         }
     });
@@ -817,7 +833,7 @@ function showQuestion() {
             else {
                 answerRight();
             }
-        }, 2000);
+        }, 1000);
 
         setTimeout(function () {
             $('#questionDiv').fadeOut();
@@ -825,7 +841,7 @@ function showQuestion() {
             showArticle();
 
             
-        }, 4000);
+        }, 3000);
 
         clicks++;
     });
@@ -1096,6 +1112,7 @@ $(document).ready(function () {
             loadingTyper();
 
             articleFromLS();
+            t1 = new Date();
 
             $('.footer-menu-open').click(function () {
 
@@ -1103,7 +1120,8 @@ $(document).ready(function () {
                 loadingTyper();
 
                 articleFromLS();
-
+                t1 = new Date();
+                
             });
 
         }
