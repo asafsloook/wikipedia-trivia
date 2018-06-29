@@ -98,6 +98,7 @@ function showArticleOrQuest() {
         if (article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
             Question = article.NotificationContent;
             Question = Question.replace(" ,", ",");
+            Question = Question.replace(" ;", ";");
             findAns(article.Title);
         }
         else {
@@ -1090,7 +1091,7 @@ $(document).ready(function () {
                         short = "...";
                     }
 
-                    $("#ph" + i + " em").html(results[i].Description.substring(0, 55).trim() + short);
+                    $("#ph" + i + " em").html(results[i].Description.substring(0, 40).trim() + short);
                 }
 
             }

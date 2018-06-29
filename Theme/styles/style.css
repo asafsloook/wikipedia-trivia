@@ -1,4 +1,10 @@
-span, p, h1, h2, h3, h4, h5, h6, a, label {
+canvas {
+opacity:0.5;
+}
+
+#myChart {
+    opacity:1;
+}span, p, h1, h2, h3, h4, h5, h6, a, label {
     font-family: Roboto !important;
 }
 
@@ -185,7 +191,7 @@ p {
 
 #question {
     text-align: center;
-    padding: 10%;
+    padding: 7.5%;
     margin-top: 60px;
     padding-bottom: 0;
     color: white;
@@ -323,7 +329,7 @@ p {
 
 #titleDiv {
     text-align: center;
-    position: relative;
+    position: absolute;
     top: 65%;
     width: 100%;
     height: 5%;
@@ -517,10 +523,9 @@ p {
 }
 
 #Photo, #ArticleImg, #aroundPhoto {
-    height: 230px;
     margin: 0 auto;
     margin-bottom: 20px;
-    max-width: 330px;
+    max-width: 90%;
     object-fit: contain;
     margin-bottom: 20px !important;
     border-radius: 15px;
