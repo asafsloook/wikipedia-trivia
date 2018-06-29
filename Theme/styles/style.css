@@ -5,12 +5,15 @@ span, p, h1, h2, h3, h4, h5, h6, a, label {
 
 .bg {
     background-image: url(https://i0.wp.com/www.mustsee.is/wp-content/uploads/2017/08/3fe793dc-90eb-4248-ae7f-fa27f8a30f41.jpg?fit=837%2C1024&ssl=1) !important;
-
+    background-position: bottom;
+    background-size: cover;
 }
 
+.decoration{
+    background-color:none;
+}
 /* https://i0.wp.com/www.mustsee.is/wp-content/uploads/2017/08/3fe793dc-90eb-4248-ae7f-fa27f8a30f41.jpg?fit=837%2C1024&ssl=1 */
 /* https://img.purch.com/w/660/aHR0cDovL3d3dy5zcGFjZS5jb20vaW1hZ2VzL2kvMDAwLzA0NS85ODMvb3JpZ2luYWwvYXJjdHVydXMtbGFrZS1oYXJ0LmpwZw== */
-
 .meRank {
     background: #e0ecff !important;
 }
@@ -38,6 +41,7 @@ td {
     border-bottom: 1px solid gray !important;
     font-weight: 500 !important;
     background-color: white !important;
+    padding: 2% 0 !important;
 }
 
 th {
@@ -88,7 +92,7 @@ td img {
     background: #2980b9 !important;
     padding: 2% !important;
     border-radius: 15px !important;
-    margin: 6% 11%;
+    margin-bottom: 7% !important;
 }
 
     .profileMenu h4 {
