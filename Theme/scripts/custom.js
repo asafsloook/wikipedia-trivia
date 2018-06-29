@@ -1807,7 +1807,7 @@ $(document).ready(function () {
                     window.location.replace("profile.html");
                 }
                 splashHandle = false;
-            }, 2000);
+            }, 500);
         }
 
         function checkUserECB2(e) {

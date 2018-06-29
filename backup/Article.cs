@@ -225,6 +225,16 @@ public class Article
             content = content.Replace("(<span></span>)", "");
         }
 
+        if (content.Contains("<p><span></span></p>"))
+        {
+            content = content.Replace("<p><span></span></p>", "");
+        }
+
+        if (content.Contains("<p><br></p>"))
+        {
+            content = content.Replace("<p><br></p>", "");
+        }
+
         if (content.Contains("</dl>"))
         {
             content = content.Substring(content.IndexOf("<p>"));
@@ -250,7 +260,7 @@ public class Article
         ArticleId = id;
 
         Category c1 = new Category();
-        c1.Name = categoryTitle;
+        c1.Name = rootCategoryTitle;
 
         Category = c1;
         Title = title.Replace("_", " ");
