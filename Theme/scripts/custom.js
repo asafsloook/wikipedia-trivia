@@ -85,61 +85,61 @@ function articleFromLS() {
 function showArticleOrQuest() {
     //setTimeout(function () {
 
-        var temp = [];
-        temp = $.parseJSON(localStorage.articles)
-        var article = temp[0];
+    var temp = [];
+    temp = $.parseJSON(localStorage.articles)
+    var article = temp[0];
 
-        var oldArticles = $.parseJSON(localStorage.articles);
-        oldArticles.shift();
-        localStorage.articles = JSON.stringify(oldArticles);
-
-
-        //check if notification is question
-        if (article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
-            Question = article.NotificationContent;
-            Question = Question.replace(" ,", ",");
-            Question = Question.replace(" ;", ";");
-            findAns(article.Title);
-        }
-        else {
-            //hideLoading();
-            articleFromLS();
-            return;
-        }
+    var oldArticles = $.parseJSON(localStorage.articles);
+    oldArticles.shift();
+    localStorage.articles = JSON.stringify(oldArticles);
 
 
-        var a = "";
+    //check if notification is question
+    if (article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
+        Question = article.NotificationContent;
+        Question = Question.replace(" ,", ",");
+        Question = Question.replace(" ;", ";");
+        findAns(article.Title);
+    }
+    else {
+        //hideLoading();
+        articleFromLS();
+        return;
+    }
 
-        $("#shareBTN").show();
 
-        if (article.PhotoUrl == null) {
-            $("#ArticleImg").hide();
-        }
-        else {
-            $("#ArticleImg").attr("src", article.PhotoUrl);
-            $("#ArticleImg").show();
-        }
+    var a = "";
+
+    $("#shareBTN").show();
+
+    if (article.PhotoUrl == null) {
+        $("#ArticleImg").hide();
+    }
+    else {
+        $("#ArticleImg").attr("src", article.PhotoUrl);
+        $("#ArticleImg").show();
+    }
 
 
-        $("#title").empty();
-        $("#title").html(article.Title);
+    $("#title").empty();
+    $("#title").html(article.Title);
 
-        //results.ArticleContent
-        $("#articleContent").empty();
-        //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
+    //results.ArticleContent
+    $("#articleContent").empty();
+    //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
 
-        $("#articleContent").append(article.ArticleContent);
-        
+    $("#articleContent").append(article.ArticleContent);
 
-        //ajax to server, user read this article
-        var uid = parseInt(localStorage.Id);
-        var request = {
-            userId: uid,
-            rootCategory: article.Category.Name,
-            articleId: article.ArticleId
 
-        }
-        readArticle(request);
+    //ajax to server, user read this article
+    var uid = parseInt(localStorage.Id);
+    var request = {
+        userId: uid,
+        rootCategory: article.Category.Name,
+        articleId: article.ArticleId
+
+    }
+    readArticle(request);
 
     //}, 2000);
 }
@@ -628,7 +628,7 @@ function findAns(title) {
                     }
 
                 } catch (e) {
-                   // hideLoading();
+                    // hideLoading();
                     articleFromLS();
                 }
             }
@@ -757,6 +757,7 @@ function showQuestion() {
 
     //stringAnswers //Question
     $('#question').append('<h4>' + Question + '<h4>');
+
     Question = undefined;
 
     correct = stringAnswers[0];
@@ -773,6 +774,10 @@ function showQuestion() {
     clicks = 0;
 
     $('#answers label').on('click', function () {
+
+        clearInterval(timer);
+        timer = undefined;
+        $('#timer').hide();
 
         if (clicks > 0) {
             return;
@@ -827,7 +832,6 @@ function showQuestion() {
         }
 
 
-        
         setTimeout(function () {
             if (score == 0) {
                 answerWrong();
@@ -837,18 +841,80 @@ function showQuestion() {
             }
         }, 1000);
 
+
         setTimeout(function () {
             $('#questionDiv').fadeOut();
-
             showArticle();
-
-            
         }, 3000);
+
 
         clicks++;
     });
 
+    timer,n = 10;
+
+    // events
+    startTimer(n);
+    $('#timer').show();
+    $('#result').html(n);
+
     hideLoadingQuest();
+}
+
+function startTimer(n) {
+    var i = n-1;
+
+    var canvas = document.getElementById('progress');
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    result.style.color = '#2980b9';
+
+    timer = setInterval(function () {
+        result.innerHTML = i--;
+
+        stopTimer = function () {
+            clearInterval(timer);
+            result.innerHTML = i;
+        }
+
+        if (i < 5) {
+            result.style.color = '#ED3E42';
+        } // hurry up!
+
+        if (i < 0) {
+            setTimeout(function () {
+
+                stopTimer();
+                $('#timer').hide();
+                $('#questionDiv').fadeOut();
+                showArticle();
+            }, 500);
+
+        } // finish
+
+        function updateProgress() {
+            var canvas = document.getElementById('progress');
+            var context = canvas.getContext('2d');
+            var centerX = canvas.width / 2;
+            var centerY = canvas.height / 2;
+            var radius = 25;
+            var circ = Math.PI * 2; // 360deg
+            var percent = i / n; // i%
+            context.beginPath();
+            context.arc(centerX, centerY, radius, ((circ) * percent), circ, false);
+            context.lineWidth = 5;
+            if (i < 5) {
+                context.strokeStyle = '#ED3E42';
+            } else {
+                context.strokeStyle = '#2980b9';
+            }
+            context.stroke();
+        } // progress
+
+        updateProgress();
+
+    }, 1000); // every sec
+
 }
 
 function findRightAnswerElement() {
@@ -1123,7 +1189,7 @@ $(document).ready(function () {
 
                 articleFromLS();
                 t1 = new Date();
-                
+
             });
 
         }

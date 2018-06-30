@@ -56,6 +56,11 @@
 
     <div id="page-transitions">
 
+        <div id="timer" class="container">
+            <p id="result"></p>
+            <canvas id="progress" width="60" height="60"></canvas><!-- progress bar -->
+        </div>
+
         <div class="page-preloader page-preloader-dark">
             <div class="loader loader-frames"><i></i><i></i><i></i><i></i></div>
         </div>
@@ -92,14 +97,15 @@
 
             </div>
 
+
             <div id="page-content-scroll" hidden="hidden">
 
                 <!--<div class="heading-strip bg-2">
-                    <h3>News Post 1</h3>
-                    <p>This is just a template, not a theme</p>
-                    <i class="fa fa-newspaper-o"></i>
-                    <div class="overlay dark-overlay"></div>
-                </div>-->
+                <h3>News Post 1</h3>
+                <p>This is just a template, not a theme</p>
+                <i class="fa fa-newspaper-o"></i>
+                <div class="overlay dark-overlay"></div>
+            </div>-->
                 <div class="decoration decoration-margins"></div>
 
                 <div class="content no-material no-top">
@@ -108,25 +114,25 @@
 
                     <button id="shareBTN" onclick="window.plugins.socialsharing.share('My message')"><i id="share" class="material-icons">share</i></button>
                     <!--<p class="news-article-small-text no-bottom">
-                        Posted by <a href="#">Enabled</a>
-                        about <a href="#">40 minutes ago</a>
-                        in <a href="#">Mobile News</a>
-                    </p>-->
+                    Posted by <a href="#">Enabled</a>
+                    about <a href="#">40 minutes ago</a>
+                    in <a href="#">Mobile News</a>
+                </p>-->
                 </div>
 
                 <!--<div class="single-item">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img class="responsive-image no-bottom" src="images/pictures/1.jpg" alt="img">
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="responsive-image no-bottom" src="images/pictures/2.jpg" alt="img">
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="responsive-image no-bottom" src="images/pictures/3.jpg" alt="img">
-                        </div>
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img class="responsive-image no-bottom" src="images/pictures/1.jpg" alt="img">
                     </div>
-                </div>-->
+                    <div class="swiper-slide">
+                        <img class="responsive-image no-bottom" src="images/pictures/2.jpg" alt="img">
+                    </div>
+                    <div class="swiper-slide">
+                        <img class="responsive-image no-bottom" src="images/pictures/3.jpg" alt="img">
+                    </div>
+                </div>
+            </div>-->
 
 
                 <div>
@@ -139,50 +145,50 @@
                         Error occurred, please try to refresh the page with the button below.
                     </p>
                     <!--<h5>Add a subtitle maybe?</h5>
-                     <p class="half-bottom">
-                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla gravida rhoncus feugiat.
-                         Maecenas lacinia ut nibh a auctor. Mauris iaculis turpis sollicitudin, cursus nisl vitae,
-                         varius justo.
+                 <p class="half-bottom">
+                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla gravida rhoncus feugiat.
+                     Maecenas lacinia ut nibh a auctor. Mauris iaculis turpis sollicitudin, cursus nisl vitae,
+                     varius justo.
+                 </p>
+                 <div class="decoration"></div>
+                 <img data-original="images/pictures/1ww.jpg" alt="img" class="responsive-image preload-image">
+                 <div class="container">
+                     <p class="dropcaps-1">
+                         Also we have dropcaps ipsum dolor sit amet, consectetur adipiscing elit.
+                         Donec varius dui et erat aliquet rutrum. Nunc vitae tincidunt.
+                         Also we have dropcaps ipsum dolor sit amet, consectetur adipiscing elit.
+                         Donec varius dui et erat aliquet rutrum. Nunc vitae tincidunt.
+                         Also we have dropcaps ipsum dolor sit amet, consectetur adipiscing elit.
+                         Donec varius dui et erat aliquet rutrum. Nunc vitae tincidunt.
                      </p>
-                     <div class="decoration"></div>
-                     <img data-original="images/pictures/1ww.jpg" alt="img" class="responsive-image preload-image">
-                     <div class="container">
-                         <p class="dropcaps-1">
-                             Also we have dropcaps ipsum dolor sit amet, consectetur adipiscing elit.
-                             Donec varius dui et erat aliquet rutrum. Nunc vitae tincidunt.
-                             Also we have dropcaps ipsum dolor sit amet, consectetur adipiscing elit.
-                             Donec varius dui et erat aliquet rutrum. Nunc vitae tincidunt.
-                             Also we have dropcaps ipsum dolor sit amet, consectetur adipiscing elit.
-                             Donec varius dui et erat aliquet rutrum. Nunc vitae tincidunt.
-                         </p>
-                     </div>
-                     <h5>Maybe a gallery in here as well?</h5>
-                     <p>
-                         You can also add galleries, without a problem, easy as pie, to show your news content elements even better and even easier.
-                     </p>
-                    <div class="gallery square-thumbs no-bottom">
-                         <a href="images/pictures/1.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/1t.jpg" alt="img"></a>
-                         <a href="images/pictures/2.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/2t.jpg" alt="img"></a>
-                         <a href="images/pictures/3.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/3t.jpg" alt="img"></a>
-                         <a href="images/pictures/4.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/4t.jpg" alt="img"></a>
-                         <a href="images/pictures/5.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/5t.jpg" alt="img"></a>
-                         <a href="images/pictures/6.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/6t.jpg" alt="img"></a>
-                         <a href="images/pictures/7.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/7t.jpg" alt="img"></a>
-                         <a href="images/pictures/8.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/8t.jpg" alt="img"></a>
-                         <a href="images/pictures/1.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/9t.jpg" alt="img"></a>
-                         <a href="images/pictures/2.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/2t.jpg" alt="img"></a>
-                         <a href="images/pictures/3.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/3t.jpg" alt="img"></a>
-                         <a href="images/pictures/4.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/4t.jpg" alt="img"></a>
-                     </div>
-                     <p>
-                         And after all these features, lets' give you even more great news, really, a lot more great news!
-                     </p>
-                     <div class="decoration"></div>
-                     <h4 class="half-bottom">You can use any feature from our pages!</h4>
-                     <p class="half-bottom">
-                         Yes, you got that right! You can add any element from any page inside the news! And we included all the pages
-                         inside for your delight, this is not just a news template. It's a full blown template with a news extension added to it!
-                     </p>-->
+                 </div>
+                 <h5>Maybe a gallery in here as well?</h5>
+                 <p>
+                     You can also add galleries, without a problem, easy as pie, to show your news content elements even better and even easier.
+                 </p>
+                <div class="gallery square-thumbs no-bottom">
+                     <a href="images/pictures/1.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/1t.jpg" alt="img"></a>
+                     <a href="images/pictures/2.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/2t.jpg" alt="img"></a>
+                     <a href="images/pictures/3.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/3t.jpg" alt="img"></a>
+                     <a href="images/pictures/4.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/4t.jpg" alt="img"></a>
+                     <a href="images/pictures/5.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/5t.jpg" alt="img"></a>
+                     <a href="images/pictures/6.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/6t.jpg" alt="img"></a>
+                     <a href="images/pictures/7.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/7t.jpg" alt="img"></a>
+                     <a href="images/pictures/8.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/8t.jpg" alt="img"></a>
+                     <a href="images/pictures/1.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/9t.jpg" alt="img"></a>
+                     <a href="images/pictures/2.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/2t.jpg" alt="img"></a>
+                     <a href="images/pictures/3.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/3t.jpg" alt="img"></a>
+                     <a href="images/pictures/4.jpg" class="scale-hover show-gallery" title="Your caption here!"><img class="preload-image responsive-image" data-original="images/pictures/4t.jpg" alt="img"></a>
+                 </div>
+                 <p>
+                     And after all these features, lets' give you even more great news, really, a lot more great news!
+                 </p>
+                 <div class="decoration"></div>
+                 <h4 class="half-bottom">You can use any feature from our pages!</h4>
+                 <p class="half-bottom">
+                     Yes, you got that right! You can add any element from any page inside the news! And we included all the pages
+                     inside for your delight, this is not just a news template. It's a full blown template with a news extension added to it!
+                 </p>-->
                 </div>
 
                 <div class="decoration decoration-margins"></div>
@@ -231,46 +237,46 @@
         </div>
 
         <!--<div class="page-menu light-footer-menu">
-            <div class="footer-menu-wrapper remove-menu">
-                <div class="footer-menu-scroll">
-                    <div class="footer-menu">
-                        <a href="news-archive.html" class="footer-menu-item">
-                            <em>Archive</em><i class="scale-hover bg-yellow-light fa fa-archive"></i>
-                        </a>
-                        <a href="news-post-3.html" class="footer-menu-item">
-                            <em>Post 3</em><i class="scale-hover bg-orange-dark fa fa-pencil"></i>
-                        </a>
-                        <a href="news-post-2.html" class="footer-menu-item">
-                            <em>Post 2</em><i class="scale-hover bg-red-dark fa fa-pencil"></i>
-                        </a>
-                        <a href="news-post-1.html" class="footer-menu-item active-menu">
-                            <em>Post 1</em><i class="scale-hover bg-red-light fa fa-pencil"></i>
-                        </a>
-                        <a href="news-list-3.html" class="footer-menu-item">
-                            <em>List 3</em><i class="scale-hover bg-magenta-dark fa fa-list"></i>
-                        </a>
-                        <a href="news-list-2.html" class="footer-menu-item">
-                            <em>List 2</em><i class="scale-hover bg-night-dark fa fa-list"></i>
-                        </a>
-                        <a href="news-list-1.html" class="footer-menu-item">
-                            <em>List 1</em><i class="scale-hover bg-night-light fa fa-list"></i>
-                        </a>
-                        <a href="news-cover.html" class="footer-menu-item">
-                            <em>Cover</em><i class="scale-hover bg-blue-light fa fa-image"></i>
-                        </a>
-                        <a href="news-front-2.html" class="footer-menu-item">
-                            <em>Home 2</em><i class="scale-hover bg-blue-dark fa fa-home"></i>
-                        </a>
-                        <a href="news-front-1.html" class="footer-menu-item">
-                            <em>Home 1</em><i class="scale-hover bg-green-dark fa fa-home"></i>
-                        </a>
-                        <a href="news-faq.html" class="footer-menu-item">
-                            <em>FAQ</em><i class="scale-hover bg-green-light fa fa-question"></i>
-                        </a>
-                    </div>
+        <div class="footer-menu-wrapper remove-menu">
+            <div class="footer-menu-scroll">
+                <div class="footer-menu">
+                    <a href="news-archive.html" class="footer-menu-item">
+                        <em>Archive</em><i class="scale-hover bg-yellow-light fa fa-archive"></i>
+                    </a>
+                    <a href="news-post-3.html" class="footer-menu-item">
+                        <em>Post 3</em><i class="scale-hover bg-orange-dark fa fa-pencil"></i>
+                    </a>
+                    <a href="news-post-2.html" class="footer-menu-item">
+                        <em>Post 2</em><i class="scale-hover bg-red-dark fa fa-pencil"></i>
+                    </a>
+                    <a href="news-post-1.html" class="footer-menu-item active-menu">
+                        <em>Post 1</em><i class="scale-hover bg-red-light fa fa-pencil"></i>
+                    </a>
+                    <a href="news-list-3.html" class="footer-menu-item">
+                        <em>List 3</em><i class="scale-hover bg-magenta-dark fa fa-list"></i>
+                    </a>
+                    <a href="news-list-2.html" class="footer-menu-item">
+                        <em>List 2</em><i class="scale-hover bg-night-dark fa fa-list"></i>
+                    </a>
+                    <a href="news-list-1.html" class="footer-menu-item">
+                        <em>List 1</em><i class="scale-hover bg-night-light fa fa-list"></i>
+                    </a>
+                    <a href="news-cover.html" class="footer-menu-item">
+                        <em>Cover</em><i class="scale-hover bg-blue-light fa fa-image"></i>
+                    </a>
+                    <a href="news-front-2.html" class="footer-menu-item">
+                        <em>Home 2</em><i class="scale-hover bg-blue-dark fa fa-home"></i>
+                    </a>
+                    <a href="news-front-1.html" class="footer-menu-item">
+                        <em>Home 1</em><i class="scale-hover bg-green-dark fa fa-home"></i>
+                    </a>
+                    <a href="news-faq.html" class="footer-menu-item">
+                        <em>FAQ</em><i class="scale-hover bg-green-light fa fa-question"></i>
+                    </a>
                 </div>
             </div>
-        </div>-->
+        </div>
+    </div>-->
 
         <div class="footer-menu-controls light-footer-menu">
             <a href="#" class="footer-menu-open"><i id="refreshBTN" class="material-icons bg-blue-dark">shuffle</i></a>
