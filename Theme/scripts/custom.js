@@ -47,9 +47,9 @@ function successArticlesCB(data) {
 
     if (newArticle.ArticleId == null) {
 
-        var badCategory = newArticle.ArticleContent;
+        //var badCategory = newArticle.ArticleContent;
 
-        alert("Please remove this category from your preferences: " + badCategory);
+        //alert("Please remove this category from your preferences: " + badCategory);
         return;
     }
 
@@ -104,6 +104,7 @@ function showArticleOrQuest() {
         else {
             //hideLoading();
             articleFromLS();
+            return;
         }
 
 
@@ -783,11 +784,11 @@ function showQuestion() {
 
         if (correct == choose) {
             $(this).css("background-color", "#4CAF50");
-            $(this).effect('shake', {
-                direction: 'up',
-                distance: 5,
-                times: 3
-            });
+            //$(this).effect('shake', {
+            //    direction: 'up',
+            //    distance: 5,
+            //    times: 3
+            //});
 
             //update score for user
             var ans = stringAnswers.length;
@@ -1807,7 +1808,7 @@ $(document).ready(function () {
                     window.location.replace("profile.html");
                 }
                 splashHandle = false;
-            }, 500);
+            }, 1000);
         }
 
         function checkUserECB2(e) {
