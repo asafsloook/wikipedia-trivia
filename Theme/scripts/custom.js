@@ -93,9 +93,9 @@ function showArticleOrQuest() {
     oldArticles.shift();
     localStorage.articles = JSON.stringify(oldArticles);
 
-
+    
     //check if notification is question
-    if (article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
+    if (typeof article.NotificationContent !== 'undefined' && article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
         Question = article.NotificationContent;
         Question = Question.replace(" ,", ",");
         Question = Question.replace(" ;", ";");
@@ -851,7 +851,7 @@ function showQuestion() {
         clicks++;
     });
 
-    timer,n = 10;
+    timer,n = 20;
 
     // events
     startTimer(n);
