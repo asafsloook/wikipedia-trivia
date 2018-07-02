@@ -48,10 +48,10 @@ public class User
     List<Category> categories;
     public List<Category> Categories { get; set; }
 
-    public User checkUser(string IMEI)
+    public User checkUser(string IMEI, string regId)
     {
         DBConnection db = new DBConnection();
-        return db.checkUser(IMEI);
+        return db.checkUser(IMEI, regId);
     }
 
     public int updatePrefs()

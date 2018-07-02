@@ -1,4 +1,25 @@
 
+$(document).ready(function () {
+
+    if (window.location.href.toString().indexOf('index.html') != -1) {
+
+
+        $('#splashLogo').fadeOut(700).fadeIn(700);
+        splashHandle = setInterval(function () {
+            $('#splashLogo').fadeOut(700).fadeIn(700);
+        }, 1400);
+
+    }
+
+    if (window.location.href.toString().indexOf('article.html') != -1) {
+
+
+        showLoading();
+    }
+
+
+});
+
 function goSearch() {
 
     searcher();
@@ -217,26 +238,7 @@ function hideLoadingQuest() {
 }
 
 
-$(document).ready(function () {
 
-    if (window.location.href.toString().indexOf('index.html') != -1) {
-
-
-        $('#splashLogo').fadeOut(700).fadeIn(700);
-        splashHandle = setInterval(function () {
-            $('#splashLogo').fadeOut(700).fadeIn(700);
-        }, 1400);
-
-    }
-
-    if (window.location.href.toString().indexOf('article.html') != -1) {
-
-
-        showLoading();
-    }
-
-
-});
 
 
 
@@ -1103,12 +1105,81 @@ $(document).ready(function () {
 
             if (window.location.href.toString().indexOf('index.html') != -1) {
 
-                var request = {
-                    IMEI: localStorage.uuid
+                if (typeof PushNotification !== 'undefined') {
+
+                    var push = PushNotification.init({
+                        android: {
+                            senderID: "198839105363",
+                            forceShow: true // this identifies your application
+                            // it must be identical to what appears in the
+                            // config.xml
+                        },
+                        browser: {
+                            //pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+                        },
+                        ios: {
+                            alert: "true",
+                            badge: "true",
+                            sound: "true"
+                        },
+                        windows: {}
+                    });
+
+                    //-----------------------------------------------------------------------
+                    // triggred by the notification server once the registration is completed
+                    //-----------------------------------------------------------------------
+                    push.on('registration', function (data) {
+
+                        //alert('reg with key: ' + data.registrationId);
+                        localStorage.RegId = data.registrationId;
+
+                        var request = {
+                            IMEI: localStorage.uuid,
+                            regId: data.registrationId
+                        }
+
+                        checkUser2(request);
+                    });
+
+                    //-------------------------------------------------------------
+                    // triggred by a notification sent from the notification server
+                    //-------------------------------------------------------------
+                    push.on('notification', function (data) {
+
+                        if (data.additionalData.foreground == true) {
+                            handleForeground(data);
+                        }
+                        else if (data.additionalData.coldstart == true) {
+                            handleColdStart(data);
+                        }
+                        else {
+                            handleBackground(data);
+                        }
+                    });
+
+                    //-----------------------------------------------------------
+                    // triggred when there is an error in the notification server
+                    //-----------------------------------------------------------
+                    push.on('error', function (e) {
+                        var request = {
+                            IMEI: localStorage.uuid,
+                            regId: 'Error'
+                        }
+
+                        checkUser2(request);
+                    });
                 }
 
-                checkUser2(request);
+                else {
+                    var request = {
+                        IMEI: localStorage.uuid,
+                        regId:'Error'
+                    }
 
+                    checkUser2(request);
+                    
+                }
+                
                 navigator.geolocation.getCurrentPosition();
 
             }

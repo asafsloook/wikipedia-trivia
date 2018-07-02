@@ -578,7 +578,7 @@ public class DBConnection
 
 
     //--------------------------------------------------------------------------------------------------
-    public int insertUser(string IMEI)
+    public int insertUser(string IMEI,string regId)
     {
 
         SqlConnection con;
@@ -596,7 +596,7 @@ public class DBConnection
 
         //Default preferences for a new user
         string cStr = "insert into UsersP (IMEI,pushKey,LocationPush,PhotoPush,PhotoPushTime,RandomArticlePush,RandomArticleQuantity,Score) ";
-        cStr += "values('" + IMEI + "','www',1,1,'12:00',1,5,0)";
+        cStr += "values('" + IMEI + "','"+ regId + "',1,1,'12:00',1,5,0)";
 
         //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
 
@@ -627,7 +627,7 @@ public class DBConnection
 
 
     //--------------------------------------------------------------------------------------------------
-    public User checkUser(string IMEI)
+    public User checkUser(string IMEI, string regId)
     {
         SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
 
@@ -642,7 +642,7 @@ public class DBConnection
         dt = ds.Tables["userPref2"]; // point to the cars table , which is the only table in this case
         if (dt.Rows.Count == 0)
         {
-            insertUser(IMEI);
+            insertUser(IMEI, regId);
 
             User u = new User();
             u.Imei = IMEI;
@@ -682,7 +682,56 @@ public class DBConnection
 
             }
 
+            updateUserRegID(u.Id, regId);
+
             return u;
+        }
+    }
+
+
+    public int updateUserRegID(int userID, string regId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("GraspDBConnectionString"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        string cStr = "update UsersP "
+            + " set "
+            + " pushKey = '" + regId
+            + "' where userId = " + userID;
+
+        //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
+
+        cmd = new SqlCommand(cStr, con);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            return 0;
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
         }
     }
 

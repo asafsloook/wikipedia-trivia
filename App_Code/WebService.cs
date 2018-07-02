@@ -158,11 +158,11 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public string checkUser(string IMEI)
+    public string checkUser(string IMEI, string regId)
     {
 
         User u1 = new User();
-        var a = u1.checkUser(IMEI);
+        var a = u1.checkUser(IMEI, regId);
 
         JavaScriptSerializer js = new JavaScriptSerializer();
 
