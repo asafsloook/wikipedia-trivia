@@ -37,7 +37,7 @@
   </widget>
 
   
-  <plugin name="phonegap-plugin-push" source="npm" spec="2.2.0">
+  <plugin name="phonegap-plugin-push" source="npm" spec="1.8.0">
     <variable name="SENDER_ID" value="198839105363" />
     <variable name="FCM_VERSION" value="15.0.0" />
   </plugin>

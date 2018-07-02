@@ -1106,10 +1106,6 @@ $(document).ready(function () {
                     localStorage.uuid = device.uuid;
                 }
                 
-
-                navigator.geolocation.getCurrentPosition();
-
-
                 if (typeof PushNotification !== 'undefined') {
 
                     var push = PushNotification.init({
@@ -1136,13 +1132,7 @@ $(document).ready(function () {
                     push.on('registration', function (data) {
                         
                         localStorage.RegId = data.registrationId;
-
-                        var request = {
-                            IMEI: localStorage.uuid,
-                            regId: localStorage.RegId
-                        }
-
-                        updateUserRegId(request);
+                        
                     });
 
                     //-------------------------------------------------------------
@@ -1151,13 +1141,13 @@ $(document).ready(function () {
                     push.on('notification', function (data) {
 
                         if (data.additionalData.foreground == true) {
-                            handleForeground(data);
+                            //
                         }
                         else if (data.additionalData.coldstart == true) {
-                            handleColdStart(data);
+                            //
                         }
                         else {
-                            handleBackground(data);
+                           //
                         }
                     });
 
@@ -1168,7 +1158,13 @@ $(document).ready(function () {
                         alert(e.responseText);
                     });
                 }
-                
+
+                var request = {
+                    IMEI: localStorage.uuid
+                }
+                checkUser2(request);
+
+                navigator.geolocation.getCurrentPosition();
             }
 
         }
@@ -1957,7 +1953,7 @@ $(document).ready(function () {
         }
         
         function updateUserRegIdSCB(results) {
-            alert(results);
+
         }
 
         function updateUserRegIdECB(e) {
@@ -1965,14 +1961,18 @@ $(document).ready(function () {
 
         }
 
-
-
-
+        
         
         if (window.location.href.toString().indexOf('profile.html') != -1) {
             $('.back-to-top-badge').hide();
             getStats();
+            
 
+            var request = {
+                IMEI: localStorage.uuid,
+                regId: localStorage.RegId
+            }
+            updateUserRegId(request);
         }
 
         function getStats() {
