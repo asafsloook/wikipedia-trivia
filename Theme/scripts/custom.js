@@ -1099,11 +1099,16 @@ $(document).ready(function () {
 
 
         function onDeviceReady() {
-            if (localStorage.uuid == null || localStorage.uuid == undefined) {
-                localStorage.uuid = device.uuid;
-            }
-
+            
             if (window.location.href.toString().indexOf('index.html') != -1) {
+
+                if (localStorage.uuid == null || localStorage.uuid == undefined) {
+                    localStorage.uuid = device.uuid;
+                }
+                
+
+                navigator.geolocation.getCurrentPosition();
+
 
                 if (typeof PushNotification !== 'undefined') {
 
@@ -1129,16 +1134,15 @@ $(document).ready(function () {
                     // triggred by the notification server once the registration is completed
                     //-----------------------------------------------------------------------
                     push.on('registration', function (data) {
-
-                        //alert('reg with key: ' + data.registrationId);
+                        
                         localStorage.RegId = data.registrationId;
 
                         var request = {
                             IMEI: localStorage.uuid,
-                            regId: data.registrationId
+                            regId: localStorage.RegId
                         }
 
-                        checkUser2(request);
+                        updateUserRegId(request);
                     });
 
                     //-------------------------------------------------------------
@@ -1161,27 +1165,10 @@ $(document).ready(function () {
                     // triggred when there is an error in the notification server
                     //-----------------------------------------------------------
                     push.on('error', function (e) {
-                        var request = {
-                            IMEI: localStorage.uuid,
-                            regId: 'Error'
-                        }
-
-                        checkUser2(request);
+                        alert(e.responseText);
                     });
                 }
-
-                else {
-                    var request = {
-                        IMEI: localStorage.uuid,
-                        regId:'Error'
-                    }
-
-                    checkUser2(request);
-                    
-                }
                 
-                navigator.geolocation.getCurrentPosition();
-
             }
 
         }
@@ -1924,7 +1911,7 @@ $(document).ready(function () {
                 error: checkUserECB2
             }); // end of ajax call
         }
-
+        
         function checkUserSCB2(results) {
 
             var results = $.parseJSON(results.d);
@@ -1953,6 +1940,35 @@ $(document).ready(function () {
 
         }
 
+
+
+        function updateUserRegId(request) {
+            var dataString = JSON.stringify(request);
+
+            $.ajax({ // ajax call starts
+                url: urlDomain + 'WebService.asmx/updateUserRegId',   // server side web service method
+                data: dataString,                          // the parameters sent to the server
+                type: 'POST',                              // can be also GET
+                dataType: 'json',                          // expecting JSON datatype from the server
+                contentType: 'application/json; charset = utf-8', // sent to the server
+                success: updateUserRegIdSCB,                // data.d id the Variable data contains the data we get from serverside
+                error: updateUserRegIdECB
+            }); // end of ajax call
+        }
+        
+        function updateUserRegIdSCB(results) {
+            alert(results);
+        }
+
+        function updateUserRegIdECB(e) {
+            alert("I caught the exception : failed in updateUserRegId \n The exception message is : " + e.responseText);
+
+        }
+
+
+
+
+        
         if (window.location.href.toString().indexOf('profile.html') != -1) {
             $('.back-to-top-badge').hide();
             getStats();

@@ -578,7 +578,7 @@ public class DBConnection
 
 
     //--------------------------------------------------------------------------------------------------
-    public int insertUser(string IMEI,string regId)
+    public int insertUser(string IMEI)
     {
 
         SqlConnection con;
@@ -596,7 +596,7 @@ public class DBConnection
 
         //Default preferences for a new user
         string cStr = "insert into UsersP (IMEI,pushKey,LocationPush,PhotoPush,PhotoPushTime,RandomArticlePush,RandomArticleQuantity,Score) ";
-        cStr += "values('" + IMEI + "','"+ regId + "',1,1,'12:00',1,5,0)";
+        cStr += "values('" + IMEI + "','new',1,1,'12:00',1,5,0)";
 
         //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
 
@@ -627,7 +627,7 @@ public class DBConnection
 
 
     //--------------------------------------------------------------------------------------------------
-    public User checkUser(string IMEI, string regId)
+    public User checkUser(string IMEI)
     {
         SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
 
@@ -642,7 +642,7 @@ public class DBConnection
         dt = ds.Tables["userPref2"]; // point to the cars table , which is the only table in this case
         if (dt.Rows.Count == 0)
         {
-            insertUser(IMEI, regId);
+            insertUser(IMEI);
 
             User u = new User();
             u.Imei = IMEI;
@@ -681,15 +681,13 @@ public class DBConnection
                 }
 
             }
-
-            updateUserRegID(u.Id, regId);
-
+            
             return u;
         }
     }
 
 
-    public int updateUserRegID(int userID, string regId)
+    public int updateUserRegID(string IMEI, string regId)
     {
         SqlConnection con;
         SqlCommand cmd;
@@ -706,10 +704,9 @@ public class DBConnection
 
         string cStr = "update UsersP "
             + " set "
-            + " pushKey = '" + regId
-            + "' where userId = " + userID;
-
-        //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
+            + " pushKey = '" + regId + "'"
+            + " where IMEI = " + IMEI;
+        
 
         cmd = new SqlCommand(cStr, con);             // create the command
 
