@@ -34,7 +34,7 @@ function searcher() {
 
     var uid = parseInt(localStorage.Id);
 
-    if (articles.length < 10) {
+    if (articles.length < 50) {
         var request = {
             userId: uid
         }
@@ -186,7 +186,7 @@ function successReadArticleCB(data) {
 }
 
 function errorReadArticleCB(e) {
-    alert("error in readArticle: " + e.responseText);
+    //alert("error in readArticle: " + e.responseText);
 }
 
 function showLoading() {
@@ -857,7 +857,6 @@ function showQuestion() {
 
     // events
     startTimer(n);
-    $('#timer').show();
     $('#result').html(n);
 
     hideLoadingQuest();
@@ -917,7 +916,7 @@ function startTimer(n) {
         updateProgress();
 
     }, 1000); // every sec
-
+    $('#timer').show();
 }
 
 function findRightAnswerElement() {
@@ -1000,7 +999,7 @@ function saveScoreSCB(data) {
 }
 
 function saveScoreECB(error) {
-    alert("Error in saveScore: " + error);
+    //alert("Error in saveScore: " + error);
 }
 
 function shuffle(array) {
@@ -1156,7 +1155,7 @@ $(document).ready(function () {
                     // triggred when there is an error in the notification server
                     //-----------------------------------------------------------
                     push.on('error', function (e) {
-                        alert(e.responseText);
+                        //alert(e.responseText);
                     });
                 }
 
@@ -1219,13 +1218,15 @@ $(document).ready(function () {
             }
 
             function errorPhotosCB(e) {
-                alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
+                //alert("I caught the exception : failed in GetPhotos \n The exception message is : " + e.responseText);
             }
 
 
         }
 
         if (window.location.href.toString().indexOf("article.html") != -1) {
+
+            $('#timer').hide();
 
             articles = [];
             goSearch();
@@ -1311,7 +1312,7 @@ $(document).ready(function () {
             }
 
             function checkUserECB(e) {
-                alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
+                //alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
 
             }
 
@@ -1450,7 +1451,7 @@ $(document).ready(function () {
             }
 
             function errorGetCategoriesCB(e) {
-                alert("I caught the exception : failed in GetCategories \n The exception message is : " + e.responseText);
+                //alert("I caught the exception : failed in GetCategories \n The exception message is : " + e.responseText);
             }
 
             function printCategories(results) {
@@ -1524,7 +1525,7 @@ $(document).ready(function () {
                 }
 
                 function errorupdateCategoriesCB(e) {
-                    alert("I caught the exception : failed in updateCategories \n The exception message is : " + e.responseText);
+                    //alert("I caught the exception : failed in updateCategories \n The exception message is : " + e.responseText);
                 }
             }
 
@@ -1581,7 +1582,7 @@ $(document).ready(function () {
             }
 
             function checkUserECB3(e) {
-                alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
+                //alert("I caught the exception : failed in checkUser \n The exception message is : " + e.responseText);
 
             }
 
@@ -1675,7 +1676,7 @@ $(document).ready(function () {
             }
 
             function errorupdateCategoriesCB2(e) {
-                alert("I caught the exception : failed in updateCategories \n The exception message is : " + e.responseText);
+                //alert("I caught the exception : failed in updateCategories \n The exception message is : " + e.responseText);
             }
 
             function checkPrefList2() {
@@ -1770,7 +1771,7 @@ $(document).ready(function () {
             }
 
             function errorUpdateUserPrefsCB(e) {
-                alert("I caught the exception : failed in UpdateUserPrefs \n The exception message is : " + e.responseText);
+                //alert("I caught the exception : failed in UpdateUserPrefs \n The exception message is : " + e.responseText);
             }
 
             function changeSwitches() {
@@ -1933,7 +1934,7 @@ $(document).ready(function () {
         }
 
         function checkUserECB2(e) {
-            alert("I caught the exception : failed in checkUser2 \n The exception message is : " + e.responseText);
+            //alert("I caught the exception : failed in checkUser2 \n The exception message is : " + e.responseText);
 
         }
 
@@ -1958,7 +1959,7 @@ $(document).ready(function () {
         }
 
         function updateUserRegIdECB(e) {
-            alert("I caught the exception : failed in updateUserRegId \n The exception message is : " + e.responseText);
+            //alert("I caught the exception : failed in updateUserRegId \n The exception message is : " + e.responseText);
 
         }
 
@@ -2068,7 +2069,7 @@ $(document).ready(function () {
         }
 
         function errorGetProfileCB(e) {
-            alert("error in getProfile: " + e.responseText);
+            //alert("error in getProfile: " + e.responseText);
         }
 
         if (window.location.href.toString().indexOf('ranking.html') != -1) {
@@ -2172,7 +2173,7 @@ $(document).ready(function () {
         }
 
         function errorGetRankingCB(e) {
-            alert("Error in errorGetRankingCB: " + e.responseText)
+            //alert("Error in errorGetRankingCB: " + e.responseText)
         }
         //Activate Menu
         //$('.footer-menu-open').click(function(){

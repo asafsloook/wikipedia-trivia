@@ -103,7 +103,7 @@ public class myPushNot
 
 
         // Configuration
-        var config = new GcmConfiguration("AIzaSyADY3vdLcnnWSTq9sgL-fd52fVG0plrVJE");
+        var config = new GcmConfiguration("AIzaSyALPWklqgv9OjE5KcZTG-yFi5UznpXD7fE");
         config.GcmUrl = "https://fcm.googleapis.com/fcm/send";
 
         // Create a new broker
@@ -154,7 +154,7 @@ public class myPushNot
     {
 
         // Configuration
-        var config = new GcmConfiguration("AIzaSyADY3vdLcnnWSTq9sgL-fd52fVG0plrVJE");
+        var config = new GcmConfiguration("AIzaSyALPWklqgv9OjE5KcZTG-yFi5UznpXD7fE");
         config.GcmUrl = "https://fcm.googleapis.com/fcm/send";
 
         // Create a new broker
