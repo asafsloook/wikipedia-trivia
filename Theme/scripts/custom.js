@@ -114,19 +114,23 @@ function showArticleOrQuest() {
     oldArticles.shift();
     localStorage.articles = JSON.stringify(oldArticles);
 
-    
-    //check if notification is question
-    if (typeof article.NotificationContent !== 'undefined' && article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
-        Question = article.NotificationContent;
-        Question = Question.replace(" ,", ",");
-        Question = Question.replace(" ;", ";");
-        findAns(article.Title);
-    }
-    else {
-        //hideLoading();
+    try {
+        //check if notification is question
+        if (typeof article.NotificationContent !== 'undefined' && article.NotificationContent.indexOf('?') == article.NotificationContent.length - 1) {
+            Question = article.NotificationContent;
+            Question = Question.replace(" ,", ",");
+            Question = Question.replace(" ;", ";");
+            findAns(article.Title);
+        }
+        else {
+            articleFromLS();
+            return;
+        }
+    } catch (e) {
         articleFromLS();
         return;
     }
+
 
 
     var a = "";
@@ -853,7 +857,7 @@ function showQuestion() {
         clicks++;
     });
 
-    timer,n = 20;
+    timer, n = 20;
 
     // events
     startTimer(n);
@@ -863,7 +867,7 @@ function showQuestion() {
 }
 
 function startTimer(n) {
-    var i = n-1;
+    var i = n - 1;
 
     var canvas = document.getElementById('progress');
     var context = canvas.getContext('2d');
@@ -1099,13 +1103,13 @@ $(document).ready(function () {
 
 
         function onDeviceReady() {
-            
+
             if (window.location.href.toString().indexOf('index.html') != -1) {
 
                 if (localStorage.uuid == null || localStorage.uuid == undefined) {
                     localStorage.uuid = device.uuid;
                 }
-                
+
                 if (typeof PushNotification !== 'undefined') {
 
                     var push = PushNotification.init({
@@ -1130,9 +1134,9 @@ $(document).ready(function () {
                     // triggred by the notification server once the registration is completed
                     //-----------------------------------------------------------------------
                     push.on('registration', function (data) {
-                        
+
                         localStorage.RegId = data.registrationId;
-                        
+
                     });
 
                     //-------------------------------------------------------------
@@ -1147,7 +1151,7 @@ $(document).ready(function () {
                             //
                         }
                         else {
-                           //
+                            //
                         }
                     });
 
@@ -1909,7 +1913,7 @@ $(document).ready(function () {
                 error: checkUserECB2
             }); // end of ajax call
         }
-        
+
         function checkUserSCB2(results) {
 
             var results = $.parseJSON(results.d);
@@ -1953,7 +1957,7 @@ $(document).ready(function () {
                 error: updateUserRegIdECB
             }); // end of ajax call
         }
-        
+
         function updateUserRegIdSCB(results) {
 
         }
@@ -1963,12 +1967,12 @@ $(document).ready(function () {
 
         }
 
-        
-        
+
+
         if (window.location.href.toString().indexOf('profile.html') != -1) {
             $('.back-to-top-badge').hide();
             getStats();
-            
+
 
             var request = {
                 IMEI: localStorage.uuid,
