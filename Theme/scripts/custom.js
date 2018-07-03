@@ -869,7 +869,7 @@ function startTimer(n) {
     var canvas = document.getElementById('progress');
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    result.style.color = '#2980b9';
+    result.style.color = '#00CE9B';
 
     timer = setInterval(function () {
         result.innerHTML = i--;
@@ -899,16 +899,17 @@ function startTimer(n) {
             var context = canvas.getContext('2d');
             var centerX = canvas.width / 2;
             var centerY = canvas.height / 2;
-            var radius = 25;
+            var radius = 20;
             var circ = Math.PI * 2; // 360deg
             var percent = i / n; // i%
             context.beginPath();
             context.arc(centerX, centerY, radius, ((circ) * percent), circ, false);
             context.lineWidth = 5;
             if (i < 5) {
+                context.lineWidth = 6;
                 context.strokeStyle = '#ED3E42';
             } else {
-                context.strokeStyle = '#2980b9';
+                context.strokeStyle = '#00CE9B';
             }
             context.stroke();
         } // progress
