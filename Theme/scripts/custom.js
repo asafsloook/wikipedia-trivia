@@ -24,7 +24,7 @@ function goSearch() {
 
     searcher();
 
-    setInterval(searcher, 1000);
+    searchThread = setInterval(searcher, 1000);
 }
 
 function searcher() {
@@ -34,7 +34,7 @@ function searcher() {
 
     var uid = parseInt(localStorage.Id);
 
-    if (articles.length < 50) {
+    if (articles.length < 10) {
         var request = {
             userId: uid
         }
@@ -92,12 +92,15 @@ function errorArticlesCB(e) {
 
 function articleFromLS() {
 
+    articles = $.parseJSON(localStorage.articles);
+
     if (typeof articles !== 'undefined' && articles.length > 0) {
         //showArticle
         showArticleOrQuest();
     }
     else {
         //wait
+        
         setTimeout(articleFromLS, 1000);
     }
 
@@ -131,10 +134,7 @@ function showArticleOrQuest() {
         return;
     }
 
-
-
-    var a = "";
-
+    
     $("#shareBTN").show();
 
     if (article.PhotoUrl == null) {
@@ -595,7 +595,6 @@ function findAns(title) {
 
                                 findAnsCon(query, title, wikidataID);
                             } catch (e) {
-
                                 try {
                                     //P27
                                     var x = allClaims.P27[0].mainsnak.datavalue.value.id;
@@ -607,9 +606,8 @@ function findAns(title) {
                                     findAnsCon(query, title, wikidataID);
 
                                 } catch (e) {
-
-                                    //hideLoading();
                                     articleFromLS();
+                                    return;
                                 }
                             }
                         }
@@ -619,11 +617,12 @@ function findAns(title) {
                         try {
                             //P360 - list
                             var x = allClaims.P360[0].mainsnak.datavalue.value.id;
-                            //hideLoading();
+                            
                             articleFromLS();
                             return;
 
                         } catch (e) {
+                            
                         }
 
                         var query = [];
@@ -634,8 +633,8 @@ function findAns(title) {
                     }
 
                 } catch (e) {
-                    // hideLoading();
                     articleFromLS();
+                    return;
                 }
             }
         }
@@ -722,8 +721,16 @@ function translate(answers) {
                     newAns = x[answers[rnd]].labels.en.value;
 
                 } catch (e) {
+
+                    for (var i = 0; i < x.length; i++) {
+
+                    }
+
                     delete x[answers[rnd]];
                     delete answers[rnd];
+
+                    answers.clean(undefined);
+
                     continue;
                 }
 
@@ -739,7 +746,7 @@ function translate(answers) {
             if (typeof Question !== 'undefined') {
 
                 if (stringAnswers.length == 1) {
-                    //hideLoading();
+                    
 
                     articleFromLS();
                 }
@@ -756,6 +763,17 @@ function translate(answers) {
         }
     });
 }
+
+
+Array.prototype.clean = function (deleteValue) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] == deleteValue) {
+            this.splice(i, 1);
+            i--;
+        }
+    }
+    return this;
+};
 
 function showQuestion() {
     $('#answers').empty();
@@ -1232,10 +1250,7 @@ $(document).ready(function () {
 
             $('#timer').hide();
 
-            articles = [];
-            goSearch();
-
-
+            
             showLoading();
             loadingTyper();
 
@@ -1970,6 +1985,17 @@ $(document).ready(function () {
 
 
         if (window.location.href.toString().indexOf('profile.html') != -1) {
+
+
+            if (typeof searchThread !== 'undefined') {
+                clearInterval(searchThread);
+                searchThread = false;
+            }
+
+            articles = [];
+            goSearch();
+
+
             $('.back-to-top-badge').hide();
             getStats();
 
