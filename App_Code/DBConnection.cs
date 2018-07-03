@@ -77,6 +77,45 @@ public class DBConnection
         }
     }
 
+    internal List<User> getUsers()
+    {
+        SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
+
+        String selectStr = "select userId,pushKey from UsersP"; // create the select that will be used by the adapter to select data from the DB
+
+        SqlDataAdapter da = new SqlDataAdapter(selectStr, con); // create the data adapter
+
+        DataSet ds = new DataSet("DS"); // create a DataSet and give it a name (not mandatory) as defualt it will be the same name as the DB
+
+        da.Fill(ds);       // Fill the datatable (in the dataset), using the Select command
+
+        dt = ds.Tables[0]; // point to the cars table , which is the only table in this case
+
+        List<User> l = new List<User>();
+        foreach (DataRow dr in dt.Rows)
+        {
+            User u = new User();
+
+            int user = int.Parse(dr["userId"].ToString());
+            string pushkey = "";
+            if (dr["pushKey"].ToString() != "")
+            {
+                pushkey = dr["pushKey"].ToString();
+            }
+            else
+            {
+                continue;
+            }
+
+            u.Id = user;
+            u.PushKey = pushkey;
+
+            l.Add(u);
+        }
+
+        return l;
+    }
+
     internal object getRanking(int id)
     {
         SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/

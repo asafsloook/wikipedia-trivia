@@ -18,6 +18,8 @@ public class User
     int id;
     public int Id { get; set; }
 
+    
+
     string imei;
     public string Imei { get; set; }
 
@@ -82,5 +84,11 @@ public class User
     {
         DBConnection db = new DBConnection();
         return db.getRanking(id);
+    }
+
+    public List<User> getUsers()
+    {
+        DBConnection db = new DBConnection();
+        return db.getUsers();
     }
 }
