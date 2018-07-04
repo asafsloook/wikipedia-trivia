@@ -100,7 +100,7 @@ function articleFromLS() {
     }
     else {
         //wait
-        
+
         setTimeout(articleFromLS, 1000);
     }
 
@@ -134,7 +134,7 @@ function showArticleOrQuest() {
         return;
     }
 
-    
+
     $("#shareBTN").show();
 
     if (article.PhotoUrl == null) {
@@ -617,12 +617,12 @@ function findAns(title) {
                         try {
                             //P360 - list
                             var x = allClaims.P360[0].mainsnak.datavalue.value.id;
-                            
+
                             articleFromLS();
                             return;
 
                         } catch (e) {
-                            
+
                         }
 
                         var query = [];
@@ -746,7 +746,7 @@ function translate(answers) {
             if (typeof Question !== 'undefined') {
 
                 if (stringAnswers.length == 1) {
-                    
+
 
                     articleFromLS();
                 }
@@ -1250,7 +1250,7 @@ $(document).ready(function () {
 
             $('#timer').hide();
 
-            
+
             showLoading();
             loadingTyper();
 
@@ -1688,9 +1688,8 @@ $(document).ready(function () {
             }
 
             function successupdateCategoriesCB2(results) {
-                setTimeout(function () {
-                    window.location.replace('pref2.html');
-                }, 100);
+
+                window.location.replace('pref2.html');
 
             }
 
@@ -1784,9 +1783,8 @@ $(document).ready(function () {
 
                 localStorage.removeItem('articles');
 
-                setTimeout(function () {
-                    window.location.replace('profile.html');
-                }, 100);
+                window.location.replace('profile.html');
+
             }
 
             function errorUpdateUserPrefsCB(e) {
