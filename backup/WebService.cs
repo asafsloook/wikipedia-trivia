@@ -173,6 +173,21 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string updateUserRegId(string IMEI, string regId)
+    {
+
+        User u1 = new User();
+        var a = u1.updateUserRegId(IMEI, regId);
+
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+        string jsonString = js.Serialize(a);
+        return jsonString;
+    }
+    
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public void UpdateCategories(string[] arr, string IMEI)
     {
         var a = arr;

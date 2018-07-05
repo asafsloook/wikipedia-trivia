@@ -18,6 +18,8 @@ public class User
     int id;
     public int Id { get; set; }
 
+    
+
     string imei;
     public string Imei { get; set; }
 
@@ -48,10 +50,16 @@ public class User
     List<Category> categories;
     public List<Category> Categories { get; set; }
 
-    public User checkUser(string IMEI)
+    public User checkUser(string IMEI )
     {
         DBConnection db = new DBConnection();
         return db.checkUser(IMEI);
+    }
+
+    public int updateUserRegId(string IMEI, string regId)
+    {
+        DBConnection db = new DBConnection();
+        return db.updateUserRegID(IMEI, regId);
     }
 
     public int updatePrefs()
@@ -76,5 +84,11 @@ public class User
     {
         DBConnection db = new DBConnection();
         return db.getRanking(id);
+    }
+
+    public List<User> getUsers()
+    {
+        DBConnection db = new DBConnection();
+        return db.getUsers();
     }
 }

@@ -77,6 +77,45 @@ public class DBConnection
         }
     }
 
+    internal List<User> getUsers()
+    {
+        SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
+
+        String selectStr = "select userId,pushKey from UsersP"; // create the select that will be used by the adapter to select data from the DB
+
+        SqlDataAdapter da = new SqlDataAdapter(selectStr, con); // create the data adapter
+
+        DataSet ds = new DataSet("DS"); // create a DataSet and give it a name (not mandatory) as defualt it will be the same name as the DB
+
+        da.Fill(ds);       // Fill the datatable (in the dataset), using the Select command
+
+        dt = ds.Tables[0]; // point to the cars table , which is the only table in this case
+
+        List<User> l = new List<User>();
+        foreach (DataRow dr in dt.Rows)
+        {
+            User u = new User();
+
+            int user = int.Parse(dr["userId"].ToString());
+            string pushkey = "";
+            if (dr["pushKey"].ToString() != "")
+            {
+                pushkey = dr["pushKey"].ToString();
+            }
+            else
+            {
+                continue;
+            }
+
+            u.Id = user;
+            u.PushKey = pushkey;
+
+            l.Add(u);
+        }
+
+        return l;
+    }
+
     internal object getRanking(int id)
     {
         SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
@@ -596,7 +635,7 @@ public class DBConnection
 
         //Default preferences for a new user
         string cStr = "insert into UsersP (IMEI,pushKey,LocationPush,PhotoPush,PhotoPushTime,RandomArticlePush,RandomArticleQuantity,Score) ";
-        cStr += "values('" + IMEI + "','www',1,1,'12:00',1,5,0)";
+        cStr += "values('" + IMEI + "','test',1,1,'12:00',1,5,0)";
 
         //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
 
@@ -683,6 +722,52 @@ public class DBConnection
             }
 
             return u;
+        }
+    }
+
+
+    public int updateUserRegID(string IMEI, string regId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("GraspDBConnectionString"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        string cStr = "update UsersP "
+            + " set "
+            + " pushKey = '" + regId + "' "
+            + " where IMEI = '" + IMEI + "' ";
+        
+
+        cmd = new SqlCommand(cStr, con);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            return 0;
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
         }
     }
 
