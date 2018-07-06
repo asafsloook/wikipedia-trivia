@@ -5516,3 +5516,83 @@ article not found after 16 seconds, retry, Root Category: Geography
 
 article not found after 16 seconds, retry, Root Category: Philosophy
 
+article found after 17 calls to wiki (7 seconds), Root Category: Philosophy
+
+article found after 10 calls to wiki (5 seconds), Root Category: History
+
+article found after 17 calls to wiki (5 seconds), Root Category: Nature
+
+article found after 32 calls to wiki (10 seconds), Root Category: Universe
+
+article found after 6 calls to wiki (2 seconds), Root Category: Nature
+
+article found after 35 calls to wiki (12 seconds), Root Category: People
+
+article found after 17 calls to wiki (4 seconds), Root Category: Philosophy
+
+article found after 18 calls to wiki (5 seconds), Root Category: People
+
+article found after 24 calls to wiki (8 seconds), Root Category: People
+
+article not found after 16 seconds, retry, Root Category: Arts
+
+article found after 37 calls to wiki (11 seconds), Root Category: Arts
+
+article found after 6 calls to wiki (2 seconds), Root Category: Software
+
+article found after 11 calls to wiki (4 seconds), Root Category: Software
+
+article found after 4 calls to wiki (1 seconds), Root Category: Software
+
+article found after 13 calls to wiki (4 seconds), Root Category: Software
+
+article found after 14 calls to wiki (4 seconds), Root Category: Software
+
+article found after 12 calls to wiki (4 seconds), Root Category: Software
+
+article found after 8 calls to wiki (2 seconds), Root Category: Software
+
+article found after 25 calls to wiki (7 seconds), Root Category: Software
+
+article found after 16 calls to wiki (5 seconds), Root Category: Software
+
+article found after 6 calls to wiki (2 seconds), Root Category: Software
+
+article found after 39 calls to wiki (12 seconds), Root Category: Software
+
+article found after 6 calls to wiki (1 seconds), Root Category: Software
+
+article found after 27 calls to wiki (8 seconds), Root Category: Software
+
+article found after 8 calls to wiki (2 seconds), Root Category: Software
+
+article found after 16 calls to wiki (5 seconds), Root Category: Software
+
+article found after 6 calls to wiki (1 seconds), Root Category: Software
+
+article found after 4 calls to wiki (1 seconds), Root Category: Software
+
+article found after 10 calls to wiki (3 seconds), Root Category: Software
+
+article found after 13 calls to wiki (4 seconds), Root Category: Software
+
+article found after 7 calls to wiki (2 seconds), Root Category: Software
+
+article found after 4 calls to wiki (1 seconds), Root Category: Software
+
+article found after 8 calls to wiki (2 seconds), Root Category: Software
+
+article found after 16 calls to wiki (5 seconds), Root Category: Software
+
+article found after 31 calls to wiki (10 seconds), Root Category: Software
+
+article found after 14 calls to wiki (3 seconds), Root Category: Software
+
+article found after 11 calls to wiki (3 seconds), Root Category: Software
+
+article found after 31 calls to wiki (9 seconds), Root Category: Software
+
+article not found after 16 seconds, retry, Root Category: Software
+
+article found after 12 calls to wiki (3 seconds), Root Category: Software
+

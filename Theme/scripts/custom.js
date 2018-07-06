@@ -34,7 +34,7 @@ function searcher() {
 
     var uid = parseInt(localStorage.Id);
 
-    if (articles.length < 10) {
+    if (articles.length < 25) {
         var request = {
             userId: uid
         }
