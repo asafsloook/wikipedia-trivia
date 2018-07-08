@@ -20,6 +20,21 @@ $(document).ready(function () {
 
 });
 
+$(document).ready(function () {
+    $('.premium').on('click', function () {
+        $('.material-menu').removeClass('opacity-out');
+        $('.sidebar-left, .sidebar-right').removeClass('active-sidebar-box');
+        $('.sidebar-tap-close').removeClass('active-tap-close');
+        $("#page-content, .header, .footer-menu").css({
+            "transform": "translateX(0px)",
+            "-webkit-transform": "translateX(0px)",
+            "-moz-transform": "translateX(0px)",
+            "-o-transform": "translateX(0px)",
+            "-ms-transform": "translateX(0px)"
+        });
+    });
+});
+
 function goSearch() {
 
     searcher();
@@ -78,6 +93,12 @@ function successArticlesCB(data) {
         articles = $.parseJSON(localStorage.articles);
     }
 
+    for (var i = 0; i < articles.length; i++) {
+        if (articles[i].ArticleId == newArticle.ArticleId) {
+            return;
+        }
+    }
+
     articles.push(newArticle);
 
     localStorage.articles = JSON.stringify(articles);
@@ -91,6 +112,10 @@ function errorArticlesCB(e) {
 
 
 function articleFromLS() {
+
+    if (typeof searchThread === 'undefined') {
+        goSearch();
+    }
 
     articles = $.parseJSON(localStorage.articles);
 
@@ -153,7 +178,14 @@ function showArticleOrQuest() {
     $("#articleContent").empty();
     //$("#articleContent").append("<b>Root category:</b> " + results.Category.Name + "<br><br>");
 
-    $("#articleContent").append(article.ArticleContent);
+
+    var content = article.ArticleContent;
+
+    content = content.replace(/<p\s+class="mw-empty-elt">[\S\s]*?<\/p>/gi, '');
+    content = content.replace(/<span><\/span>/gi, '');
+    content = content.replace(/<p>[\n\r]+<\/p>/gi, '');
+    content = content.replace(/<p><\/p>/gi, '');
+    $("#articleContent").append(content);
 
 
     //ajax to server, user read this article

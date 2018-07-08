@@ -27,7 +27,7 @@ public partial class _Default : System.Web.UI.Page
         //int randomNum = rnd.Next(0, categoriesList.Count());
         //var a = categoriesList[randomNum].ToString();
 
-        //RandomPageFromCategory("Money", "Money");
+        RandomPageFromCategory("Money", "Money");
 
         // ph.Text= isAnimal("Donkey");
         //GetInfoNearBy("31.771959", "35.217018", "1000");
@@ -43,6 +43,8 @@ public partial class _Default : System.Web.UI.Page
         //MoreLike("Technology", "Tennis");
 
         //getMainCategories();
+
+
     }
 
 
@@ -99,7 +101,7 @@ public partial class _Default : System.Web.UI.Page
 
         string ResponseText;
         HttpWebRequest myRequest2 =
-        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + articleTitle);
+        (HttpWebRequest)WebRequest.Create("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&format=json&titles=" + "JSFuck");
         using (HttpWebResponse response = (HttpWebResponse)myRequest2.GetResponse())
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -185,8 +187,8 @@ public partial class _Default : System.Web.UI.Page
         var views = GetViews(title);
         if (views == -1 || views < 100)
         {
-            RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
-            return;
+            //RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle);
+            //return;
         }
 
         if (content.Contains("(<span></span>)"))

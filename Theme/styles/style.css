@@ -1,3 +1,22 @@
+.premium {
+    font-size: 23px !important;
+    width: calc(80% - 40px) !important;
+    height: 30px !important;
+    font-weight: 600 !important;
+    margin: 10px 20px !important;
+    line-height: 30px !important;
+    border-radius: 10px !important;
+    background: rgba(125, 255, 164, 0.2) !important;
+    color: white !important;
+    box-shadow: 0 0 3px 3px rgba(255, 255, 255, 0.1) !important;
+    text-shadow: 2px 2px rgba(0, 0, 0, 1) !important;
+}
+
+
+.sidebar-header-controls .close-sidebar {
+    float: right !important;
+}
+
 
 #timer {
     position: relative;
@@ -118,10 +137,12 @@ td img {
     float: none !important;
 }
 
-.ui-widget.ui-widget-content, .ui-dialog .ui-dialog-content {
+#dialog, .ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable {
     border-radius: 25px;
     height: 200px !important;
 }
+
+
 
 .topHeader {
     text-align: center;
