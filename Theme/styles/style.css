@@ -589,6 +589,7 @@ p {
     margin-bottom: 20px !important;
     border-radius: 15px;
     background-color: rgba(255,255,255,0.25);
+    PADDING: 5%;
 }
 
 
@@ -1161,10 +1162,10 @@ p {
 }
 
 .sidebar-header h2 {
-    font-size: 13px;
+    font-size: 15px;
     color: #bfbfbf;
-    font-weight: 400;
-    margin-top: -13px;
+    font-weight: 600;
+    margin-top: -10px;
     padding-left: 85px;
 }
 
