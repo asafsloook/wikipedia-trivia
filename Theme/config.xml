@@ -9,6 +9,8 @@
   </author>
   <content src="index.html" />
 
+  <icon src="icon.png" />
+
   <preference name="phonegap-version" value="cli-7.1.0"/>
 
   <access origin="whatsapp:*" launch-external="yes" />
