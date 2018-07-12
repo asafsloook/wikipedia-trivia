@@ -81,7 +81,7 @@ public class DBConnection
     {
         SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
 
-        String selectStr = "select userId,pushKey from UsersP"; // create the select that will be used by the adapter to select data from the DB
+        String selectStr = "select * from UsersP"; // create the select that will be used by the adapter to select data from the DB
 
         SqlDataAdapter da = new SqlDataAdapter(selectStr, con); // create the data adapter
 
@@ -98,7 +98,7 @@ public class DBConnection
 
             int user = int.Parse(dr["userId"].ToString());
             string pushkey = "";
-            if (dr["pushKey"].ToString() != "")
+            if (dr["pushKey"].ToString() != "" && dr["pushKey"].ToString() != "no-reg-id")
             {
                 pushkey = dr["pushKey"].ToString();
             }
@@ -109,6 +109,13 @@ public class DBConnection
 
             u.Id = user;
             u.PushKey = pushkey;
+            u.Imei = dr["IMEI"].ToString();
+            u.LocationPush = (bool)(dr["LocationPush"]);
+            u.PhotoPush = (bool)(dr["PhotoPush"]);
+            u.PhotoPushTime = Convert.ToDateTime(dr["PhotoPushTime"].ToString());
+            u.ArticlePush = (bool)(dr["RandomArticlePush"]);
+            u.ArticlesPerDay = int.Parse(dr["RandomArticleQuantity"].ToString());
+            u.Score = int.Parse(dr["Score"].ToString());
 
             l.Add(u);
         }

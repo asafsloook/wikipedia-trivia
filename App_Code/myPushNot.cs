@@ -94,7 +94,7 @@ public class myPushNot
         {
 
             //ignore nulls
-            if (item.PushKey != "")
+            if (item.PushKey != "" && item.PushKey != "no-reg-id")
             {
                 registrationIDs.Add(item.PushKey);
             }
@@ -206,5 +206,62 @@ public class myPushNot
         x.Add("content-available", 1);
       
         RunPushNotificationOne(user, x);
+    }
+
+    public void photoPush(List<User> lu)
+    {
+        for (int i = 0; i < lu.Count; i++)
+        {
+            if (lu[i].PhotoPush)
+            {
+                if (lu[i].PhotoPushTime.Hour >= DateTime.Now.Hour )
+                {
+                    var x = new JObject();
+
+                    x.Add("title", "Photo of the Day is HERE!");
+
+                    //modify by import photo description?
+                    x.Add("message", "WOW");
+
+                    x.Add("info", "PhotoPush");
+                    x.Add("content-available", 1);
+
+                    RunPushNotificationOne(lu[i], x);
+                }
+            }
+        }
+    }
+
+    public void articlePush(List<User> lu)
+    {
+        for (int i = 0; i < lu.Count; i++)
+        {
+            if (lu[i].ArticlePush)
+            {
+                double hours = 24;
+                double articlePerDay = lu[i].ArticlesPerDay;
+                double min = DateTime.Now.Minute;
+                double minutes = 60;
+                double minFronHour = min / minutes;
+
+                double hour = Math.Round(DateTime.Now.Hour + minFronHour, 2);
+                double articleEvery = Math.Round(hours / articlePerDay, 2);
+
+                if (hour % articleEvery == 0)
+                {
+                    var x = new JObject();
+                    
+                    x.Add("title", "Question for you");
+
+                    //modify by import article (getArticle)
+                    x.Add("message", "What is tennis");
+
+                    x.Add("info", "ArticlePush");
+                    x.Add("content-available", 1);
+
+                    RunPushNotificationOne(lu[i], x);
+                }
+            }
+        }
     }
 }
