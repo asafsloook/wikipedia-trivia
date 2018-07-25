@@ -210,23 +210,25 @@ public class myPushNot
 
     public void photoPush(List<User> lu)
     {
+       
         for (int i = 0; i < lu.Count; i++)
         {
-            if (lu[i].PhotoPush)
+            //if (lu[i].PhotoPush)
             {
-                if (lu[i].PhotoPushTime.Hour >= DateTime.Now.Hour )
+                //if (lu[i].PhotoPushTime.Hour >= DateTime.Now.Hour )
                 {
                     var x = new JObject();
 
                     x.Add("title", "Photo of the Day is HERE!");
 
                     //modify by import photo description?
-                    x.Add("message", "WOW");
+                    x.Add("message", "Tap here to see it :)");
 
                     x.Add("info", "PhotoPush");
                     x.Add("content-available", 1);
 
                     RunPushNotificationOne(lu[i], x);
+                    
                 }
             }
         }
@@ -236,7 +238,7 @@ public class myPushNot
     {
         for (int i = 0; i < lu.Count; i++)
         {
-            if (lu[i].ArticlePush)
+            //if (lu[i].ArticlePush)
             {
                 double hours = 24;
                 double articlePerDay = lu[i].ArticlesPerDay;
@@ -244,21 +246,36 @@ public class myPushNot
                 double minutes = 60;
                 double minFronHour = min / minutes;
 
+                //every 6 minutes
+                //2.68  0.01 * 60
+
                 double hour = Math.Round(DateTime.Now.Hour + minFronHour, 2);
                 double articleEvery = Math.Round(hours / articlePerDay, 2);
 
-                if (hour % articleEvery == 0)
+                //if (hour % articleEvery == 0)
                 {
                     var x = new JObject();
                     
-                    x.Add("title", "Question for you");
+                    x.Add("title", "A new question is waiting for you");
+
+
+                    Article a1 = new Article();
+                    var categoriesList = a1.getCatByImei(lu[i].Id.ToString());
+                    
+                    Random rnd = new Random();
+
+                    int randomNum = rnd.Next(0, categoriesList.Count());
+                    var a = categoriesList[randomNum].ToString();
+
+                    a1 = a1.RandomPageFromCategory(a, a, lu[i].Id.ToString());
+                    
 
                     //modify by import article (getArticle)
-                    x.Add("message", "What is tennis");
+                    x.Add("message", a1.NotificationContent);
 
                     x.Add("info", "ArticlePush");
                     x.Add("content-available", 1);
-
+                    
                     RunPushNotificationOne(lu[i], x);
                 }
             }

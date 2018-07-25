@@ -20,6 +20,9 @@ public partial class _Default : System.Web.UI.Page
         //AllText("Kenneth Burke");
 
         
+        //btn on off
+        //thread push 
+
 
         //Random rnd = new Random();
         //var categoriesList = getMainCategories();

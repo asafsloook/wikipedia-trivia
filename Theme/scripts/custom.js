@@ -1203,6 +1203,15 @@ $(document).ready(function () {
                         else {
                             //
                         }
+
+                        if (data.additionalData.info == 'PhotoPush') {
+
+                            localStorage.toPhotoPush = 'true';
+                            window.location.replace('allphotos.html');
+                        }
+                        else {
+                            
+                        }
                     });
 
                     //-----------------------------------------------------------
@@ -1227,6 +1236,13 @@ $(document).ready(function () {
         if (window.location.href.toString().indexOf('allphotos.html') != -1) {
 
             getPhotos();
+
+            function checkPhotoPush() {
+                if (localStorage.toPhotoPush == 'true') {
+                    localStorage.toPhotoPush = 'false';
+                    $('#ph9').click();
+                }
+            }
 
             $("#photos a[id*='ph']").on('click', function () {
 
@@ -1267,6 +1283,8 @@ $(document).ready(function () {
                     }
 
                     $("#ph" + i + " em").html(results[i].Description.substring(0, 40).trim() + short);
+
+                    checkPhotoPush();
                 }
 
             }

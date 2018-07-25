@@ -8786,3 +8786,15 @@ article not found after 16 seconds, retry, Root Category: Science and technology
 
 article found after 18 calls to wiki (6 seconds), Root Category: Science and technology
 
+article found after 36 calls to wiki (13 seconds), Root Category: Geography
+
+article found after 6 calls to wiki (2 seconds), Root Category: Sports
+
+article found after 51 calls to wiki (17 seconds), Root Category: Geography
+
+article found after 15 calls to wiki (6 seconds), Root Category: Sports
+
+article found after 18 calls to wiki (7 seconds), Root Category: Geography
+
+article found after 50 calls to wiki (16 seconds), Root Category: Science and technology
+
