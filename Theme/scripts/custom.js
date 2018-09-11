@@ -39,7 +39,7 @@ function goSearch() {
 
     searcher();
 
-    searchThread = setInterval(searcher, 1000);
+    searchThread = setInterval(searcher, 1500);
 }
 
 function searcher() {
@@ -50,6 +50,19 @@ function searcher() {
     var uid = parseInt(localStorage.Id);
 
     if (articles.length < 25) {
+
+        if (window.location.href.toString().indexOf('profile.html') != -1) {
+            if (articles.length < 5) {
+                $('#loading').show();
+                $('#page-content').hide();
+            }
+            else {
+                $('#loading').fadeOut();
+                $('#page-content').fadeIn();
+            };
+        }
+
+
         var request = {
             userId: uid
         }
@@ -1210,7 +1223,7 @@ $(document).ready(function () {
                             window.location.replace('allphotos.html');
                         }
                         else {
-                            
+
                         }
                     });
 
