@@ -9108,3 +9108,265 @@ article found after 37 calls to wiki (11 seconds), Root Category: Arts
 
 article found after 20 calls to wiki (6 seconds), Root Category: Nature
 
+article found after 8 calls to wiki (9 seconds), Root Category: Arts
+
+article found after 4 calls to wiki (8 seconds), Root Category: Arts
+
+article found after 4 calls to wiki (2 seconds), Root Category: Matter
+
+article found after 4 calls to wiki (1 seconds), Root Category: Culture
+
+article found after 13 calls to wiki (5 seconds), Root Category: Religion
+
+article found after 25 calls to wiki (13 seconds), Root Category: History
+
+article found after 26 calls to wiki (12 seconds), Root Category: People
+
+article found after 18 calls to wiki (11 seconds), Root Category: World
+
+article found after 25 calls to wiki (12 seconds), Root Category: World
+
+article found after 6 calls to wiki (3 seconds), Root Category: Politics
+
+article found after 11 calls to wiki (5 seconds), Root Category: Politics
+
+article found after 9 calls to wiki (4 seconds), Root Category: Events
+
+article found after 6 calls to wiki (3 seconds), Root Category: Sports
+
+article found after 6 calls to wiki (2 seconds), Root Category: Nature
+
+article found after 6 calls to wiki (2 seconds), Root Category: Geography
+
+article found after 12 calls to wiki (5 seconds), Root Category: People
+
+article found after 34 calls to wiki (15 seconds), Root Category: Universe
+
+article found after 20 calls to wiki (9 seconds), Root Category: Politics
+
+article found after 6 calls to wiki (5 seconds), Root Category: Sports
+
+article found after 8 calls to wiki (6 seconds), Root Category: Events
+
+article found after 13 calls to wiki (10 seconds), Root Category: Society
+
+article found after 36 calls to wiki (14 seconds), Root Category: Politics
+
+article found after 11 calls to wiki (5 seconds), Root Category: Culture
+
+article found after 21 calls to wiki (10 seconds), Root Category: Politics
+
+article found after 34 calls to wiki (13 seconds), Root Category: Arts
+
+article found after 7 calls to wiki (3 seconds), Root Category: Matter
+
+article found after 4 calls to wiki (2 seconds), Root Category: Culture
+
+article found after 9 calls to wiki (7 seconds), Root Category: Matter
+
+article found after 6 calls to wiki (3 seconds), Root Category: World
+
+article found after 12 calls to wiki (5 seconds), Root Category: World
+
+article found after 11 calls to wiki (4 seconds), Root Category: Universe
+
+article found after 4 calls to wiki (2 seconds), Root Category: Philosophy
+
+article found after 13 calls to wiki (5 seconds), Root Category: Universe
+
+article found after 13 calls to wiki (6 seconds), Root Category: Nature
+
+article found after 4 calls to wiki (2 seconds), Root Category: Matter
+
+article found after 20 calls to wiki (7 seconds), Root Category: Nature
+
+article found after 7 calls to wiki (3 seconds), Root Category: Culture
+
+article found after 11 calls to wiki (4 seconds), Root Category: Religion
+
+article found after 18 calls to wiki (11 seconds), Root Category: People
+
+article found after 8 calls to wiki (4 seconds), Root Category: History
+
+article found after 17 calls to wiki (7 seconds), Root Category: World
+
+article found after 30 calls to wiki (14 seconds), Root Category: Science and technology
+
+article found after 11 calls to wiki (5 seconds), Root Category: Arts
+
+article found after 4 calls to wiki (2 seconds), Root Category: Geography
+
+article found after 11 calls to wiki (4 seconds), Root Category: Events
+
+article found after 19 calls to wiki (9 seconds), Root Category: Nature
+
+article found after 4 calls to wiki (2 seconds), Root Category: Culture
+
+article found after 37 calls to wiki (15 seconds), Root Category: World
+
+article found after 13 calls to wiki (7 seconds), Root Category: Humanities
+
+article found after 16 calls to wiki (7 seconds), Root Category: Religion
+
+article found after 4 calls to wiki (2 seconds), Root Category: Health
+
+article found after 11 calls to wiki (12 seconds), Root Category: Humanities
+
+article found after 15 calls to wiki (8 seconds), Root Category: Religion
+
+article found after 13 calls to wiki (6 seconds), Root Category: Universe
+
+article found after 4 calls to wiki (2 seconds), Root Category: Politics
+
+article found after 20 calls to wiki (10 seconds), Root Category: World
+
+article not found after 18 seconds, retry, Root Category: Nature
+
+article found after 37 calls to wiki (18 seconds), Root Category: Sports
+
+article found after 17 calls to wiki (8 seconds), Root Category: Nature
+
+article found after 6 calls to wiki (4 seconds), Root Category: Sports
+
+article found after 7 calls to wiki (4 seconds), Root Category: Humanities
+
+article found after 4 calls to wiki (2 seconds), Root Category: Culture
+
+article found after 9 calls to wiki (4 seconds), Root Category: Religion
+
+article found after 19 calls to wiki (8 seconds), Root Category: Nature
+
+article found after 4 calls to wiki (2 seconds), Root Category: Geography
+
+article found after 8 calls to wiki (4 seconds), Root Category: Politics
+
+article found after 8 calls to wiki (3 seconds), Root Category: Events
+
+article found after 6 calls to wiki (3 seconds), Root Category: History
+
+article not found after 16 seconds, retry, Root Category: Science and technology
+
+article found after 6 calls to wiki (6 seconds), Root Category: People
+
+article found after 10 calls to wiki (4 seconds), Root Category: World
+
+article found after 18 calls to wiki (7 seconds), Root Category: Arts
+
+article found after 40 calls to wiki (17 seconds), Root Category: Universe
+
+article not found after 16 seconds, retry, Root Category: History
+
+article found after 6 calls to wiki (3 seconds), Root Category: History
+
+article found after 11 calls to wiki (14 seconds), Root Category: Health
+
+article found after 15 calls to wiki (9 seconds), Root Category: Universe
+
+article found after 6 calls to wiki (6 seconds), Root Category: Humanities
+
+article found after 6 calls to wiki (3 seconds), Root Category: Events
+
+article found after 12 calls to wiki (7 seconds), Root Category: Matter
+
+article found after 6 calls to wiki (3 seconds), Root Category: Universe
+
+article found after 18 calls to wiki (7 seconds), Root Category: Philosophy
+
+article found after 13 calls to wiki (7 seconds), Root Category: History
+
+article found after 14 calls to wiki (7 seconds), Root Category: History
+
+article found after 11 calls to wiki (5 seconds), Root Category: Humanities
+
+article found after 21 calls to wiki (8 seconds), Root Category: Politics
+
+article not found after 16 seconds, retry, Root Category: Science and technology
+
+article found after 16 calls to wiki (7 seconds), Root Category: Culture
+
+article found after 8 calls to wiki (6 seconds), Root Category: Science and technology
+
+article found after 6 calls to wiki (5 seconds), Root Category: Society
+
+article found after 9 calls to wiki (3 seconds), Root Category: Matter
+
+article not found after 16 seconds, retry, Root Category: Nature
+
+article found after 24 calls to wiki (12 seconds), Root Category: Geography
+
+article found after 4 calls to wiki (2 seconds), Root Category: Philosophy
+
+article found after 20 calls to wiki (7 seconds), Root Category: World
+
+article found after 21 calls to wiki (7 seconds), Root Category: History
+
+article found after 17 calls to wiki (5 seconds), Root Category: Nature
+
+article found after 6 calls to wiki (2 seconds), Root Category: Matter
+
+article found after 17 calls to wiki (5 seconds), Root Category: Events
+
+article found after 6 calls to wiki (3 seconds), Root Category: Religion
+
+article found after 4 calls to wiki (1 seconds), Root Category: Politics
+
+article found after 42 calls to wiki (16 seconds), Root Category: Philosophy
+
+article not found after 16 seconds, retry, Root Category: Science and technology
+
+article found after 44 calls to wiki (15 seconds), Root Category: Nature
+
+article found after 28 calls to wiki (10 seconds), Root Category: Science and technology
+
+article found after 8 calls to wiki (3 seconds), Root Category: Culture
+
+article found after 31 calls to wiki (10 seconds), Root Category: Universe
+
+article found after 10 calls to wiki (3 seconds), Root Category: Geography
+
+article found after 27 calls to wiki (9 seconds), Root Category: Society
+
+article found after 12 calls to wiki (4 seconds), Root Category: Arts
+
+article found after 12 calls to wiki (4 seconds), Root Category: History
+
+article found after 6 calls to wiki (2 seconds), Root Category: Philosophy
+
+article found after 9 calls to wiki (3 seconds), Root Category: Geography
+
+article found after 8 calls to wiki (3 seconds), Root Category: Geography
+
+article found after 15 calls to wiki (5 seconds), Root Category: Arts
+
+article found after 21 calls to wiki (8 seconds), Root Category: Sports
+
+article found after 4 calls to wiki (2 seconds), Root Category: Geography
+
+article found after 8 calls to wiki (3 seconds), Root Category: Health
+
+article found after 20 calls to wiki (7 seconds), Root Category: Arts
+
+article found after 18 calls to wiki (7 seconds), Root Category: Nature
+
+article found after 8 calls to wiki (3 seconds), Root Category: Health
+
+article found after 15 calls to wiki (6 seconds), Root Category: Arts
+
+article found after 14 calls to wiki (7 seconds), Root Category: World
+
+article found after 17 calls to wiki (6 seconds), Root Category: Mathematics
+
+article found after 6 calls to wiki (3 seconds), Root Category: People
+
+article found after 15 calls to wiki (5 seconds), Root Category: Events
+
+article found after 23 calls to wiki (8 seconds), Root Category: People
+
+article found after 11 calls to wiki (4 seconds), Root Category: Religion
+
+article found after 9 calls to wiki (4 seconds), Root Category: Humanities
+
+article found after 25 calls to wiki (9 seconds), Root Category: Philosophy
+
+article found after 8 calls to wiki (2 seconds), Root Category: Nature
+

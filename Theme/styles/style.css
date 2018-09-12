@@ -1,9 +1,9 @@
-b{
-font-weight: 500;
+b {
+    font-weight: 500;
 }
 
-code{
-    display:inline;
+code {
+    display: inline;
 }
 
 .premium {
@@ -36,8 +36,8 @@ code{
     text-align: center;
     z-index: 9999;
     float: right;
-    top:5px;
-    left:-5px;
+    top: 5px;
+    left: -5px;
 }
 
 #progress {
@@ -62,12 +62,14 @@ code{
 
 
 canvas {
-opacity:0.5;
+    opacity: 0.5;
 }
 
 #myChart {
-    opacity:1;
-}span, p, h1, h2, h3, h4, h5, h6, a, label {
+    opacity: 1;
+}
+
+span, p, h1, h2, h3, h4, h5, h6, a, label {
     font-family: Roboto !important;
 }
 
@@ -78,8 +80,8 @@ opacity:0.5;
     background-size: cover;
 }
 
-.decoration{
-    background-color:none;
+.decoration {
+    background-color: none;
 }
 /* https://i0.wp.com/www.mustsee.is/wp-content/uploads/2017/08/3fe793dc-90eb-4248-ae7f-fa27f8a30f41.jpg?fit=837%2C1024&ssl=1 */
 /* https://img.purch.com/w/660/aHR0cDovL3d3dy5zcGFjZS5jb20vaW1hZ2VzL2kvMDAwLzA0NS85ODMvb3JpZ2luYWwvYXJjdHVydXMtbGFrZS1oYXJ0LmpwZw== */
@@ -570,7 +572,7 @@ p {
     z-index: 1000 !important;
 }
 
-    #title, #aroundTitle {
+#title, #aroundTitle {
     padding-bottom: 20px;
     float: left;
     width: 90%;
@@ -1204,4 +1206,73 @@ p {
     text-align: center;
     color: #FFFFFF;
     font-size: 15px;
+}
+
+.profileControls {
+    height: 12%;
+}
+
+    .profileControls .profileMenu {
+        margin: 0% 11%;
+    }
+
+    .profileControls .loaderNew {
+        top: 18%;
+    }
+
+    .profileControls #loading {
+        background: none;
+    }
+
+.profileMenu {
+    margin: 0 20px;
+}
+
+.spinner {
+    margin: 0 auto;
+    width: 70px;
+    text-align: center;
+    top: 20%;
+}
+
+    .spinner > div {
+        width: 18px;
+        height: 18px;
+        background-color: #fff;
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    }
+
+    .spinner .bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+
+    .spinner .bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+
+@-webkit-keyframes sk-bouncedelay {
+    0%, 80%, 100% {
+        -webkit-transform: scale(0)
+    }
+
+    40% {
+        -webkit-transform: scale(1.0)
+    }
+}
+
+@keyframes sk-bouncedelay {
+    0%, 80%, 100% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+
+    40% {
+        -webkit-transform: scale(1.0);
+        transform: scale(1.0);
+    }
 }

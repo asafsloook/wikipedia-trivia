@@ -39,7 +39,7 @@ function goSearch() {
 
     searcher();
 
-    searchThread = setInterval(searcher, 1500);
+    searchThread = setInterval(searcher, 2500);
 }
 
 function searcher() {
@@ -54,11 +54,11 @@ function searcher() {
         if (window.location.href.toString().indexOf('profile.html') != -1) {
             if (articles.length < 5) {
                 $('#loading').show();
-                $('#page-content').hide();
+                $('.profileMenu').hide();
             }
             else {
                 $('#loading').fadeOut();
-                $('#page-content').fadeIn();
+                $('.profileMenu').fadeIn();
             };
         }
 
