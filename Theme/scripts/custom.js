@@ -54,13 +54,23 @@ function searcher() {
         if (window.location.href.toString().indexOf('profile.html') != -1) {
             if (articles.length < 5) {
                 $('#loading').show();
+                $('.lodingGameText').show();
                 $('.profileMenu').hide();
             }
             else {
+                $('.lodingGameText').fadeOut();
                 $('#loading').fadeOut();
                 $('.profileMenu').fadeIn();
             };
         }
+
+        if (articles.length < 5) {
+            $("a[href*='article.html']").hide();
+        }
+        else {
+            $("a[href*='article.html']").show();
+        };
+
 
 
         var request = {
@@ -161,6 +171,7 @@ function showArticleOrQuest() {
             Question = article.NotificationContent;
             Question = Question.replace(" ,", ",");
             Question = Question.replace(" ;", ";");
+            articleIdForScore = article.ArticleId;
             findAns(article.Title);
         }
         else {
@@ -882,7 +893,8 @@ function showQuestion() {
             var uid = parseInt(localStorage.Id);
             var request = {
                 Score: score,
-                UserId: uid
+                UserId: uid,
+                articleId: articleIdForScore
             }
 
             saveScore(request);

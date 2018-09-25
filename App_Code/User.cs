@@ -18,7 +18,8 @@ public class User
     int id;
     public int Id { get; set; }
 
-    
+
+    public string articleIdForScore { get; set; }
 
     string imei;
     public string Imei { get; set; }

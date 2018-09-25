@@ -22,6 +22,7 @@ using edu.stanford.nlp.parser.lexparser;
 using edu.stanford.nlp.ling;
 using edu.stanford.nlp.process;
 using edu.stanford.nlp.trees;
+using edu.stanford.nlp.sentiment;
 
 /// <summary>
 /// Summary description for Article
@@ -55,7 +56,7 @@ public class Article
 
     string url;
     public string Url { get; set; }
-    
+
     //log test
     StringBuilder sb = new StringBuilder();
     Timer timer = new Timer();
@@ -80,7 +81,7 @@ public class Article
     /// 
     public Article RandomPageFromCategory(string categoryTitle, string rootCategoryTitle, string userID)
     {
-        
+
         if (callCounter == 0)
         {
             timeStart = DateTime.Now;
@@ -93,7 +94,7 @@ public class Article
 
             if (def.Seconds > 15)
             {
-                sb.Append("article not found after "+def.Seconds+" seconds, retry, Root Category: "+rootCategoryTitle+  "\r\n\r\n");
+                sb.Append("article not found after " + def.Seconds + " seconds, retry, Root Category: " + rootCategoryTitle + "\r\n\r\n");
                 System.IO.File.AppendAllText(HttpContext.Current.Server.MapPath("~/") + "log.txt", sb.ToString());
                 sb.Clear();
 
@@ -108,7 +109,7 @@ public class Article
         using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
         {
             ResponseURI = response.ResponseUri.ToString();
-            if (ResponseURI ==  "https://en.wikipedia.org/wiki/Special:RandomInCategory/" + categoryTitle)
+            if (ResponseURI == "https://en.wikipedia.org/wiki/Special:RandomInCategory/" + categoryTitle)
             {
                 Article a = new Article();
                 a.ArticleContent = categoryTitle;
@@ -125,7 +126,7 @@ public class Article
         {
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
             {
-                ResponseText = reader.ReadToEnd();   
+                ResponseText = reader.ReadToEnd();
             }
         }
         callCounter++;
@@ -200,11 +201,11 @@ public class Article
 
 
         DBConnection db = new DBConnection();
-        bool test = db.isUserRead(id, userID);
+        bool test = db.isUserAnswerCorrect(id, userID);
 
         if (test)
         {
-             return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
+            return RandomPageFromCategory(rootCategoryTitle, rootCategoryTitle, userID);
         }
 
 
@@ -278,7 +279,7 @@ public class Article
         var now2 = DateTime.Now;
         var def2 = now2 - timeStart;
 
-        sb.Append("article found after " + callCounter + " calls to wiki ("+def2.Seconds +" seconds), Root Category: "+rootCategoryTitle+  "\r\n\r\n");
+        sb.Append("article found after " + callCounter + " calls to wiki (" + def2.Seconds + " seconds), Root Category: " + rootCategoryTitle + "\r\n\r\n");
         System.IO.File.AppendAllText(HttpContext.Current.Server.MapPath("~/") + "log.txt", sb.ToString());
         sb.Clear();
 
@@ -361,11 +362,11 @@ public class Article
 
         content = content.Replace("&amp;", "&");
 
-        
+
 
         content = removeParenthesis(content);
 
-        
+
 
         string qContent = content;
 
@@ -387,7 +388,7 @@ public class Article
 
 
         qContent = content;
-        
+
         qContent = Regex.Replace(qContent, @"(?!</?b>)<.*?>", String.Empty);
 
         qContent = qContent.Replace(" . ", ". ");
@@ -616,6 +617,52 @@ public class Article
                 }
             }
 
+        }
+        return "";
+    }
+
+    public string test(string sentence)
+    {
+        // Path to models extracted from `stanford-parser-3.6.0-models.jar`
+        var dir = HttpContext.Current.Server.MapPath("~/");
+
+        // Loading english PCFG parser from file
+        var lp = LexicalizedParser.loadModel(dir + @"\englishPCFG.ser.gz");
+
+        var content_ = System.IO.File.ReadAllText(dir + @"\rh.txt");
+        var sentences = splitToSentences(content_);
+
+        // This option shows loading and using an explicit tokenizer
+
+        foreach (var sent2 in sentences)
+        {
+            var tokenizerFactory = PTBTokenizer.factory(new CoreLabelTokenFactory(), "");
+            var sent2Reader = new java.io.StringReader(sent2);
+            var rawWords2 = tokenizerFactory.getTokenizer(sent2Reader).tokenize();
+            sent2Reader.close();
+            var tree2 = lp.apply(rawWords2);
+
+            // Extract dependencies from lexical tree
+            var tlp = new PennTreebankLanguagePack();
+            var gsf = tlp.grammaticalStructureFactory();
+            var gs = gsf.newGrammaticalStructure(tree2);
+
+            var tdl = gs.typedDependenciesCCprocessed();
+            //System.Console.WriteLine("\n{0}\n", tdl);
+
+            string subject = "";
+            foreach (TypedDependency item in tdl.toArray())
+            {
+                if (item.gov().value() == "ROOT")
+                {
+                    subject = item.dep().value();
+                    subject += "_" + item.dep().tag();
+                }
+            }
+
+            // Extract collapsed dependencies from parsed tree
+            var tp = new TreePrint("penn,typedDependenciesCollapsed");
+            tp.printTree(tree2);
         }
         return "";
     }

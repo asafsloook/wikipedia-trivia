@@ -32,8 +32,18 @@ public class WebService : System.Web.Services.WebService
 
         //Uncomment the following line if using designed components 
         //InitializeComponent(); 
-        
+
     }
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string Test(string sentence)
+    {
+        var a = new Article();
+        var b = (a.test(sentence));
+        return b;
+    }
+
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
@@ -48,9 +58,9 @@ public class WebService : System.Web.Services.WebService
 
         int randomNum = rnd.Next(0, categoriesList.Count());
         var a = categoriesList[randomNum].ToString();
-        
+
         a1 = a1.RandomPageFromCategory(a, a, userID);
-      
+
         //method
         //Reading r = new Reading();
         //r.insert(userID, a1.ArticleId, DateTime.Now, a.ToString());
@@ -64,9 +74,9 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public string readArticle(int userId,string rootCategory, string articleId)
+    public string readArticle(int userId, string rootCategory, string articleId)
     {
-        
+
         Reading r = new Reading();
         r.insert(userId, articleId, DateTime.Now, rootCategory.ToString());
 
@@ -85,7 +95,7 @@ public class WebService : System.Web.Services.WebService
 
         User u = new User();
         var a = u.getProfile(int.Parse(userId));
-        
+
         JavaScriptSerializer js = new JavaScriptSerializer();
 
         string jsonString = js.Serialize(a);
@@ -184,7 +194,7 @@ public class WebService : System.Web.Services.WebService
         string jsonString = js.Serialize(a);
         return jsonString;
     }
-    
+
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
@@ -219,11 +229,12 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public void saveScore(int Score, int UserId)
+    public void saveScore(int Score, int UserId, string articleId)
     {
         User u = new User();
         u.Score = Score;
         u.Id = UserId;
+        u.articleIdForScore = articleId;
 
         u.updateScore();
     }

@@ -15,6 +15,7 @@ public class Reading
         //
     }
 
+
     public int UserId { get; set; }
 
     public string ArticleId { get; set; }

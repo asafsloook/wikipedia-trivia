@@ -255,7 +255,11 @@ public class DBConnection
             + " Score += " + user.Score
             + " where userId = " + user.Id;
 
-        //String cStr = "INSERT INTO UsersP values({0},{1}      // helper method to build the insert string
+        cStr += "; update ReadingP "
+                    + " set "
+                    + " IsCorrect = 1 "
+                    + " where userId = " + user.Id
+                        + " AND ArticleId = '" + user.articleIdForScore + "'";
 
         cmd = new SqlCommand(cStr, con);             // create the command
 
@@ -281,11 +285,12 @@ public class DBConnection
         }
     }
 
-    public bool isUserRead(string articleId, string userId)
+    //better call this isUserAnswerRight
+    public bool isUserAnswerCorrect(string articleId, string userId)
     {
         SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
 
-        String selectStr = "Select * from ReadingP where UserID = " + userId + " and ArticleId='" + articleId + "'"; // create the select that will be used by the adapter to select data from the DB
+        String selectStr = "Select * from ReadingP where UserID = " + userId + " and ArticleId='" + articleId + "' and IsCorrect = 1 "; // create the select that will be used by the adapter to select data from the DB
 
         SqlDataAdapter da = new SqlDataAdapter(selectStr, con); // create the data adapter
 
@@ -752,7 +757,7 @@ public class DBConnection
             + " set "
             + " pushKey = '" + regId + "' "
             + " where IMEI = '" + IMEI + "' ";
-        
+
 
         cmd = new SqlCommand(cStr, con);             // create the command
 
