@@ -621,8 +621,10 @@ public class Article
         return "";
     }
 
-    public string test(string sentence)
+    public List<Question> test()
     {
+        List<Question> lq = new List<Question>();
+
         // Path to models extracted from `stanford-parser-3.6.0-models.jar`
         var dir = HttpContext.Current.Server.MapPath("~/");
 
@@ -657,14 +659,17 @@ public class Article
                 {
                     subject = item.dep().value();
                     subject += "_" + item.dep().tag();
+                    break;
                 }
             }
 
+            lq.Add(new Question(sent2, subject));
+
             // Extract collapsed dependencies from parsed tree
-            var tp = new TreePrint("penn,typedDependenciesCollapsed");
-            tp.printTree(tree2);
+            //var tp = new TreePrint("penn,typedDependenciesCollapsed");
+            //tp.printTree(tree2);
         }
-        return "";
+        return lq;
     }
 
     public List<string> splitToSentences(string content)

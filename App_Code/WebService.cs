@@ -37,11 +37,9 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public string Test(string sentence)
+    public List<Question> Test(string test)
     {
-        var a = new Article();
-        var b = (a.test(sentence));
-        return b;
+        return new Article().test();
     }
 
 
