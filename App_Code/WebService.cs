@@ -37,9 +37,25 @@ public class WebService : System.Web.Services.WebService
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public List<Question> Test(string test)
+    public string Test(string test)
     {
-        return new Article().test();
+        var questions = new Article().test();
+
+        foreach (var question in questions)
+        {
+            var a = new Article();
+            question.possibleAnswers = new List<string>();
+
+            var wikiAnswers = a.answers("wiki", question.answer);
+            if (wikiAnswers != null && wikiAnswers.Count() > 0) question.possibleAnswers.AddRange(wikiAnswers);
+
+            var theAnswers = a.answers("the", question.answer);
+            if (theAnswers != null && theAnswers.Count() > 0) question.possibleAnswers.AddRange(theAnswers);
+        }
+
+        JavaScriptSerializer js = new JavaScriptSerializer();
+        js.MaxJsonLength = 999999999;
+        return js.Serialize(questions);
     }
 
 

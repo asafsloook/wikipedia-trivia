@@ -44,15 +44,16 @@
     <link href="scripts/jquery-ui.css" rel="stylesheet" />
     <script src="scripts/jquery-uiJS.js"></script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzxNzo8N6KHRkVreIVvJeqnLVE2vDjJ8c&libraries=places"></script>
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzxNzo8N6KHRkVreIVvJeqnLVE2vDjJ8c&libraries=places"></script>
 
     <script src="scripts/Chart.min.js"></script>
 
     <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="scripts/custom.js"></script>
+    <script type="text/javascript" src="scripts/custom.js"></script>-->
 
     <script>
         function Start() {
+
             var request = {
                 test: 'true'
             };
@@ -65,18 +66,25 @@
                 dataType: 'json',
                 contentType: 'application/json; charset = utf-8',
                 success: function (data) {
-                    Questions = data.d;
+                    Questions = $.parseJSON(data.d);
+                    debugger;
                     questPos = 0;
                     goFillAnswers();
                 },
                 error: function (data) {
+                    debugger;
                     alert(data);
                 }
             });
         }
 
         function goFillAnswers() {
-            
+
+            //get synonyms page from thesaurus
+            //https://www.thesaurus.com/browse/define
+            //get the inner html for the word
+            //jQuery('.synonyms-container ul li a').eq(0).html()
+
             Questions[questPos].answer = capitalizeFirstLetter(Questions[questPos].answer);
             var ans = Questions[questPos].answer;
             quest = Questions[questPos];
@@ -93,7 +101,6 @@
                 url: 'https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&titles=' + title,
                 dataType: "jsonp",
                 success: function (data) {
-                    debugger;
                     var wikidataID = "";
                     try {
                         wikidataID = data.entities[Object.keys(data.entities)[0]].id;
@@ -277,8 +284,8 @@
                             break;
                         }
                     }
-                    
-                    mergeToQuestions(stringAnswers); 
+
+                    mergeToQuestions(stringAnswers);
                 }
             });
         }
@@ -292,7 +299,7 @@
         }
 
         function mergeToQuestions(stringAnswers_) {
-            
+
             for (var i = 0; i < stringAnswers_.length; i++) {
                 Questions[questPos]['answer' + i] = stringAnswers_[i];
             }

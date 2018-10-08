@@ -1,5 +1,12 @@
-﻿public class Question
+﻿using System.Collections.Generic;
+
+public class Question
 {
+    public Question()
+    {
+
+    }
+
     public Question(string q, string a)
     {
         question = q;
@@ -11,4 +18,5 @@
     public string answer1 { get; set; }
     public string answer2 { get; set; }
     public string answer3 { get; set; }
+    public List<string> possibleAnswers { get; set; }
 }

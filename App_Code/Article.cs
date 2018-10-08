@@ -23,6 +23,7 @@ using edu.stanford.nlp.ling;
 using edu.stanford.nlp.process;
 using edu.stanford.nlp.trees;
 using edu.stanford.nlp.sentiment;
+using HtmlAgilityPack;
 
 /// <summary>
 /// Summary description for Article
@@ -670,6 +671,107 @@ public class Article
             //tp.printTree(tree2);
         }
         return lq;
+    }
+
+    public List<string> answers(string type, string title)
+    {
+        List<string> answers = new List<string>(); 
+
+        title = title.Substring(0, title.IndexOf("_"));
+        string urlAddress;
+
+        if (type == "wiki") urlAddress = "https://en.wiktionary.org/w/api.php?action=query&prop=extracts&titles=" + title + "&format=json";
+        else urlAddress = "https://www.thesaurus.com/browse/" + title;
+
+        string data = "";
+
+        try
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                Stream receiveStream = response.GetResponseStream();
+                StreamReader readStream = null;
+
+                if (response.CharacterSet == null)
+                {
+                    readStream = new StreamReader(receiveStream);
+                }
+                else
+                {
+                    readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
+                }
+
+                data = readStream.ReadToEnd();
+
+                response.Close();
+                readStream.Close();
+            }
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+
+        if (type == "wiki")
+        {
+            try
+            {
+                string root = JObject.Parse(data)["query"]["pages"].First.First["extract"].ToString();
+                
+                if (root.Contains("id=\"Antonyms\""))
+                {
+                    root = root.Substring(root.IndexOf("id=\"Antonyms\""));
+                   
+                    HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlDocument();
+                    htmlDoc.LoadHtml(root);
+                    var x = htmlDoc.DocumentNode.SelectNodes("//ul").First();
+
+                    foreach (var item in x.ChildNodes)
+                    {
+                        if (item.SelectNodes("span") != null)
+                        {
+                            foreach (var item2 in item.SelectNodes("span"))
+                            {
+                                answers.Add(item2.InnerHtml);
+                            }
+                        }
+                        
+                    }
+                }
+
+                //also use Hyponyms, Hypernyms, Antonyms
+            }
+            catch (Exception)
+            {
+                
+            }
+        }
+        else
+        {
+            HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(data);
+            var x = htmlDoc.DocumentNode.Descendants("section").ToList();
+
+            foreach (var item in x)
+            {
+                foreach (var item2 in item.Attributes.ToList())
+                {
+                    if (/*item2.Value.Contains("synonyms-container") ||*/ item2.Value.Contains("antonyms-container"))
+                    {
+                        foreach (var item3 in item.Descendants("a").ToList())
+                        {
+                            answers.Add(item3.InnerHtml);
+                        }
+                    }
+                }
+            }
+        }
+
+            return answers;
     }
 
     public List<string> splitToSentences(string content)
