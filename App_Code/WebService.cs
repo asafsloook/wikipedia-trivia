@@ -46,11 +46,14 @@ public class WebService : System.Web.Services.WebService
             var a = new Article();
             question.possibleAnswers = new List<string>();
 
-            var wikiAnswers = a.answers("wiki", question.answer);
-            if (wikiAnswers != null && wikiAnswers.Count() > 0) question.possibleAnswers.AddRange(wikiAnswers);
+            var wikiVerbsAnswers = a.answers("wikiVERBS", question.answer);
+            if (wikiVerbsAnswers != null && wikiVerbsAnswers.Count() > 0) question.possibleAnswers.AddRange(wikiVerbsAnswers);
 
-            var theAnswers = a.answers("the", question.answer);
+            var theAnswers = a.answers("theVERBS", question.answer);
             if (theAnswers != null && theAnswers.Count() > 0) question.possibleAnswers.AddRange(theAnswers);
+
+            var wikiAnswers = a.answers("wikiENTITIES", question.answer);
+            if (wikiAnswers != null && wikiAnswers.Count() > 0) question.possibleAnswers.AddRange(wikiAnswers);
         }
 
         JavaScriptSerializer js = new JavaScriptSerializer();

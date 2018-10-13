@@ -675,21 +675,212 @@ public class Article
 
     public List<string> answers(string type, string title)
     {
-        List<string> answers = new List<string>(); 
+        List<string> answers = new List<string>();
 
         title = title.Substring(0, title.IndexOf("_"));
-        string urlAddress;
+        string urlAddress = "";
 
-        if (type == "wiki") urlAddress = "https://en.wiktionary.org/w/api.php?action=query&prop=extracts&titles=" + title + "&format=json";
-        else urlAddress = "https://www.thesaurus.com/browse/" + title;
-
+        if (type == "wikiVERBS") urlAddress = "https://en.wiktionary.org/w/api.php?action=query&prop=extracts&titles=" + title + "&format=json";
+        else if (type == "theVERBS") urlAddress = "https://www.thesaurus.com/browse/" + title;
+        else if (type == "wikiENTITIES") urlAddress = "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=" + title + "&language=en&format=json";
         string data = "";
 
+        data = get(urlAddress);
+
+        if (type == "wikiVERBS")
+        {
+            try
+            {
+                string root = JObject.Parse(data)["query"]["pages"].First.First["extract"].ToString();
+
+                if (root.Contains("id=\"Antonyms\""))
+                {
+                    root = root.Substring(root.IndexOf("id=\"Antonyms\""));
+
+                    HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlDocument();
+                    htmlDoc.LoadHtml(root);
+                    var x = htmlDoc.DocumentNode.SelectNodes("//ul").First();
+
+                    foreach (var item in x.ChildNodes)
+                    {
+                        if (item.SelectNodes("span") != null)
+                        {
+                            foreach (var item2 in item.SelectNodes("span"))
+                            {
+                                answers.Add(item2.InnerHtml);
+                            }
+                        }
+
+                    }
+                }
+
+                //also use Hyponyms, Hypernyms, Antonyms
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+        else if (type == "theVERBS")
+        {
+            try
+            {
+                HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(data);
+                var x = htmlDoc.DocumentNode.Descendants("section").ToList();
+
+                foreach (var item in x)
+                {
+                    foreach (var item2 in item.Attributes.ToList())
+                    {
+                        if (/*item2.Value.Contains("synonyms-container") ||*/ item2.Value.Contains("antonyms-container"))
+                        {
+                            foreach (var item3 in item.Descendants("a").ToList())
+                            {
+                                answers.Add(item3.InnerHtml);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+        else if (type == "wikiENTITIES")
+        {
+            try
+            {
+
+                var wikidataID = JObject.Parse(data)["search"][0]["id"].ToString();
+
+                string newUrl = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&ids=" + "wikidataID";
+
+                //            wikidataID = data.entities[Object.keys(data.entities)[0]].id;
+
+                //            var allClaims = data.entities[Object.keys(data.entities)[0]].claims;
+
+                //            //P279
+                //            var x = allClaims.P279[0].mainsnak.datavalue.value.id;
+
+                //            var query = [];
+                //            query.P = "P279";
+                //            query.Q = x;
+
+                //            findAnsCon(query, title, wikidataID);
+                //        }
+                //        catch (e)
+                //        {
+                //            try
+                //            {
+                //                //P31 - instance of
+                //                var x = allClaims.P31[0].mainsnak.datavalue.value.id;
+
+                //                //if Q5 (human) try P39(position held) else go to P106(occupation)
+                //                if (x == "Q5")
+                //                {
+                //                    try
+                //                    {
+
+                //                        //P39
+                //                        var x = allClaims.P39[0].mainsnak.datavalue.value.id;
+
+                //                        var query = [];
+                //                        query.P = "P39";
+                //                        query.Q = x;
+
+                //                        findAnsCon(query, title, wikidataID);
+
+                //                    }
+                //                    catch (e)
+                //                    {
+                //                        try
+                //                        {
+
+                //                            //P106
+                //                            var x = allClaims.P106[0].mainsnak.datavalue.value.id;
+
+                //                            var query = [];
+                //                            query.P = "P106";
+                //                            query.Q = x;
+
+                //                            findAnsCon(query, title, wikidataID);
+                //                        }
+                //                        catch (e)
+                //                        {
+                //                            try
+                //                            {
+                //                                //P27
+                //                                var x = allClaims.P27[0].mainsnak.datavalue.value.id;
+
+                //                                var query = [];
+                //                                query.P = "P27";
+                //                                query.Q = x;
+
+                //                                findAnsCon(query, title, wikidataID);
+
+                //                            }
+                //                            catch (e)
+                //                            {
+                //                                articleFromLS();
+                //                                return;
+                //                            }
+                //                        }
+                //                    }
+                //                }
+                //                else
+                //                {
+
+                //                    try
+                //                    {
+                //                        //P360 - list
+                //                        var x = allClaims.P360[0].mainsnak.datavalue.value.id;
+
+                //                        articleFromLS();
+                //                        return;
+
+                //                    }
+                //                    catch (e)
+                //                    {
+
+                //                    }
+
+                //                    var query = [];
+                //                    query.P = "P31";
+                //                    query.Q = x;
+
+                //                    findAnsCon(query, title, wikidataID);
+                //                }
+
+                //            }
+                //            catch (e)
+                //            {
+                //                articleFromLS();
+                //                return;
+                //            }
+                //        }
+                //    }
+                //});
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+        return answers;
+    }
+
+    private string get(string urlAddress)
+    {
+        string data = "";
         try
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            
+
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -715,63 +906,7 @@ public class Article
         {
             return null;
         }
-
-        if (type == "wiki")
-        {
-            try
-            {
-                string root = JObject.Parse(data)["query"]["pages"].First.First["extract"].ToString();
-                
-                if (root.Contains("id=\"Antonyms\""))
-                {
-                    root = root.Substring(root.IndexOf("id=\"Antonyms\""));
-                   
-                    HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlDocument();
-                    htmlDoc.LoadHtml(root);
-                    var x = htmlDoc.DocumentNode.SelectNodes("//ul").First();
-
-                    foreach (var item in x.ChildNodes)
-                    {
-                        if (item.SelectNodes("span") != null)
-                        {
-                            foreach (var item2 in item.SelectNodes("span"))
-                            {
-                                answers.Add(item2.InnerHtml);
-                            }
-                        }
-                        
-                    }
-                }
-
-                //also use Hyponyms, Hypernyms, Antonyms
-            }
-            catch (Exception)
-            {
-                
-            }
-        }
-        else
-        {
-            HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(data);
-            var x = htmlDoc.DocumentNode.Descendants("section").ToList();
-
-            foreach (var item in x)
-            {
-                foreach (var item2 in item.Attributes.ToList())
-                {
-                    if (/*item2.Value.Contains("synonyms-container") ||*/ item2.Value.Contains("antonyms-container"))
-                    {
-                        foreach (var item3 in item.Descendants("a").ToList())
-                        {
-                            answers.Add(item3.InnerHtml);
-                        }
-                    }
-                }
-            }
-        }
-
-            return answers;
+        return data;
     }
 
     public List<string> splitToSentences(string content)
