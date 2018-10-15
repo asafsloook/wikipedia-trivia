@@ -24,6 +24,10 @@ using edu.stanford.nlp.process;
 using edu.stanford.nlp.trees;
 using edu.stanford.nlp.sentiment;
 using HtmlAgilityPack;
+using VDS.RDF;
+using VDS.RDF.Parsing;
+using VDS.RDF.Query;
+using VDS.RDF.Storage;
 
 /// <summary>
 /// Summary description for Article
@@ -750,127 +754,196 @@ public class Article
         }
         else if (type == "wikiENTITIES")
         {
+            string res = "";
+            string wikidataID = "";
             try
             {
 
-                var wikidataID = JObject.Parse(data)["search"][0]["id"].ToString();
+                wikidataID = JObject.Parse(data)["search"][0]["id"].ToString();
 
-                string newUrl = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&ids=" + "wikidataID";
+                string newUrl = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&ids=" + wikidataID;
 
-                //            wikidataID = data.entities[Object.keys(data.entities)[0]].id;
+                var data2 = get(newUrl);
 
-                //            var allClaims = data.entities[Object.keys(data.entities)[0]].claims;
+                var jsonObj = JObject.Parse(data2);
 
-                //            //P279
-                //            var x = allClaims.P279[0].mainsnak.datavalue.value.id;
+                var wikidataPageID = jsonObj["entities"][wikidataID].First.First.ToString();
 
-                //            var query = [];
-                //            query.P = "P279";
-                //            query.Q = x;
+                var allClaims = jsonObj["entities"][wikidataID]["claims"];
 
-                //            findAnsCon(query, title, wikidataID);
-                //        }
-                //        catch (e)
-                //        {
-                //            try
-                //            {
-                //                //P31 - instance of
-                //                var x = allClaims.P31[0].mainsnak.datavalue.value.id;
 
-                //                //if Q5 (human) try P39(position held) else go to P106(occupation)
-                //                if (x == "Q5")
-                //                {
-                //                    try
-                //                    {
-
-                //                        //P39
-                //                        var x = allClaims.P39[0].mainsnak.datavalue.value.id;
-
-                //                        var query = [];
-                //                        query.P = "P39";
-                //                        query.Q = x;
-
-                //                        findAnsCon(query, title, wikidataID);
-
-                //                    }
-                //                    catch (e)
-                //                    {
-                //                        try
-                //                        {
-
-                //                            //P106
-                //                            var x = allClaims.P106[0].mainsnak.datavalue.value.id;
-
-                //                            var query = [];
-                //                            query.P = "P106";
-                //                            query.Q = x;
-
-                //                            findAnsCon(query, title, wikidataID);
-                //                        }
-                //                        catch (e)
-                //                        {
-                //                            try
-                //                            {
-                //                                //P27
-                //                                var x = allClaims.P27[0].mainsnak.datavalue.value.id;
-
-                //                                var query = [];
-                //                                query.P = "P27";
-                //                                query.Q = x;
-
-                //                                findAnsCon(query, title, wikidataID);
-
-                //                            }
-                //                            catch (e)
-                //                            {
-                //                                articleFromLS();
-                //                                return;
-                //                            }
-                //                        }
-                //                    }
-                //                }
-                //                else
-                //                {
-
-                //                    try
-                //                    {
-                //                        //P360 - list
-                //                        var x = allClaims.P360[0].mainsnak.datavalue.value.id;
-
-                //                        articleFromLS();
-                //                        return;
-
-                //                    }
-                //                    catch (e)
-                //                    {
-
-                //                    }
-
-                //                    var query = [];
-                //                    query.P = "P31";
-                //                    query.Q = x;
-
-                //                    findAnsCon(query, title, wikidataID);
-                //                }
-
-                //            }
-                //            catch (e)
-                //            {
-                //                articleFromLS();
-                //                return;
-                //            }
-                //        }
-                //    }
-                //});
+                if (checkClaim(allClaims, "P279"))
+                {
+                    var P = "P279";
+                    var Q = allClaims[P].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+                    res = getSPARQL(P, Q);
+                }
+                else if (checkClaim(allClaims, "P31"))
+                {
+                    var x = allClaims["P31"].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+                    if (x == "Q5")
+                    {
+                        if (checkClaim(allClaims, "P39"))
+                        {
+                            var P = "P39";
+                            var Q = allClaims[P].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+                            res = getSPARQL(P, Q);
+                        }
+                        else if (checkClaim(allClaims, "P106"))
+                        {
+                            var P = "P106";
+                            var Q = allClaims[P].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+                            res = getSPARQL(P, Q);
+                        }
+                        else if (checkClaim(allClaims, "P27"))
+                        {
+                            var P = "P27";
+                            var Q = allClaims[P].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+                            res = getSPARQL(P, Q);
+                        }
+                    }
+                    else if (checkClaim(allClaims, "P360"))
+                    {
+                        //list, go out
+                    }
+                    else
+                    {
+                        var P = "P31";
+                        var Q = allClaims[P].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+                        res = getSPARQL(P, Q); //title, wikidataID
+                    }
+                }
             }
             catch (Exception)
             {
 
-                throw;
+            }
+            if (res != null && res != "")
+            {
+                List<string> possibleAnswers = new List<string>();
+                possibleAnswers.Add(wikidataID);
+
+                var results = JObject.Parse(res)["results"]["bindings"];
+
+                for (var i = 0; i < results.Count(); i++)
+                {
+
+                    var item = results[i]["A"]["value"].ToString().Replace("http://www.wikidata.org/entity/", "");
+
+                    if (!possibleAnswers.Contains(item))
+                    {
+
+                        possibleAnswers.Add(item);
+                    }
+                }
+
+                answers.AddRange(translate(possibleAnswers));
+            }
+        }
+
+        answers = capitalizeFirstLetter(answers);
+        answers = ShuffleMe(answers);
+
+        return answers;
+    }
+
+    private List<string> translate(List<string> answers)
+    {
+        var url_ = "https://www.wikidata.org/w/api.php?format=json&action=wbgetentities&sites=enwiki&props=labels&ids=";
+
+        for (var i = 0; i < answers.Count(); i++)
+        {
+            url_ += answers[i];
+
+            if (i != answers.Count() - 1)
+            {
+                url_ += "|";
+            }
+        }
+
+        var data = get(url_);
+        var x = JObject.Parse(data)["entities"];
+
+        var stringAnswers = new List<string>();
+
+        //add the right answer
+        var right = x[answers[0]]["labels"]["en"]["value"].ToString();
+        stringAnswers.Add(right);
+
+
+        while (stringAnswers.Count != 4 && stringAnswers.Count != x.Count())
+        {
+
+            var newAns = "";
+            var rnd = 0;
+
+            try
+            {
+                double next = new System.Random().NextDouble() * x.Count();
+                rnd = (int)Math.Floor(next);
+                newAns = x[answers[rnd]]["labels"]["en"]["value"].ToString();
+
+            }
+            catch (Exception ex)
+            {
+                x[answers[rnd]].Parent.Remove();
+                answers.Remove(answers[rnd]);
+                continue;
             }
 
+            if (!stringAnswers.Contains(newAns))
+            {
+                stringAnswers.Add(newAns);
+            }
+
+            if (stringAnswers.Count == 4)
+            {
+                break;
+            }
         }
-        return answers;
+
+        return stringAnswers;
+    }
+    
+    private List<string> capitalizeFirstLetter(List<string> list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            list[i] = list[i].First().ToString().ToUpper() + list[i].Substring(1);
+        }
+
+        return list;
+    }
+
+        private List<string> ShuffleMe(List<string> list)
+    {
+        System.Random random = new System.Random();
+        int n = list.Count;
+
+        for (int i = list.Count - 1; i > 1; i--)
+        {
+            int rnd = random.Next(i + 1);
+
+            var temp = list[rnd];
+            list[rnd] = list[i];
+            list[i] = temp;
+        }
+
+        return list;
+    }
+
+    private bool checkClaim(JToken allClaims, string P)
+    {
+        try
+        {
+            var x = allClaims[P].First["mainsnak"]["datavalue"]["value"]["id"].ToString();
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     private string get(string urlAddress)
@@ -903,6 +976,36 @@ public class Article
             }
         }
         catch (Exception)
+        {
+            return null;
+        }
+        return data;
+    }
+
+    private string getSPARQL(string P, string Q)
+    {
+        var urlAddress = "https://query.wikidata.org/sparql?query=SELECT%20%3FA%20WHERE%20%7B%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22%5BAUTO_LANGUAGE%5D%2Cen%22.%20%7D%0A%20%20%3FA%20wdt%3A" + P + "%20wd%3A" + Q + ".%0A%7D%0ALIMIT%2049";
+
+        string data = "";
+        try
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
+            request.Accept = "application/sparql-results+json";
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                Stream receiveStream = response.GetResponseStream();
+                StreamReader readStream = new StreamReader(receiveStream);
+
+                data = readStream.ReadToEnd();
+
+                response.Close();
+                readStream.Close();
+            }
+        }
+        catch (Exception ex)
         {
             return null;
         }
