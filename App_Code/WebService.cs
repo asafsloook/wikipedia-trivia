@@ -56,6 +56,23 @@ public class WebService : System.Web.Services.WebService
             if (wikiAnswers != null && wikiAnswers.Count() > 0) question.possibleAnswers.AddRange(wikiAnswers);
         }
 
+        for (int i = 0; i < questions.Count; i++)
+        {
+            for (int j = 0; j < questions[i].possibleAnswers.Count; j++)
+            {
+                var ans = questions[i].possibleAnswers[j];
+
+                var isAnsValid = Regex.Match(ans, @"[a-zA-Z]{3,20}");
+                if (!isAnsValid.Success)
+                {
+                    //delete non-words
+                    questions[i].possibleAnswers = questions[i].possibleAnswers.Where(a => a != ans).ToList();
+                }
+                
+            }
+            //delete duplicates
+            questions[i].possibleAnswers = questions[i].possibleAnswers.Distinct().ToList();
+        }
         JavaScriptSerializer js = new JavaScriptSerializer();
         js.MaxJsonLength = 999999999;
         return js.Serialize(questions);

@@ -697,28 +697,36 @@ public class Article
             {
                 string root = JObject.Parse(data)["query"]["pages"].First.First["extract"].ToString();
 
-                if (root.Contains("id=\"Antonyms\""))
+                List<string> temp = new List<string>() { "Hyponyms", "Hypernyms", "Antonyms" };
+                foreach (var wordType in temp)
                 {
-                    root = root.Substring(root.IndexOf("id=\"Antonyms\""));
-
-                    HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlDocument();
-                    htmlDoc.LoadHtml(root);
-                    var x = htmlDoc.DocumentNode.SelectNodes("//ul").First();
-
-                    foreach (var item in x.ChildNodes)
+                    if (root.Contains("id=\"" + wordType + "\""))
                     {
-                        if (item.SelectNodes("span") != null)
+                        try
                         {
-                            foreach (var item2 in item.SelectNodes("span"))
+                            root = root.Substring(root.IndexOf("id=\"" + wordType + "\""));
+
+                            HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlDocument();
+                            htmlDoc.LoadHtml(root);
+                            var x = htmlDoc.DocumentNode.SelectNodes("//ul").First();
+
+                            foreach (var item in x.ChildNodes)
                             {
-                                answers.Add(item2.InnerHtml);
+                                if (item.SelectNodes("span") != null)
+                                {
+                                    foreach (var item2 in item.SelectNodes("span"))
+                                    {
+                                        answers.Add(item2.InnerHtml);
+                                    }
+                                }
                             }
                         }
+                        catch (Exception)
+                        {
 
+                        }
                     }
                 }
-
-                //also use Hyponyms, Hypernyms, Antonyms
             }
             catch (Exception)
             {
@@ -732,15 +740,27 @@ public class Article
                 HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(data);
                 var x = htmlDoc.DocumentNode.Descendants("section").ToList();
+                var globalCounter = 0;
 
                 foreach (var item in x)
                 {
+                    var ansCounter = 0;
                     foreach (var item2 in item.Attributes.ToList())
                     {
-                        if (/*item2.Value.Contains("synonyms-container") ||*/ item2.Value.Contains("antonyms-container"))
+                        var isSynonymsContainer = item2.Value.Contains("synonyms-container");
+                        var isAntonymsContainer = item2.Value.Contains("antonyms-container");
+                        if (isSynonymsContainer || isAntonymsContainer)
                         {
+                            if (++globalCounter > 2)
+                            {
+                                break;
+                            }
                             foreach (var item3 in item.Descendants("a").ToList())
                             {
+                                if (++ansCounter > 10)
+                                {
+                                    break;
+                                }
                                 answers.Add(item3.InnerHtml);
                             }
                         }
@@ -832,7 +852,6 @@ public class Article
 
                     if (!possibleAnswers.Contains(item))
                     {
-
                         possibleAnswers.Add(item);
                     }
                 }
@@ -904,7 +923,7 @@ public class Article
 
         return stringAnswers;
     }
-    
+
     private List<string> capitalizeFirstLetter(List<string> list)
     {
         for (int i = 0; i < list.Count; i++)
@@ -915,7 +934,7 @@ public class Article
         return list;
     }
 
-        private List<string> ShuffleMe(List<string> list)
+    private List<string> ShuffleMe(List<string> list)
     {
         System.Random random = new System.Random();
         int n = list.Count;
