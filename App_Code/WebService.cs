@@ -68,10 +68,16 @@ public class WebService : System.Web.Services.WebService
                     //delete non-words
                     questions[i].possibleAnswers = questions[i].possibleAnswers.Where(a => a != ans).ToList();
                 }
-                
+                if (ans.Length > 20)
+                {
+                    questions[i].possibleAnswers = questions[i].possibleAnswers.Where(a => a != ans).ToList();
+                }
             }
             //delete duplicates
             questions[i].possibleAnswers = questions[i].possibleAnswers.Distinct().ToList();
+
+            var rightAnswer = (questions[i].answer.Split('_')[0]).ToLower();
+            questions[i].possibleAnswers.Remove(rightAnswer.First().ToString().ToUpper() + rightAnswer.Substring(1));
         }
         JavaScriptSerializer js = new JavaScriptSerializer();
         js.MaxJsonLength = 999999999;
