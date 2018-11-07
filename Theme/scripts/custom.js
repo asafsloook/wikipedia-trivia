@@ -65,14 +65,19 @@ function searcher() {
         }
 
         if (articles.length < 5) {
-            $("a[href*='article.html']").hide();
+            $(".sidebar-menu a[href*='article.html']").hide();
+            $(".sidebar-menu #loading2").show();
+
+            $(".profileMenu a[href*='article.html']").hide();
         }
         else {
-            $("a[href*='article.html']").show();
+            $(".sidebar-menu a[href*='article.html']").show();
+            $(".sidebar-menu #loading2").hide();
+
+            $(".profileMenu a[href*='article.html']").show();
         };
 
-
-
+        
         var request = {
             userId: uid
         }
@@ -1164,9 +1169,9 @@ $(document).ready(function () {
             urlDomain = '../';
             userPref = [];
 
-            localStorage.uuid = "test";
-            userPref.Id = 197;
-            localStorage.Id = 197;
+            //localStorage.uuid = "test";
+            //userPref.Id = 197;
+            //localStorage.Id = 197;
 
             //localStorage.uuid = "67a8bacd24573639";
             //userPref.Id = 192;
@@ -1763,7 +1768,7 @@ $(document).ready(function () {
 
             function successupdateCategoriesCB2(results) {
 
-                window.location.replace('pref2.html');
+                window.location.replace('profile.html');
 
             }
 
@@ -2013,7 +2018,7 @@ $(document).ready(function () {
 
             setTimeout(function () {
                 if (userPref.Categories == null || userPref.Categories.length == 0) {
-                    window.location.replace("pref1.html");
+                    window.location.replace("pref1a.html");
 
                 }
                 else {
@@ -2058,6 +2063,7 @@ $(document).ready(function () {
 
         if (window.location.href.toString().indexOf('profile.html') != -1) {
 
+            $('.lodingGameText').hide();
 
             if (typeof searchThread !== 'undefined') {
                 clearInterval(searchThread);

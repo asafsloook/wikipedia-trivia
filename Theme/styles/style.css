@@ -7,6 +7,7 @@ code {
 }
 
 .premium {
+    display: none;
     font-size: 23px !important;
     width: calc(80% - 40px) !important;
     height: 30px !important;
@@ -23,6 +24,7 @@ code {
 
 .sidebar-header-controls .close-sidebar {
     float: right !important;
+    display:none;
 }
 
 
@@ -294,11 +296,12 @@ p {
     /* margin-left: 12px; */
     padding: 5px 11px 5px 13px !important;
     text-overflow: ellipsis !important;
-    width: 44% !important;
+    width: 60% !important;
     position: absolute !important;
     z-index: 999 !important;
-    left: 40% !important;
-    top: 2% !important;
+    left: 3% !important;
+    top: 10% !important;
+    height: 35px;
 }
 
 .gm-style-iw img {
@@ -343,10 +346,7 @@ p {
 }
 
 
-
-
 /*Loading*/
-
 .loaderNew {
     position: relative;
     transform-style: preserve-3d;
@@ -1163,7 +1163,7 @@ p {
 .sidebar-header-background {
     background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSszs4sS9INobmviug5t5b0xpOWY_WXhdc_lkqMtJ_ljVQulp73ww);
     background-size: cover;
-    height: 150px;
+    height: 100px;
 }
 
 .sidebar-header h1 {
@@ -1183,7 +1183,7 @@ p {
 }
 
 .sidebar-header-controls {
-    border-top: solid 1px rgba(255,255,255,0.1);
+    /*border-top: solid 1px rgba(255,255,255,0.1);*/
     position: absolute;
     bottom: 1px;
     width: 250px;
@@ -1283,4 +1283,13 @@ p {
 .lodingGameText {
     text-align: center;
     color: #fff;
+}
+
+.sidebar-menu #loading2 {
+    margin-top: 30px;
+    height:auto;
+}
+
+.sidebar-menu .spinner > div {
+    background-color: #585858;
 }
