@@ -695,11 +695,7 @@ public class DBConnection
         {
             insertUser(IMEI);
 
-            User u = new User();
-            u.Imei = IMEI;
-
-
-            return u;
+            return checkUser(IMEI);
         }
         else
         {
@@ -735,6 +731,8 @@ public class DBConnection
 
             return u;
         }
+
+        return null;
     }
 
 

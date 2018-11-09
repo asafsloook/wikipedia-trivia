@@ -52,7 +52,7 @@ function searcher() {
     if (articles.length < 25) {
 
         if (window.location.href.toString().indexOf('profile.html') != -1) {
-            if (articles.length < 5) {
+            if (articles.length < 2) {
                 $('#loading').show();
                 $('.lodingGameText').show();
                 $('.profileMenu').hide();
@@ -64,7 +64,7 @@ function searcher() {
             };
         }
 
-        if (articles.length < 5) {
+        if (articles.length < 2) {
             $(".sidebar-menu a[href*='article.html']").hide();
             $(".sidebar-menu #loading2").show();
 
@@ -936,7 +936,7 @@ function showQuestion() {
         clicks++;
     });
 
-    timer, n = 20;
+    timer, n = 30;
 
     // events
     startTimer(n);
@@ -1062,7 +1062,6 @@ function answerRight() {
 }
 
 function saveScore(request) {
-
     var dataString = JSON.stringify(request);
 
     $.ajax({ // ajax call starts
@@ -1169,9 +1168,9 @@ $(document).ready(function () {
             urlDomain = '../';
             userPref = [];
 
-            //localStorage.uuid = "test";
-            //userPref.Id = 197;
-            //localStorage.Id = 197;
+            localStorage.uuid = "test";
+            userPref.Id = 197;
+            localStorage.Id = 197;
 
             //localStorage.uuid = "67a8bacd24573639";
             //userPref.Id = 192;
@@ -1638,7 +1637,7 @@ $(document).ready(function () {
         }
 
         if (window.location.href.toString().indexOf('pref1a.html') != -1) {
-
+            
             $("#burgerMenu").hide();
 
             cat = [];
@@ -1768,6 +1767,7 @@ $(document).ready(function () {
 
             function successupdateCategoriesCB2(results) {
 
+                localStorage.removeItem('articles');
                 window.location.replace('profile.html');
 
             }

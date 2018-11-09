@@ -445,6 +445,19 @@ p {
     padding-bottom: 5%;
 }
 
+.prefHeader {
+    text-align: center;
+    line-height: 60px;
+    vertical-align: middle;
+    color: #fff;
+    text-shadow: 2px 2px rgba(0,0,0,.48);
+}
+
+.header-pref-div {
+    background: none !important;
+    box-shadow:none !important;
+}
+
 #artHead, #aroundHead, #photoHead {
     margin-left: 15%;
     color: white;

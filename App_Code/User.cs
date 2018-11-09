@@ -69,19 +69,19 @@ public class User
         return db.updateUserPref(this);
     }
 
-    internal int updateScore()
+    public int updateScore()
     {
         DBConnection db = new DBConnection();
         return db.updateScore(this);
     }
 
-    internal User getProfile(int id)
+    public User getProfile(int id)
     {
         DBConnection db = new DBConnection();
         return db.getProfile(id);
     }
 
-    internal object getRanking(int id)
+    public object getRanking(int id)
     {
         DBConnection db = new DBConnection();
         return db.getRanking(id);
