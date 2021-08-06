@@ -1,0 +1,43 @@
+﻿CREATE TABLE [dbo].[CategoriesP] (
+    [CategoryId]   SMALLINT     IDENTITY (1, 1) NOT NULL,
+    [CategoryName] VARCHAR (50) NULL,
+    PRIMARY KEY CLUSTERED ([CategoryId] ASC)
+);
+
+CREATE TABLE [dbo].[UsersP] (
+    [userId]                INT           IDENTITY (1, 1) NOT NULL,
+    [IMEI]                  VARCHAR (16)  NULL,
+    [pushKey]               VARCHAR (250) NULL,
+    [LocationPush]          BIT           NULL,
+    [PhotoPush]             BIT           NULL,
+    [PhotoPushTime]         TIME (7)      NULL,
+    [RandomArticlePush]     BIT           NULL,
+    [RandomArticleQuantity] SMALLINT      NULL,
+    [Score]                 INT           NULL,
+    PRIMARY KEY CLUSTERED ([userId] ASC)
+);
+
+CREATE TABLE [dbo].[userCategoriesP] (
+    [id]         INT      IDENTITY (1, 1) NOT NULL,
+    [UserID]     INT      NOT NULL,
+    [CategoryID] SMALLINT NOT NULL,
+    [Active]     BIT      NOT NULL,
+    PRIMARY KEY CLUSTERED ([id] ASC),
+    FOREIGN KEY ([UserID]) REFERENCES [dbo].[UsersP] ([userId]),
+    FOREIGN KEY ([CategoryID]) REFERENCES [dbo].[CategoriesP] ([CategoryId])
+);
+
+CREATE TABLE [dbo].[ReadingP] (
+    [readId]          INT           IDENTITY (1, 1) NOT NULL,
+    [userId]          INT           NULL,
+    [ArticleId]       VARCHAR (30)  NULL,
+    [ReadingDuration] TIME (7)      NULL,
+    [ReadingTime]     NVARCHAR (50) NULL,
+    [Favorite]        BIT           NULL,
+    [CategoryId]      SMALLINT      NULL,
+    [IsCorrect]       BIT           NULL,
+    PRIMARY KEY CLUSTERED ([readId] ASC),
+    FOREIGN KEY ([userId]) REFERENCES [dbo].[UsersP] ([userId]),
+    FOREIGN KEY ([CategoryId]) REFERENCES [dbo].[CategoriesP] ([CategoryId])
+);
+
