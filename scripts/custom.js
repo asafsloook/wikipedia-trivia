@@ -1111,6 +1111,12 @@ function capitalizeFirstLetter(string) {
     }
 }
 
+function uuidv4() {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}
+
 
 
 $(document).ready(function () {
@@ -1168,9 +1174,12 @@ $(document).ready(function () {
             urlDomain = '../';
             userPref = [];
 
-            localStorage.uuid = "test";
-            userPref.Id = 197;
-            localStorage.Id = 197;
+            if (!localStorage.uuid)
+                localStorage.uuid = uuidv4();
+
+            //localStorage.uuid = "test";
+            //userPref.Id = 197;
+            //localStorage.Id = 197;
 
             //localStorage.uuid = "67a8bacd24573639";
             //userPref.Id = 192;
@@ -2080,7 +2089,7 @@ $(document).ready(function () {
 
             var request = {
                 IMEI: localStorage.uuid,
-                regId: localStorage.RegId
+                regId: localStorage.RegId || "test"
             }
 
             //todo - change it when deploying to app store

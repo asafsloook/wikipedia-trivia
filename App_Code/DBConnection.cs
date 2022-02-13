@@ -12,6 +12,7 @@ using System.Text;
 /// </summary>
 public class DBConnection
 {
+    private const string ConString = "GraspDBConnectionString";
     public SqlDataAdapter da;
     public DataTable dt;
 
@@ -680,7 +681,7 @@ public class DBConnection
     //--------------------------------------------------------------------------------------------------
     public User checkUser(string IMEI)
     {
-        SqlConnection con = connect("GraspDBConnectionString"); // open the connection to the database/
+        SqlConnection con = connect(ConString); // open the connection to the database/
 
         String selectStr = "select * from UsersP where IMEI='" + IMEI + "'"; // create the select that will be used by the adapter to select data from the DB
 
