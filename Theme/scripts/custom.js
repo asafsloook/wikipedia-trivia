@@ -2082,7 +2082,9 @@ $(document).ready(function () {
                 IMEI: localStorage.uuid,
                 regId: localStorage.RegId
             }
-            updateUserRegId(request);
+
+            //todo - change it when deploying to app store
+            //updateUserRegId(request);
         }
 
         function getStats() {
