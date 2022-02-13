@@ -16,3 +16,13 @@ article found after 6 calls to wiki (3 seconds), Root Category: Geography
 
 article found after 21 calls to wiki (9 seconds), Root Category: Sports
 
+article found after 6 calls to wiki (3 seconds), Root Category: Nature
+
+article found after 4 calls to wiki (5 seconds), Root Category: Culture
+
+article found after 4 calls to wiki (3 seconds), Root Category: Universe
+
+article found after 19 calls to wiki (14 seconds), Root Category: Universe
+
+article found after 16 calls to wiki (9 seconds), Root Category: Politics
+
