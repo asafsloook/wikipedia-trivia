@@ -29,7 +29,7 @@ code {
 
 
 #timer {
-    position: relative;
+    position: absolute;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -39,7 +39,7 @@ code {
     z-index: 9999;
     float: right;
     top: 5px;
-    left: -5px;
+    right: 5px;
 }
 
 #progress {
@@ -834,6 +834,8 @@ p {
     top: 10px;
     height: 60px;
     z-index: 99;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .header-full {
@@ -1131,9 +1133,9 @@ p {
 }
 
 .footer-menu-open, .footer-menu-close {
-    position: fixed;
-    bottom: 14px;
-    right: 27px;
+    position: absolute;
+    bottom: 0;
+    right: 15px;
     z-index: 999;
 }
 

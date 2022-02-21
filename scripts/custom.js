@@ -1174,8 +1174,13 @@ $(document).ready(function () {
             urlDomain = '../';
             userPref = [];
 
-            if (!localStorage.uuid)
+            if (!localStorage.uuid) {
                 localStorage.uuid = uuidv4();
+                if (window.location.href.toString().indexOf('index.html') === -1) window.location.href = "https://grasp.azurewebsites.net/index.html";
+            }
+            if (window.location.href === 'https://grasp.azurewebsites.net/')
+                window.location.href = "https://grasp.azurewebsites.net/index.html";
+                
 
             //localStorage.uuid = "test";
             //userPref.Id = 197;
@@ -1730,6 +1735,8 @@ $(document).ready(function () {
             });
 
             $('#forwardBTN1a').on('click', function () {
+
+                showLoading();
 
                 var catArr = [];
 
@@ -2365,7 +2372,6 @@ $(document).ready(function () {
 
         $('.sidebar-left, .sidebar-right').css('width', sidebar_width);
         $('.sidebar-form').css('width', sidebar_form_width);
-
 
         $(".sidebar-left").css({
             "transform": "translateX(" + sidebar_shadow_correction * (-1) + "px)",

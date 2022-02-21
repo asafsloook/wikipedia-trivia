@@ -882,6 +882,8 @@ ol ol ol{list-style-type:disc;}
     transition: all 250ms ease;
     transition-delay:250ms;
     -webkit-transition-delay:250ms;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .page-preloader-light{background-color:rgba(255,255,255,0.1);}
@@ -7219,7 +7221,7 @@ calendar*{display:block; overflow:hidden;}
 /*EDIT ONLY if you have the required skill!!!*/
 
 *::-webkit-scrollbar{display: none; }
-html, body {overflow-x:hidden;} 
+html, body {overflow-x:hidden;width: 100%;height: 100%;display: flex;} 
 .sidebar-left, .sidebar-right{
     transform: translateZ(0px);
     -webkit-transform: translateZ(0px);
@@ -7264,6 +7266,8 @@ html, body {overflow-x:hidden;}
     right:0px;
     z-index:1;
     overflow:hidden;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 #page-content-scroll{
@@ -7299,9 +7303,11 @@ html, body {overflow-x:hidden;}
 
 .sidebar-left{
     overflow: hidden;
-    position: fixed;
-    z-index:9999;
-    left:0px;
+    display: none;
+    position: absolute;
+    z-index: 99999999999999999999999999999999;
+    left: 0px;
+    height: 100%;
     top:0px;
     bottom:0px;
     -webkit-overflow-scrolling: touch;
@@ -7355,7 +7361,8 @@ html, body {overflow-x:hidden;}
     -webkit-transform: translateX(0px)!important;
     -o-transform: translateX(0px)!important;
     -ms-transform: translateX(0px)!important;
-    transform: translateX(0px)!important;   
+    transform: translateX(0px)!important;
+    display: flex;
 }
 
 .sidebar-decoration{
@@ -9565,4 +9572,19 @@ button.swiper-pagination-bullet {
 	line-height: 50px;
     font-weight:500;
 	font-family: 'Roboto', sans-serif;
+}
+
+div#page-transitions {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.footer-menu-controls.light-footer-menu {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
